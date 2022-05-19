@@ -12,15 +12,16 @@ import themion7.my_chat.backend.domain.Member;
 @SpringBootTest
 @Transactional
 public class MemberRepositoryTest {
+
     @Autowired MemberRepository memberRepository;
-    
-    Member member = Member.builder()
-        .username("test123")
-        .password("password123")
-        .build();
 
     @Test
     public void create() {
+        Member member = Member.builder()
+            .username("test123")
+            .password("password123")
+            .build();
+        
         memberRepository.save(member);
         Assertions.assertThat(member.getId()).isNotNull();
     }
@@ -33,7 +34,9 @@ public class MemberRepositoryTest {
             .build();
         
         memberRepository.save(member);
-        Assertions.assertThat(memberRepository.findById(member.getId())).isNotEmpty();
+        Assertions
+            .assertThat(memberRepository.findById(member.getId()))
+            .isNotEmpty();
     }
 
     @Test
@@ -45,7 +48,9 @@ public class MemberRepositoryTest {
         
         memberRepository.save(member);
         memberRepository.deleteById(member.getId());
-        Assertions.assertThat(memberRepository.findById(member.getId())).isEmpty();
+        Assertions
+            .assertThat(memberRepository.findById(member.getId()))
+            .isEmpty();
 
     }
 }
