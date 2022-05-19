@@ -3,10 +3,8 @@ spring:
         url: jdbc:mysql://localhost:3306/myChat?useUnicode=true
         username: my_chat
         password: myChat
-        driver-class-name: com.mysql.cj.jdbc.Driver
     jpa:
-        database: mysql
-        hibernate:
-            show-sql: true
+        show-sql: true
         properties:
-            format_sql: true
+            hibernate:
+                format_sql: true

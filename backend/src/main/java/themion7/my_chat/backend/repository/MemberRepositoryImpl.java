@@ -3,10 +3,12 @@ package themion7.my_chat.backend.repository;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
+import javax.transaction.Transactional;
 
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.domain.Member;
 
+@Transactional
 @AllArgsConstructor
 public class MemberRepositoryImpl implements MemberRepository {
 

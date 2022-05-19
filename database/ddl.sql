@@ -9,3 +9,9 @@ create table member (
     password    varchar(255)    not null,
     primary key (id)
 );
+
+create table chatroom (
+    id          bigint          not null auto_increment,
+    title       varchar(100)    unique not null,
+    primary key (id)
+);
