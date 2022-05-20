@@ -14,8 +14,8 @@ public class ChatroomService {
     
     private final ChatroomRepository chatroomRepository;
 
-    public void newChatroom(Chatroom chatroom) {
-        this.chatroomRepository.save(chatroom);
+    public Long newChatroom(Chatroom chatroom) {
+        return this.chatroomRepository.save(chatroom).getId();
     }
 
     public List<Chatroom> chatroomList() {

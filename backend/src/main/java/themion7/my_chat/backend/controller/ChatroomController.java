@@ -26,8 +26,8 @@ public class ChatroomController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public void makeChatroom(@RequestBody ChatroomDTO dto) {
-        this.chatroomService.newChatroom(
+    public Long makeChatroom(@RequestBody ChatroomDTO dto) {
+        return this.chatroomService.newChatroom(
             Chatroom.builder()
                 .title(HtmlUtils.htmlEscape(dto.getTitle()))  
                 .build()
