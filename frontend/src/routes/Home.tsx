@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react"
-import Chatroom, { Props as ChatroomProps } from "../components/Chatroom"
+import ChatroomTr, { Props as ChatroomProps } from "../components/ChatroomTr"
 import { Callback, Fallback, sendTo, send } from "../utils/axios"
 
 const Home = () => {
@@ -15,7 +15,7 @@ const Home = () => {
             const trList: JSX.Element[] = []
             
             res.data.forEach((tr: ChatroomProps) => {
-                trList.push(<Chatroom key={tr.id} {...tr} />)
+                trList.push(<ChatroomTr key={tr.id} {...tr} />)
             })
 
             setTable(
