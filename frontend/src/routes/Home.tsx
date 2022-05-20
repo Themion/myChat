@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react"
 import ChatroomTr, { Props as ChatroomProps } from "../components/ChatroomTr"
+import CreateChatroomForm from "../components/CreateChatroomForm"
 import { Callback, Fallback, sendTo, send } from "../utils/axios"
 
 const Home = () => {
@@ -13,7 +14,7 @@ const Home = () => {
 
         const callback: Callback = (res) => {
             const trList: JSX.Element[] = []
-            
+
             res.data.forEach((tr: ChatroomProps) => {
                 trList.push(<ChatroomTr key={tr.id} {...tr} />)
             })
@@ -38,7 +39,10 @@ const Home = () => {
         send(to, {}, callback, fallback)
     }, [])
 
-    return table
+    return <>
+        {table}
+        <CreateChatroomForm />
+    </>
 }
 
 
