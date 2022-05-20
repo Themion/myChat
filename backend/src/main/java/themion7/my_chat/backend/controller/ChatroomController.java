@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.util.HtmlUtils;
 
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
@@ -28,7 +29,7 @@ public class ChatroomController {
     public void makeChatroom(@RequestBody ChatroomDTO dto) {
         this.chatroomService.newChatroom(
             Chatroom.builder()
-                .title(dto.getTitle())  
+                .title(HtmlUtils.htmlEscape(dto.getTitle()))  
                 .build()
         );
     }
