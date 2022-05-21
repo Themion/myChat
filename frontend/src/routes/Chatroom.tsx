@@ -1,32 +1,49 @@
-import { Client } from "@stomp/stompjs"
+import {messageCallbackType } from "@stomp/stompjs"
+import { FormEventHandler } from "react"
 import { useParams } from "react-router-dom"
-import SockJS from "sockjs-client"
+import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { stompClient } from "../utils/stomp"
 
-const WebSocketServer = "http://localhost:8080/websocket"
+
+interface ChatDTO {
+    chat: string
+}
 
 const Chatroom = () => {
     const id = useParams().id
 
-    const client = new Client({
-        webSocketFactory: () => new SockJS(WebSocketServer)
-    })
+    const url = `/topic/${id}`
+    const callback: messageCallbackType = (message) => {
+        const dto: ChatDTO = JSON.parse(message.body)
+        const chats = document.getElementById("chats") as HTMLDivElement
 
-    client.onConnect = (frame) => {
-        // Do something, all subscribes must be done is this callback
-        // This is needed because this will be executed after a (re)connect
-        console.log(frame)
-    };
+        const p = document.createElement("p") as HTMLParagraphElement
+        p.innerText = dto.chat
 
-    client.onStompError = (frame) => {
-        // Will be invoked in case of error encountered at Broker
-        // Bad login/passcode typically will cause an error
-        // Complaint brokers will set `message` header with a brief message. Body may contain details.
-        // Compliant brokers will terminate the connection after any error
-        console.log('Broker reported error: ' + frame.headers['message']);
-        console.log('Additional details: ' + frame.body);
-    };
+        chats.appendChild(p)
+    }
 
-    client.activate()
+    stompClient([{url, callback}])
+
+    const onSubmit: FormEventHandler = (e) => {
+        e.preventDefault()
+        
+        const chat = document.getElementById("chat") as HTMLTextAreaElement
+
+        const to: sendTo = {
+            url: `/room/${id}`,
+            method: "POST"
+        }
+
+        const data: ChatDTO = { chat: chat.value }
+
+        const callback: Callback = (res) => {}
+        const fallback: Fallback = (res) => { console.log(res) }
+
+        send(to, data, callback, fallback)
+
+        chat.value = ""
+    }
 
     return (
         <>
@@ -34,9 +51,9 @@ const Chatroom = () => {
             <div id="chats">
 
             </div>
-            <form>
-                <textarea></textarea>
-                <button type="submit">채팅 송신</button>
+            <form onSubmit={onSubmit}>
+                <textarea id="chat"></textarea>
+                <button type="submit">보내기</button>
             </form>
         </>
     )
