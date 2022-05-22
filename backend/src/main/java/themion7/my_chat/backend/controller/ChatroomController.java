@@ -45,4 +45,9 @@ public class ChatroomController {
     ) {
         webSocketService.publish(roomId, dto);
     }
+
+    @RequestMapping(method = RequestMethod.POST, value = "{roomId}/disconnect")
+    public void onDisconnect(@PathVariable final Long roomId) {
+        webSocketService.onDisconnect(roomId);
+    }
 }

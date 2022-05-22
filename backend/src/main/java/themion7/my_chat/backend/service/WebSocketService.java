@@ -17,4 +17,11 @@ public class WebSocketService {
             dto
         );
     }
+
+    public void onDisconnect(final Long roomId) {
+        messagingTemplate.convertAndSend(
+            "/topic/" + roomId.toString() + "/disconnect", 
+            "disconnect"
+        );
+    }
 }

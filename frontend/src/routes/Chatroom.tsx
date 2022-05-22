@@ -1,48 +1,26 @@
-import {messageCallbackType } from "@stomp/stompjs"
-import { FormEventHandler } from "react"
-import { useParams } from "react-router-dom"
-import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { Navigate, useParams } from "react-router-dom"
+import { ChatForm } from "../components/ChatForm"
+import { send, sendTo } from "../utils/axios"
 import { stompClient } from "../utils/stomp"
-
-
-interface ChatDTO {
-    chat: string
-}
 
 const Chatroom = () => {
     const id = useParams().id
 
-    const url = `/topic/${id}`
-    const callback: messageCallbackType = (message) => {
-        const dto: ChatDTO = JSON.parse(message.body)
-        const chats = document.getElementById("chats") as HTMLDivElement
+    if (!id) return <Navigate to="/" />
 
-        const p = document.createElement("p") as HTMLParagraphElement
-        p.innerText = dto.chat
+    const client = stompClient(id)
 
-        chats.appendChild(p)
-    }
-
-    stompClient([{url, callback}])
-
-    const onSubmit: FormEventHandler = (e) => {
-        e.preventDefault()
-        
-        const chat = document.getElementById("chat") as HTMLTextAreaElement
-
+    client.onDisconnect = (frame) => {
         const to: sendTo = {
-            url: `/room/${id}`,
+            url: `/room/${id}/disconnect`,
             method: "POST"
         }
+        send(to, {}, ()=>{}, ()=>{})
+    }
 
-        const data: ChatDTO = { chat: chat.value }
-
-        const callback: Callback = (res) => {}
-        const fallback: Fallback = (res) => { console.log(res) }
-
-        send(to, data, callback, fallback)
-
-        chat.value = ""
+    window.onbeforeunload = (e) => { 
+        client.deactivate()
+        e.returnValue = ""
     }
 
     return (
@@ -51,10 +29,7 @@ const Chatroom = () => {
             <div id="chats">
 
             </div>
-            <form onSubmit={onSubmit}>
-                <textarea id="chat"></textarea>
-                <button type="submit">보내기</button>
-            </form>
+            <ChatForm id={id} client={client} />
         </>
     )
 }

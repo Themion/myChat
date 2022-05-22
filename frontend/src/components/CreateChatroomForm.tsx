@@ -6,6 +6,7 @@ const CreateChatroomForm = () => {
         e.preventDefault()
 
         const input = document.getElementById("title") as HTMLInputElement
+        if (input.value === "") return
         
         const to: sendTo = {
             url: "/room",
