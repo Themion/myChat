@@ -1,7 +1,7 @@
 import { Client, messageCallbackType } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { ChatDTO } from "../routes/Chatroom";
-import { send, sendTo } from "./axios";
+// import { send, sendTo } from "./axios";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
@@ -15,8 +15,12 @@ const chatSubscribe: messageCallbackType = (message) => {
     addChat(dto.chat)
 }
 
-const closeSubscribe: messageCallbackType = () => {
-    addChat("someone has left")
+const connectSubscribe: messageCallbackType = () => {
+    addChat("someone has connected")
+}
+
+const disconnectSubscribe: messageCallbackType = () => {
+    addChat("someone has disconnected")
 }
 
 const addChat = (chat: string) => {
@@ -39,16 +43,21 @@ export const stompClient = (id: string) => {
     
     client.onConnect = (frame) => {
         client.subscribe(`/topic/${id}`, chatSubscribe)
-        client.subscribe(`/topic/${id}/disconnect`, closeSubscribe)
+        client.subscribe(`/topic/${id}/connect`, connectSubscribe)
+        client.subscribe(`/topic/${id}/disconnect`, disconnectSubscribe)
+
+        client.publish({
+            destination: `/ws/${id}/connect`
+        })
     };
 
-    client.onDisconnect = (frame) => {
-        const to: sendTo = {
-            url: `/room/${id}/disconnect`,
-            method: "POST"
-        }
-        send(to, {}, ()=>{}, ()=>{})
-    }
+    // client.onDisconnect = (frame) => {
+    //     const to: sendTo = {
+    //         url: `/room/${id}/disconnect`,
+    //         method: "POST"
+    //     }
+    //     send(to, {}, ()=>{}, ()=>{})
+    // }
     
     client.onStompError = (frame) => {
         // Will be invoked in case of error encountered at Broker
@@ -60,6 +69,9 @@ export const stompClient = (id: string) => {
     };
 
     window.onbeforeunload = (e) => { 
+        client.publish({
+            destination: `/ws/${id}/disconnect`
+        })
         client.deactivate()
         e.returnValue = ""
     }
