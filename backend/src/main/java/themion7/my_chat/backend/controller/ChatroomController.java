@@ -34,7 +34,7 @@ public class ChatroomController {
         return this.chatroomService.newChatroom(
             Chatroom.builder()
                 .title(HtmlUtils.htmlEscape(dto.getTitle()))  
-                .population(1L)
+                .population(0L)
                 .build()
         );
     }

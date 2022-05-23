@@ -18,6 +18,13 @@ public class WebSocketService {
         );
     }
 
+    public void onConnect(final Long roomId) {
+        messagingTemplate.convertAndSend(
+            "/topic/" + roomId.toString() + "/connect", 
+            "connect"
+        );
+    }
+
     public void onDisconnect(final Long roomId) {
         messagingTemplate.convertAndSend(
             "/topic/" + roomId.toString() + "/disconnect", 
