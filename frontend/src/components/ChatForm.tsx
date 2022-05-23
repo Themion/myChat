@@ -1,25 +1,26 @@
 import { Client } from "@stomp/stompjs"
 import { FormEventHandler } from "react"
+import { connect } from "react-redux"
+
+export interface ChatDTO {
+    chat: string
+}
 
 interface Props {
     id: string
     client: Client
 }
 
-export interface ChatDTO {
-    chat: string
-}
-
-export const ChatForm = (props: Props) => {
-    const {id, client} = props
+const ChatForm = (props: Partial<Props>) => {
+    const { id, client } = props as Props
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
         
         const chat = document.getElementById("chat") as HTMLTextAreaElement
+        if (chat.value === "") return
 
-        const data: ChatDTO = { chat: chat.value }
-
+        const data = { chat: chat.value }
         client.publish({
             destination: `/ws/${id}`,
             body: JSON.stringify(data)
@@ -33,3 +34,9 @@ export const ChatForm = (props: Props) => {
         <button type="submit">보내기</button>
     </form>
 }
+
+const mapStateToProps = (state: Client, props: Partial<Props>): Partial<Props> => {
+    return { ...props, client: state }
+}
+
+export default connect(mapStateToProps)(ChatForm)

@@ -1,24 +1,29 @@
 import { Client, messageCallbackType } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { ChatDTO } from "../components/ChatForm";
+import { send, sendTo } from "./axios";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
-const chatSubscribe: messageCallbackType = (message) => {
-    const dto: ChatDTO = JSON.parse(message.body)
-    const chats = document.getElementById("chats") as HTMLDivElement
-
-    const p = document.createElement("p") as HTMLParagraphElement
-    p.innerText = dto.chat
-
-    chats.appendChild(p)
+export interface PublishType {
+    id: string
+    chat: string
 }
 
-const closeSubscribe: messageCallbackType = (message) => {
+const chatSubscribe: messageCallbackType = (message) => {
+    const dto: ChatDTO = JSON.parse(message.body)
+    addChat(dto.chat)
+}
+
+const closeSubscribe: messageCallbackType = () => {
+    addChat("someone has left")
+}
+
+const addChat = (chat: string) => {
     const chats = document.getElementById("chats") as HTMLDivElement
 
     const p = document.createElement("p") as HTMLParagraphElement
-    p.innerText = "someone has closed"
+    p.innerText = chat
 
     chats.appendChild(p)
 }
@@ -36,6 +41,14 @@ export const stompClient = (id: string) => {
         client.subscribe(`/topic/${id}`, chatSubscribe)
         client.subscribe(`/topic/${id}/disconnect`, closeSubscribe)
     };
+
+    client.onDisconnect = (frame) => {
+        const to: sendTo = {
+            url: `/room/${id}/disconnect`,
+            method: "POST"
+        }
+        send(to, {}, ()=>{}, ()=>{})
+    }
     
     client.onStompError = (frame) => {
         // Will be invoked in case of error encountered at Broker
@@ -45,6 +58,11 @@ export const stompClient = (id: string) => {
         console.log('Broker reported error: ' + frame.headers['message']);
         console.log('Additional details: ' + frame.body);
     };
+
+    window.onbeforeunload = (e) => { 
+        client.deactivate()
+        e.returnValue = ""
+    }
     
     client.activate()
 
