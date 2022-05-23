@@ -7,6 +7,7 @@ import javax.persistence.EntityManager;
 import javax.transaction.Transactional;
 
 import lombok.AllArgsConstructor;
+import lombok.var;
 import themion7.my_chat.backend.domain.Chatroom;
 
 @Transactional
@@ -32,21 +33,26 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public void increaseRoomPopulationById(Long id) {
-        Chatroom chatroom = this.findById(id).orElseThrow();
-        chatroom.setPopulation(chatroom.getPopulation() + 1);
+    public Optional<Chatroom> increaseRoomPopulationById(Long id) {
+        var chatroom = this.findById(id);
+        chatroom.ifPresent(room -> {
+            room.setPopulation(room.getPopulation() + 1);
+        });
+        return chatroom;
     }
 
     @Override
-    public void decreaseRoomPopulationById(Long id) {
-        Chatroom chatroom = this.findById(id).orElseThrow();
-        chatroom.setPopulation(chatroom.getPopulation() - 1);
-        if (chatroom.getPopulation() <= 0) this.deleteById(id);
+    public Optional<Chatroom> decreaseRoomPopulationById(Long id) {
+        var chatroom = this.findById(id);
+        chatroom.ifPresent(room -> {
+            room.setPopulation(room.getPopulation() - 1);
+        });
+        return chatroom;
     }
 
     @Override
     public void deleteById(Long id) {
         this.findById(id).ifPresent((chatroom) -> { em.remove(chatroom); });
     }
-    
+
 }

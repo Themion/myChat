@@ -1,6 +1,7 @@
 package themion7.my_chat.backend.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.transaction.Transactional;
 
@@ -14,11 +15,15 @@ public class ChatroomService {
     
     private final ChatroomRepository chatroomRepository;
 
-    public Long newChatroom(Chatroom chatroom) {
+    public Long save(Chatroom chatroom) {
         return this.chatroomRepository.save(chatroom).getId();
     }
 
-    public List<Chatroom> chatroomList() {
+    public Optional<Chatroom> findById(Long id) {
+        return this.chatroomRepository.findById(id);
+    }
+
+    public List<Chatroom> findAll() {
         return this.chatroomRepository.findAll();
     }
 
@@ -27,7 +32,11 @@ public class ChatroomService {
     }
 
     public void leave(final Long id) {
-        this.chatroomRepository.decreaseRoomPopulationById(id);
+        var chatroom = this.chatroomRepository.decreaseRoomPopulationById(id);
+        chatroom.ifPresent(room -> {
+            if (room.getPopulation() <= 0)
+                this.chatroomRepository.deleteById(id);
+        });
     }
 
 }

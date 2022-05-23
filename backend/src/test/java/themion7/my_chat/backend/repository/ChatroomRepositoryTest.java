@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import themion7.my_chat.backend.domain.Chatroom;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 public class ChatroomRepositoryTest {
 
     @Autowired ChatroomRepository chatroomRepository;
@@ -73,13 +73,8 @@ public class ChatroomRepositoryTest {
 
         chatroomRepository.decreaseRoomPopulationById(id);
         Assertions
-        .assertThat(chatroom.getPopulation())
-        .isEqualTo(population);
-        
-        chatroomRepository.decreaseRoomPopulationById(id);
-        Assertions
-            .assertThat(chatroomRepository.findById(id))
-            .isEmpty();
+            .assertThat(chatroom.getPopulation())
+            .isEqualTo(population);
     }
 
     @Test

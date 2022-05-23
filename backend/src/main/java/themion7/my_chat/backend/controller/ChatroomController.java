@@ -22,12 +22,12 @@ public class ChatroomController {
     
     @RequestMapping(method = RequestMethod.GET)
     public List<Chatroom> chatroomList() {
-        return this.chatroomService.chatroomList();
+        return this.chatroomService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Long makeChatroom(@RequestBody ChatroomDTO dto) {
-        return this.chatroomService.newChatroom(
+        return this.chatroomService.save(
             Chatroom.builder()
                 .title(HtmlUtils.htmlEscape(dto.getTitle()))  
                 .population(0L)

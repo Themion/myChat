@@ -9,8 +9,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import themion7.my_chat.backend.domain.Member;
 
-@SpringBootTest
 @Transactional
+@SpringBootTest
 public class MemberRepositoryTest {
 
     @Autowired MemberRepository memberRepository;

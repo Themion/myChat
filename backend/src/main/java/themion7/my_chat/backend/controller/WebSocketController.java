@@ -23,14 +23,12 @@ public class WebSocketController {
 
     @MessageMapping("/{roomId}/connect")
     public void onConnect(@DestinationVariable final Long roomId) {
-        System.out.println("connect");
         webSocketService.onConnect(roomId);
         chatroomService.join(roomId);
     }
 
     @MessageMapping("/{roomId}/disconnect")
     public void onDisconnect(@DestinationVariable final Long roomId) {
-        System.out.println("disconnect");
         webSocketService.onDisconnect(roomId);
         chatroomService.leave(roomId);
     }

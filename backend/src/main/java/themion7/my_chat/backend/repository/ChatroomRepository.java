@@ -9,7 +9,7 @@ public interface ChatroomRepository {
     public Chatroom save(Chatroom chatroom);
     public Optional<Chatroom> findById(Long id);
     public List<Chatroom> findAll();
-    public void increaseRoomPopulationById(Long id);
-    public void decreaseRoomPopulationById(Long id);
+    public Optional<Chatroom> increaseRoomPopulationById(Long id);
+    public Optional<Chatroom> decreaseRoomPopulationById(Long id);
     public void deleteById(Long id);
 }
