@@ -10,8 +10,10 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
 @Entity
+@Accessors
 @AllArgsConstructor
 @Builder
 @Data
@@ -27,5 +29,11 @@ public class Chatroom {
 
     @Column
     private Long population;
+
+    public static ChatroomBuilder builder() {
+        ChatroomBuilder builder = new ChatroomBuilder();
+        builder.population(0L);
+        return builder;
+    }
 
 }
