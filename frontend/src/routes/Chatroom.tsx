@@ -1,26 +1,34 @@
-import { Dispatch } from "@reduxjs/toolkit"
 import { Client } from "@stomp/stompjs"
-import { connect } from "react-redux"
+import { FormEventHandler } from "react"
 import { Navigate, useParams } from "react-router-dom"
-import { clientSlice } from "../app/clientStore"
-import ChatForm from "../components/ChatForm"
+import { stompClient } from "../utils/stomp"
 
-interface Props {
-    client: Client
-    setClient: (id: string) => void
+export interface ChatDTO {
+    chat: string
 }
 
-const Chatroom = (props: Props) => {
+const Chatroom = () => {
     const id = useParams().id
-    const { setClient } = props
+    let client: Client | undefined = undefined
 
     if (!id) return <Navigate to="/" />
 
-    window.onclick = () => { if (!props.client) setClient(id) }
+    window.onclick = () => { if (!client) client = stompClient(id) }
 
-    // onbeforeunload: window와 상호작용한 후에야 제대로 동작
-    // client를 window.onclick에서 redux에 등록해서 사용할 것
-    // https://developer.mozilla.org/en-US/docs/web/api/window/beforeunload_event
+    const onSubmit: FormEventHandler = (e) => {
+        e.preventDefault()
+        
+        const chat = document.getElementById("chat") as HTMLTextAreaElement
+        if (chat.value === "") return
+
+        const data: ChatDTO = { chat: chat.value }
+        if (client) client.publish({
+            destination: `/ws/${id}`,
+            body: JSON.stringify(data)
+        })
+
+        chat.value = ""
+    }
 
     return (
         <>
@@ -28,21 +36,12 @@ const Chatroom = (props: Props) => {
             <div id="chats">
 
             </div>
-            <ChatForm id={id} />
+            <form onSubmit={onSubmit}>
+                <textarea id="chat"></textarea>
+                <button type="submit">보내기</button>
+            </form>
         </>
     )
 }
 
-const mapStateToProps = (state: Client) => {
-    return { client: state }
-}
-
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return { 
-        setClient: (id: string) => {
-            dispatch(clientSlice.actions.create(id))
-        }
-    }
-}
-
-export default connect(mapStateToProps, mapDispatchToProps)(Chatroom)
+export default Chatroom

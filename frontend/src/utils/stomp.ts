@@ -1,6 +1,6 @@
 import { Client, messageCallbackType } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { ChatDTO } from "../components/ChatForm";
+import { ChatDTO } from "../routes/Chatroom";
 import { send, sendTo } from "./axios";
 
 const WebSocketServer = "http://localhost:8080/websocket"
