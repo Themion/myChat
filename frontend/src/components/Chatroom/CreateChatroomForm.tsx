@@ -1,5 +1,5 @@
 import { FormEventHandler } from "react"
-import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { Callback, Fallback, send, sendTo } from "../../utils/axios"
 
 const CreateChatroomForm = () => {
     const onSubmit: FormEventHandler = (e) => {

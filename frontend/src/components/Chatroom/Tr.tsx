@@ -1,9 +1,10 @@
 export interface Props {
     id: number
     title: string
+    population: number
 }
 
-const ChatroomTr = (props: Props) => {
+const Tr = (props: Props) => {
     const onClick = () => {
         window.open(`/${props.id}`)
     }
@@ -11,7 +12,8 @@ const ChatroomTr = (props: Props) => {
     return <tr onClick={onClick}>
         <td>{props.id}</td>
         <td>{props.title}</td>
+        <td>{props.population}</td>
     </tr>
 }
 
-export default ChatroomTr
+export default Tr
