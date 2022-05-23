@@ -34,6 +34,7 @@ public class ChatroomController {
         return this.chatroomService.newChatroom(
             Chatroom.builder()
                 .title(HtmlUtils.htmlEscape(dto.getTitle()))  
+                .population(1L)
                 .build()
         );
     }
@@ -43,11 +44,12 @@ public class ChatroomController {
         @PathVariable final Long roomId,
         @RequestBody final ChatDTO dto
     ) {
-        webSocketService.publish(roomId, dto);
+        this.webSocketService.publish(roomId, dto);
     }
 
     @RequestMapping(method = RequestMethod.POST, value = "{roomId}/disconnect")
     public void onDisconnect(@PathVariable final Long roomId) {
-        webSocketService.onDisconnect(roomId);
+        this.webSocketService.onDisconnect(roomId);
+        this.chatroomService.leave(roomId);
     }
 }

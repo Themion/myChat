@@ -13,5 +13,6 @@ create table member (
 create table chatroom (
     id          bigint          not null auto_increment,
     title       varchar(100)    unique not null,
+    population  bigint          not null,
     primary key (id)
 );

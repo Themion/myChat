@@ -32,6 +32,19 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
+    public void increaseRoomPopulationById(Long id) {
+        Chatroom chatroom = this.findById(id).orElseThrow();
+        chatroom.setPopulation(chatroom.getPopulation() + 1);
+    }
+
+    @Override
+    public void decreaseRoomPopulationById(Long id) {
+        Chatroom chatroom = this.findById(id).orElseThrow();
+        chatroom.setPopulation(chatroom.getPopulation() - 1);
+        if (chatroom.getPopulation() <= 0) this.deleteById(id);
+    }
+
+    @Override
     public void deleteById(Long id) {
         this.findById(id).ifPresent((chatroom) -> { em.remove(chatroom); });
     }

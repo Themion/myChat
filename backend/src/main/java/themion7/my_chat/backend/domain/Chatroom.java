@@ -25,4 +25,7 @@ public class Chatroom {
     @Column(length = 100, unique = true, nullable = false)
     private String title;
 
+    @Column
+    private Long population;
+
 }

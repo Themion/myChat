@@ -56,6 +56,33 @@ public class ChatroomRepositoryTest {
     }
 
     @Test
+    public void population() {
+        Long id, population = 1L;
+        Chatroom chatroom = Chatroom.builder()
+            .title("chatroomTest")
+            .population(population)
+            .build();
+
+        chatroomRepository.save(chatroom);
+        id = chatroom.getId();
+
+        chatroomRepository.increaseRoomPopulationById(id);
+        Assertions
+            .assertThat(chatroom.getPopulation())
+            .isEqualTo(population + 1);
+
+        chatroomRepository.decreaseRoomPopulationById(id);
+        Assertions
+        .assertThat(chatroom.getPopulation())
+        .isEqualTo(population);
+        
+        chatroomRepository.decreaseRoomPopulationById(id);
+        Assertions
+            .assertThat(chatroomRepository.findById(id))
+            .isEmpty();
+    }
+
+    @Test
     public void delete() {
         Chatroom chatroom = Chatroom.builder()
             .title("chatroomTest")

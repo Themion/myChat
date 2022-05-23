@@ -22,4 +22,9 @@ public class ChatroomService {
         return this.chatroomRepository.findAll();
     }
 
+    public void leave(final Long id) {
+        System.out.println("debug");
+        this.chatroomRepository.decreaseRoomPopulationById(id);
+    }
+
 }
