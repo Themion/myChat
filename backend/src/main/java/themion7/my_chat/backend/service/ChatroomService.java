@@ -1,7 +1,7 @@
 package themion7.my_chat.backend.service;
 
 import java.util.List;
-import java.util.Optional;
+import java.util.NoSuchElementException;
 
 import javax.transaction.Transactional;
 
@@ -18,14 +18,17 @@ public class ChatroomService {
     private final ChatroomRepository chatroomRepository;
 
     @Async
-    public void async(Long id) {
+    public void deleteIfRoomEmpty(Long id) {
+
         try {
-            Thread.sleep(1000 * 60 * 10);
-            this.findById(id).ifPresent(room -> {
-                System.out.println(room.getPopulation());
-                if (room.getPopulation() <= 0L)
-                    this.chatroomRepository.deleteById(id);
-            });
+            Thread.sleep(10000);
+            this.chatroomRepository.findById(id).ifPresentOrElse(
+                room -> {
+                    if (room.getPopulation() <= 0L)
+                        this.chatroomRepository.deleteById(id);
+                },
+                () -> new NoSuchElementException("Chatroom not found with id: " + id)
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -35,8 +38,10 @@ public class ChatroomService {
         return this.chatroomRepository.save(chatroom).getId();
     }
 
-    public Optional<Chatroom> findById(Long id) {
-        return this.chatroomRepository.findById(id);
+    public Chatroom findById(Long id) {
+        return this.chatroomRepository.findById(id).orElseThrow(
+            () -> new NoSuchElementException("Chatroom not found with id: " + id)
+        );
     }
 
     public List<Chatroom> findAll() {

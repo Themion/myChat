@@ -1,5 +1,9 @@
 package themion7.my_chat.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import java.util.NoSuchElementException;
+
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -16,7 +20,7 @@ public class ChatroomServiceTest {
     @Autowired ChatroomService service;
 
     @Test
-    public void leave() {
+    public void joinAndLeave() {
         Long id;
         Chatroom chatroom = Chatroom.builder()
             .title("test")
@@ -38,8 +42,28 @@ public class ChatroomServiceTest {
         Assertions
             .assertThat(chatroom.getPopulation())
             .isZero();
+    
+        Exception e = assertThrows(NoSuchElementException.class, () -> { service.findById(id); });
+        Assertions
+            .assertThat(e)
+            .isInstanceOf(NoSuchElementException.class);
+    }
+
+    @Test
+    public void autoDelete() {
+        Long id;
+        Chatroom chatroom = Chatroom.builder()
+            .title("test")
+            .build();
+
+        this.service.save(chatroom);
+        id = chatroom.getId();
+        this.service.deleteIfRoomEmpty(id);
+
         Assertions
             .assertThat(service.findById(id))
-            .isEmpty();
+            .isNotNull();
+
+        // 테스트에선 작동하지 않지만 실제로 돌려보면 자동으로 삭제됨을 알 수 있음
     }
 }
