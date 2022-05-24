@@ -4,13 +4,11 @@ import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
-import javax.transaction.Transactional;
 
 import lombok.AllArgsConstructor;
 import lombok.var;
 import themion7.my_chat.backend.domain.Chatroom;
 
-@Transactional
 @AllArgsConstructor
 public class ChatroomRepositoryImpl implements ChatroomRepository {
 

@@ -3,15 +3,12 @@ package themion7.my_chat.backend.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
-import javax.transaction.Transactional;
-
 import org.springframework.scheduling.annotation.Async;
 
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
 import themion7.my_chat.backend.repository.ChatroomRepository;
 
-@Transactional
 @AllArgsConstructor
 public class ChatroomService {
     
