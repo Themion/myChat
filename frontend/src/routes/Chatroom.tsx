@@ -1,10 +1,11 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { Client } from "@stomp/stompjs"
-import React, { FormEventHandler, useReducer } from "react"
+import React, { useReducer } from "react"
 import { connect } from "react-redux"
 import { Navigate, useParams } from "react-router-dom"
-import { clientSlice } from "../app/stompStore"
+import { ClientProps, clientSlice } from "../app/stompStore"
 import { Chat, Info } from "../components/Chatroom/Chat"
+import ChatForm from "../components/Chatroom/ChatForm"
 import { stompClient } from "../utils/stomp"
 
 export interface ChatDTO {
@@ -12,23 +13,22 @@ export interface ChatDTO {
     sender?: string
 }
 
-export interface ChatAction {
+interface ChatAction {
     type: string
     payload: ChatDTO
 }
 
-type ChatReducer = (state: JSX.Element[], action: ChatAction) => JSX.Element[]
+export type ChatDispatch = React.Dispatch<ChatAction>
 
 export enum ChatActionType {
     CHAT = "chat", INFO = "info"
 }
 
-interface Props {
-    client: Client
-    setClient: (id: string, dispatch: React.Dispatch<ChatAction>) => void
+interface Props extends ClientProps{
+    setClient: (id: string, dispatch: ChatDispatch) => void
 }
 
-const reducer: ChatReducer = (state, action) => {
+const reducer = (state: JSX.Element[], action: ChatAction) => {
     switch (action.type) {
         case ChatActionType.CHAT:
             return state.concat(<Chat {...action.payload} />)
@@ -45,35 +45,13 @@ const Chatroom = (props: Props) => {
 
     if (!id) return <Navigate to="/" />
 
-    window.onclick = () => { 
-        if (!props.client) {
-            props.setClient(id, dispatch)
-        }
-    }
-
-    const onSubmit: FormEventHandler = (e) => {
-        e.preventDefault()
-        
-        const chat = document.getElementById("chat") as HTMLTextAreaElement
-        if (chat.value === "") return
-
-        const data: ChatDTO = { chat: chat.value }
-        if (props.client) props.client.publish({
-            destination: `/ws/${id}`,
-            body: JSON.stringify(data)
-        })
-
-        chat.value = ""
-    }
+    window.onclick = () => { if (!props.client) props.setClient(id, dispatch) }
 
     return (
         <>
             <div>id: {id}</div>
             <div id="chats">{chats}</div>
-            <form onSubmit={onSubmit}>
-                <textarea id="chat"></textarea>
-                <button type="submit">보내기</button>
-            </form>
+            <ChatForm id={id} />
         </>
     )
 }
@@ -84,7 +62,7 @@ const mapStateToProps = (state: Client) => {
 
 const mapDispatchToProps = (reduxDispatch: Dispatch) => {
     return { 
-        setClient: (id: string, dispatch: React.Dispatch<ChatAction>) => {
+        setClient: (id: string, dispatch: ChatDispatch) => {
             reduxDispatch(clientSlice.actions.create(stompClient(id, dispatch)))
         }
     }

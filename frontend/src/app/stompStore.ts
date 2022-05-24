@@ -1,6 +1,10 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
 import { Client } from "@stomp/stompjs";
 
+export interface ClientProps {
+    client: Client
+}
+
 interface CreateAction {
     type: string
     payload: Client
