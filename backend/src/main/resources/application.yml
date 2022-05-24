@@ -8,3 +8,12 @@ spring:
         properties:
             hibernate:
                 format_sql: true
+
+jwt:
+    secret: AnySampleRandomSecretValue
+    token-life-span: 
+        access: 900000 # 1000 * 60 * 15 millisecond
+        refresh: 86400000 # 1000 * 60 * 60 * 24 millisecond
+
+chat:
+    life-span: 60000 # 1000 * 60 millisecond

@@ -3,22 +3,28 @@ package themion7.my_chat.backend.service;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 
-import lombok.AllArgsConstructor;
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
 import themion7.my_chat.backend.repository.ChatroomRepository;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class ChatroomService {
     
+    @NonNull
     private final ChatroomRepository chatroomRepository;
+
+    @Value("${chat.lifespan}")
+    private Long lifespan;
 
     @Async
     public void deleteIfRoomEmpty(Long id) {
 
         try {
-            Thread.sleep(1000 * 60 * 10);
+            Thread.sleep(lifespan);
             this.chatroomRepository.findById(id).ifPresentOrElse(
                 room -> {
                     if (room.getPopulation() <= 0L)
