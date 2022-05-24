@@ -14,8 +14,9 @@ const Home = () => {
 
         const callback: Callback = (res) => {
             const trList: JSX.Element[] = []
+            const chatroomList: ChatroomProps[] = res.data
 
-            res.data.forEach((tr: ChatroomProps) => {
+            chatroomList.forEach((tr: ChatroomProps) => {
                 trList.push(<Tr key={tr.id} {...tr} />)
             })
 

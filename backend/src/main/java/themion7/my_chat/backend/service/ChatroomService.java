@@ -21,7 +21,7 @@ public class ChatroomService {
     public void deleteIfRoomEmpty(Long id) {
 
         try {
-            Thread.sleep(10000);
+            Thread.sleep(1000 * 60 * 10);
             this.chatroomRepository.findById(id).ifPresentOrElse(
                 room -> {
                     if (room.getPopulation() <= 0L)

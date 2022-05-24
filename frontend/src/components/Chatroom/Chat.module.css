@@ -1,3 +1,7 @@
-.center {
+.info {
     text-align: center;
+}
+
+.chat {
+    margin-top: 0.5rem;
 }

@@ -1,11 +1,13 @@
 import { Dispatch } from "@reduxjs/toolkit"
 import { Client } from "@stomp/stompjs"
-import React, { useReducer } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import { connect } from "react-redux"
-import { Navigate, useParams } from "react-router-dom"
+import { Navigate, useNavigate, useParams } from "react-router-dom"
 import { ClientProps, clientSlice } from "../app/stompStore"
 import { Chat, Info } from "../components/Chatroom/Chat"
 import ChatForm from "../components/Chatroom/ChatForm"
+import {Props as ChatroomDTO} from "../components/Chatroom/Tr"
+import { Callback, Fallback, send, sendTo } from "../utils/axios"
 import { stompClient } from "../utils/stomp"
 
 export interface ChatDTO {
@@ -24,7 +26,7 @@ export enum ChatActionType {
     CHAT = "chat", INFO = "info"
 }
 
-interface Props extends ClientProps{
+interface Props extends ClientProps {
     setClient: (id: string, dispatch: ChatDispatch) => void
 }
 
@@ -41,19 +43,34 @@ const reducer = (state: JSX.Element[], action: ChatAction) => {
 
 const Chatroom = (props: Props) => {
     const id = useParams().id
+    const [room, setRoom] = useState<ChatroomDTO>({id: Number(id), title: "", population: 0})
     const [chats, dispatch] = useReducer(reducer, [])
+    const navigate = useNavigate()
 
-    if (!id) return <Navigate to="/" />
+    useEffect(() => {
+        const to: sendTo = {
+            url: `/room/${id}`,
+            method: 'GET'
+        }
+        const callback: Callback = (res) => {
+            setRoom(res.data)
+        }
+        const fallback: Fallback = (res) => {
+            navigate('/')
+        }
+
+        send(to, {}, callback, fallback)
+    }, [id, navigate, chats])
+
+    if (!id) { return <Navigate to='/' /> }
 
     window.onclick = () => { if (!props.client) props.setClient(id, dispatch) }
 
-    return (
-        <>
-            <div>id: {id}</div>
-            <div id="chats">{chats}</div>
-            <ChatForm id={id} />
-        </>
-    )
+    return <>
+        <h2 id='chatroom_title'>{room.title} ({room.population})</h2>
+        <div id="chats">{chats}</div>
+        <ChatForm id={id} />
+    </>
 }
 
 const mapStateToProps = (state: Client) => {
