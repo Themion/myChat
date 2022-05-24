@@ -14,4 +14,6 @@ import lombok.NoArgsConstructor;
 public class ChatDTO {
     @NotBlank
     private String chat;
+
+    private String sender;
 }

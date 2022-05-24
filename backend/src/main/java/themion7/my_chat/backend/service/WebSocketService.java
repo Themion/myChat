@@ -1,5 +1,7 @@
 package themion7.my_chat.backend.service;
 
+import java.security.Principal;
+
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
@@ -11,7 +13,9 @@ import themion7.my_chat.backend.dto.ChatDTO;
 public class WebSocketService {
     private final SimpMessagingTemplate messagingTemplate;
     
-    public void publish(final Long roomId, final ChatDTO dto) {
+    public void onPublish(final Long roomId, final Principal principal, final ChatDTO dto) {
+        dto.setSender(principal.getName().split("-")[0]);
+
         messagingTemplate.convertAndSend(
             "/topic/" + roomId.toString(), 
             dto
@@ -21,14 +25,18 @@ public class WebSocketService {
     public void onConnect(final Long roomId) {
         messagingTemplate.convertAndSend(
             "/topic/" + roomId.toString() + "/connect", 
-            "connect"
+            ChatDTO.builder()
+                .chat("someone has connected")
+                .build()
         );
     }
 
     public void onDisconnect(final Long roomId) {
         messagingTemplate.convertAndSend(
             "/topic/" + roomId.toString() + "/disconnect", 
-            "disconnect"
+            ChatDTO.builder()
+                .chat("someone has disconnected")
+                .build()
         );
     }
 }

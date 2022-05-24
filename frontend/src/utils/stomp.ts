@@ -1,38 +1,10 @@
-import { Client, messageCallbackType } from "@stomp/stompjs";
+import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { ChatDTO } from "../routes/Chatroom";
-// import { send, sendTo } from "./axios";
+import { ChatAction, ChatActionType, ChatDTO } from "../routes/Chatroom";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
-export interface PublishType {
-    id: string
-    chat: string
-}
-
-const chatSubscribe: messageCallbackType = (message) => {
-    const dto: ChatDTO = JSON.parse(message.body)
-    addChat(dto.chat)
-}
-
-const connectSubscribe: messageCallbackType = () => {
-    addChat("someone has connected")
-}
-
-const disconnectSubscribe: messageCallbackType = () => {
-    addChat("someone has disconnected")
-}
-
-const addChat = (chat: string) => {
-    const chats = document.getElementById("chats") as HTMLDivElement
-
-    const p = document.createElement("p") as HTMLParagraphElement
-    p.innerText = chat
-
-    chats.appendChild(p)
-}
-
-export const stompClient = (id: string) => {
+export const stompClient = (id: string, dispatch: React.Dispatch<ChatAction>) => {
     const client = new Client({
         webSocketFactory: () => new SockJS(WebSocketServer),
         debug: (str) => console.log(str),
@@ -42,22 +14,23 @@ export const stompClient = (id: string) => {
     })
     
     client.onConnect = (frame) => {
-        client.subscribe(`/topic/${id}`, chatSubscribe)
-        client.subscribe(`/topic/${id}/connect`, connectSubscribe)
-        client.subscribe(`/topic/${id}/disconnect`, disconnectSubscribe)
+        client.subscribe(`/topic/${id}`, (message) => {
+            const dto: ChatDTO = JSON.parse(message.body)
+            dispatch({type: ChatActionType.CHAT, payload: dto})
+        })
+        client.subscribe(`/topic/${id}/connect`, (message) => {
+            const dto: ChatDTO = JSON.parse(message.body)
+            dispatch({type: ChatActionType.INFO, payload: dto})
+        })
+        client.subscribe(`/topic/${id}/disconnect`, (message) => {
+            const dto: ChatDTO = JSON.parse(message.body)
+            dispatch({type: ChatActionType.INFO, payload: dto})
+        })
 
         client.publish({
             destination: `/ws/${id}/connect`
         })
     };
-
-    // client.onDisconnect = (frame) => {
-    //     const to: sendTo = {
-    //         url: `/room/${id}/disconnect`,
-    //         method: "POST"
-    //     }
-    //     send(to, {}, ()=>{}, ()=>{})
-    // }
     
     client.onStompError = (frame) => {
         // Will be invoked in case of error encountered at Broker

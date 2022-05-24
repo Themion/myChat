@@ -1,5 +1,7 @@
 package themion7.my_chat.backend.controller;
 
+import java.security.Principal;
+
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
@@ -17,8 +19,12 @@ public class WebSocketController {
     private final WebSocketService webSocketService;
 
     @MessageMapping("/{roomId}")
-    public void chat(@DestinationVariable final Long roomId, final ChatDTO dto) {
-        webSocketService.publish(roomId, dto);
+    public void chat(
+        @DestinationVariable final Long roomId,
+        final Principal principal,
+        final ChatDTO dto
+    ) {
+        webSocketService.onPublish(roomId, principal, dto);
     }
 
     @MessageMapping("/{roomId}/connect")
