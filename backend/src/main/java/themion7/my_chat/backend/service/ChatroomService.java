@@ -5,6 +5,8 @@ import java.util.Optional;
 
 import javax.transaction.Transactional;
 
+import org.springframework.scheduling.annotation.Async;
+
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
 import themion7.my_chat.backend.repository.ChatroomRepository;
@@ -14,6 +16,20 @@ import themion7.my_chat.backend.repository.ChatroomRepository;
 public class ChatroomService {
     
     private final ChatroomRepository chatroomRepository;
+
+    @Async
+    public void async(Long id) {
+        try {
+            Thread.sleep(1000 * 60 * 10);
+            this.findById(id).ifPresent(room -> {
+                System.out.println(room.getPopulation());
+                if (room.getPopulation() <= 0L)
+                    this.chatroomRepository.deleteById(id);
+            });
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public Long save(Chatroom chatroom) {
         return this.chatroomRepository.save(chatroom).getId();

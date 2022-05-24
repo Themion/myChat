@@ -27,11 +27,15 @@ public class ChatroomController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Long makeChatroom(@RequestBody ChatroomDTO dto) {
-        return this.chatroomService.save(
+        Long id = this.chatroomService.save(
             Chatroom.builder()
                 .title(HtmlUtils.htmlEscape(dto.getTitle()))  
                 .population(0L)
                 .build()
         );
+
+        chatroomService.async(id);
+
+        return id;
     }
 }
