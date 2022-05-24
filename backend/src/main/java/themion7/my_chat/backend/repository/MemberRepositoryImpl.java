@@ -4,10 +4,13 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.transaction.annotation.Transactional;
+
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.domain.Member;
 
 @AllArgsConstructor
+@Transactional
 public class MemberRepositoryImpl implements MemberRepository {
 
     private final EntityManager em;
