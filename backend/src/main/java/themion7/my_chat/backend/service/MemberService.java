@@ -2,16 +2,30 @@ package themion7.my_chat.backend.service;
 
 import java.util.NoSuchElementException;
 
-import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import lombok.NonNull;
+import lombok.RequiredArgsConstructor;
 import themion7.my_chat.backend.domain.Member;
+import themion7.my_chat.backend.dto.SignupDTO;
 import themion7.my_chat.backend.repository.MemberRepository;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class MemberService {
+
+    @NonNull
     private final MemberRepository memberRepository;
 
-    public Member save(Member member) {
-        return this.memberRepository.save(member);
+    private final PasswordEncoder encoder = 
+        new themion7.my_chat.backend.security.PasswordEncoder();
+
+    public Member save(SignupDTO dto) {
+        return this.memberRepository.save(
+            Member.builder()
+                .username(dto.getUsername())
+                .password(encoder.encode(dto.getPassword()))
+                .build()
+        );
     }
 
     public Member findById(Long id) {
