@@ -18,7 +18,7 @@ const CreateChatroomForm = () => {
         }
 
         const callback: Callback = (res) => {
-            window.open(`/${res.data}`)
+            window.open(`/room/${res.data}`)
             window.location.reload()
         }
 

@@ -1,10 +1,10 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { ChatActionType, ChatDispatch, ChatDTO } from "../routes/Chatroom";
+import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../routes/Chatroom";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
-export const stompClient = (id: string, dispatch: ChatDispatch) => {
+export const stompClient = (id: Id, dispatch: ChatDispatch) => {
     const client = new Client({
         webSocketFactory: () => new SockJS(WebSocketServer),
         debug: (str) => console.log(str),

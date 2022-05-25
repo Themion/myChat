@@ -20,6 +20,8 @@ interface ChatAction {
     payload: ChatDTO
 }
 
+export type Id = number
+
 export type ChatDispatch = React.Dispatch<ChatAction>
 
 export enum ChatActionType {
@@ -27,7 +29,7 @@ export enum ChatActionType {
 }
 
 interface Props extends ClientProps {
-    setClient: (id: string, dispatch: ChatDispatch) => void
+    setClient: (id: Id, dispatch: ChatDispatch) => void
 }
 
 const reducer = (state: JSX.Element[], action: ChatAction) => {
@@ -42,7 +44,7 @@ const reducer = (state: JSX.Element[], action: ChatAction) => {
 }
 
 const Chatroom = (props: Props) => {
-    const id = useParams().id
+    const id: Id = Number(useParams().id)
     const [room, setRoom] = useState<ChatroomDTO>({id: Number(id), title: "", population: 0})
     const [chats, dispatch] = useReducer(reducer, [])
     const navigate = useNavigate()
@@ -64,7 +66,9 @@ const Chatroom = (props: Props) => {
 
     if (!id) { return <Navigate to='/' /> }
 
-    window.onclick = () => { if (!props.client) props.setClient(id, dispatch) }
+    window.onclick = () => { 
+        if (!props.client) props.setClient(id, dispatch) 
+    }
 
     return <>
         <h2 id='chatroom_title'>{room.title} ({room.population})</h2>
@@ -79,8 +83,10 @@ const mapStateToProps = (state: Client) => {
 
 const mapDispatchToProps = (reduxDispatch: Dispatch) => {
     return { 
-        setClient: (id: string, dispatch: ChatDispatch) => {
-            reduxDispatch(clientSlice.actions.create(stompClient(id, dispatch)))
+        setClient: (id: Id, dispatch: ChatDispatch) => {
+            reduxDispatch(clientSlice.actions.create(
+                stompClient(id, dispatch)
+            ))
         }
     }
 }

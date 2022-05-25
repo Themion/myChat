@@ -1,12 +1,14 @@
+import { Id } from "../../routes/Chatroom"
+
 export interface Props {
-    id: number
+    id: Id
     title: string
     population: number
 }
 
 const Tr = (props: Props) => {
     const onClick = () => {
-        window.open(`/${props.id}`)
+        window.open(`/room/${props.id}`)
     }
 
     return <tr onClick={onClick}>

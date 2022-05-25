@@ -2,10 +2,10 @@ import { Client } from "@stomp/stompjs"
 import { FormEventHandler } from "react"
 import { connect } from "react-redux"
 import { ClientProps } from "../../app/stompStore"
-import { ChatDTO } from "../../routes/Chatroom"
+import { ChatDTO, Id } from "../../routes/Chatroom"
 
 interface Props extends ClientProps {
-    id: string
+    id: Id
 }
 
 const ChatForm = (props: Props) => {
