@@ -1,6 +1,6 @@
 package themion7.my_chat.backend.controller;
 
-import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -21,8 +21,8 @@ public class MemberController {
         this.memberService.save(dto);
     }
 
-    @RequestMapping(method = RequestMethod.DELETE, value = "{id}")
-    public void deleteById(@PathVariable final Long id) {
-        this.memberService.deleteById(id);
+    @RequestMapping(method = RequestMethod.DELETE)
+    public void deleteById(@AuthenticationPrincipal String username) {
+        this.memberService.deleteByUsername(username);
     }
 }

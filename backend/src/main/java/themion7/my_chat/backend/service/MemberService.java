@@ -37,18 +37,22 @@ public class MemberService implements UserDetailsService {
 
     public Member findById(Long id) {
         return this.memberRepository.findById(id).orElseThrow(
-            () -> new UsernameNotFoundException("Member not found with id: " + id)
+            () -> this.memberRepository.idNotFoundException(id)
         );
     }
 
     public Member findByUsername(String username) {
         return this.memberRepository.findByUsername(username).orElseThrow(
-            () -> new UsernameNotFoundException("Member not found with username: " + username)
+            () -> this.memberRepository.usernameNotFoundException(username)
         );
     }
 
     public void deleteById(Long id) {
         this.memberRepository.deleteById(id);
+    }
+
+    public void deleteByUsername(String username) {
+        this.memberRepository.deleteByUsername(username);
     }
 
     @Override

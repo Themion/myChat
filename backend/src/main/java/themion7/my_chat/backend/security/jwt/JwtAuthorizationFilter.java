@@ -9,11 +9,9 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
-import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.service.MemberService;
 
 public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
@@ -34,25 +32,20 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
         String header = request.getHeader(JwtUtils.HEADER);
 
         if (header != null && header.startsWith(JwtUtils.PREFIX)) {
-            Authentication auth = getAuthentication(header, response);
-            SecurityContextHolder.getContext().setAuthentication(auth);
+            String username = JwtUtils.getUsernameFromHeader(header);
+
+            // 인가 과정에서는 credentials(password)를 확인할 필요 없음
+            //     -> 어차피 password를 memberService에서 가져오므로 항상 맞는 credential이 된다
+            SecurityContextHolder.getContext().setAuthentication(
+                new UsernamePasswordAuthenticationToken(
+                    username, 
+                    null,
+                    memberService.findByUsername(username).getAuthorities()
+                )
+            );
         }
 
         chain.doFilter(request, response);
-    }
-
-    private Authentication getAuthentication(
-            String header, 
-            HttpServletResponse response
-    ) {
-        String username = JwtUtils.getUsernameFromHeader(header);
-        Member member = memberService.findByUsername(username);
-
-        return new UsernamePasswordAuthenticationToken(
-            username, 
-            null, 
-            member.getAuthorities()
-        );
     }
     
 }

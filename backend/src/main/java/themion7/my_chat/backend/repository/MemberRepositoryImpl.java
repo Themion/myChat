@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
@@ -39,7 +40,28 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public void deleteById(Long id) {
-        this.findById(id).ifPresent((member) -> em.remove(member));
+        this.findById(id).ifPresentOrElse(
+            member -> em.remove(member),
+            () -> { throw this.idNotFoundException(id); }
+        );
+    }
+
+	@Override
+	public void deleteByUsername(String username) {
+		this.findByUsername(username).ifPresentOrElse(
+            member -> em.remove(member),
+            () -> { throw this.usernameNotFoundException(username); }
+        );
+	}
+
+    @Override
+    public UsernameNotFoundException idNotFoundException(Long id) {
+        return new UsernameNotFoundException("Member not found with id: " + id);
+    }
+
+    @Override
+    public UsernameNotFoundException usernameNotFoundException(String username) {
+        return new UsernameNotFoundException("Member not found with username: " + username);
     }
     
 }
