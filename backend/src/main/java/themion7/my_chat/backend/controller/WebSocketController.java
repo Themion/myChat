@@ -20,22 +20,22 @@ public class WebSocketController {
 
     @MessageMapping("/{roomId}")
     public void chat(
-        @DestinationVariable final Long roomId,
-        final Principal principal,
-        final ChatDTO dto
+            @DestinationVariable final Long roomId,
+            final Principal principal,
+            final ChatDTO dto
     ) {
         webSocketService.onPublish(roomId, principal, dto);
     }
 
     @MessageMapping("/{roomId}/connect")
     public void onConnect(@DestinationVariable final Long roomId) {
-        webSocketService.onConnect(roomId);
         chatroomService.join(roomId);
+        webSocketService.onConnect(roomId);
     }
 
     @MessageMapping("/{roomId}/disconnect")
     public void onDisconnect(@DestinationVariable final Long roomId) {
-        webSocketService.onDisconnect(roomId);
         chatroomService.leave(roomId);
+        webSocketService.onDisconnect(roomId);
     }
 }
