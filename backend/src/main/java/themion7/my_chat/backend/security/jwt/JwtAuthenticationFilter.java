@@ -10,6 +10,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.auth0.jwt.JWTCreator.Builder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.springframework.http.MediaType;
@@ -68,12 +69,13 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     ) throws IOException, ServletException {
 
         // Get UserDetails
-        Member user = (Member) authResult.getPrincipal();
+        Member member = (Member) authResult.getPrincipal();
 
         // Create JWT Tokens
         Map<String, String> tokens = new HashMap<>();
-        tokens.put(JwtUtils.ACCESS_TOKEN_HEADER, JwtUtils.getAccessToken(request, user));
-        tokens.put(JwtUtils.REFRESH_TOKEN_HEADER, JwtUtils.getRefreshToken(request, user));
+        Builder builder = JwtUtils.getJwtBuilder(request, member);
+        tokens.put(JwtUtils.ACCESS_TOKEN_HEADER, JwtUtils.getAccessToken(builder));
+        tokens.put(JwtUtils.REFRESH_TOKEN_HEADER, JwtUtils.getRefreshToken(builder));
 
         // Add tokens in response
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);

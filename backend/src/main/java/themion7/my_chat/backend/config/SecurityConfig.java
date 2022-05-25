@@ -7,11 +7,17 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
 
+import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.security.jwt.JwtAuthenticationFilter;
+import themion7.my_chat.backend.security.jwt.JwtAuthorizationFilter;
+import themion7.my_chat.backend.service.MemberService;
 
 @Configuration
 @EnableWebSecurity
+@AllArgsConstructor
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
+
+    private final MemberService memberService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -22,6 +28,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
             .addFilter(new JwtAuthenticationFilter(authenticationManager()))
+            .addFilter(new JwtAuthorizationFilter(authenticationManager(), memberService))
             .authorizeRequests()
                 .antMatchers(HttpMethod.GET, "/room")
                     .permitAll()

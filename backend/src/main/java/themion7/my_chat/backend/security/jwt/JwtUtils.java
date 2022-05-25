@@ -49,22 +49,25 @@ public class JwtUtils {
             .getSubject();
     }
 
-    private static Builder getJwtBuilder(HttpServletRequest request, Member member) {
+    public static Builder getJwtBuilder(HttpServletRequest request, Member member) {
         return JWT.create()
             .withSubject(member.getUsername())
             .withIssuer(request.getRequestURI().toString())
-            .withIssuedAt(new Date(System.currentTimeMillis()));
+            .withIssuedAt(new Date(System.currentTimeMillis()))
+            ;
     }
 
-    public static String getAccessToken(HttpServletRequest request, Member member) {
-        return getJwtBuilder(request, member)
+    public static String getAccessToken(Builder builder) {
+        return builder
             .withExpiresAt(new Date(System.currentTimeMillis() + JwtUtils.ACCESS_TOKEN_LIFE_SPAN))
-            .sign(JwtUtils.HMAC512());
+            .sign(JwtUtils.HMAC512())
+            ;
     }
 
-    public static String getRefreshToken(HttpServletRequest request, Member member) {
-        return getJwtBuilder(request, member)
+    public static String getRefreshToken(Builder builder) {
+        return builder
             .withExpiresAt(new Date(System.currentTimeMillis() + JwtUtils.REFRESH_TOKEN_LIFE_SPAN))
-            .sign(JwtUtils.HMAC512());
+            .sign(JwtUtils.HMAC512())
+            ;
     }
 }
