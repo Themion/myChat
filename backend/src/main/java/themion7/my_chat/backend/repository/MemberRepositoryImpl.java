@@ -1,5 +1,6 @@
 package themion7.my_chat.backend.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.persistence.EntityManager;
@@ -27,8 +28,18 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public Optional<Member> findByUsername(String username) {
+        List<Member> result = em.createQuery(
+                "select m from Member m where m.username = :username",
+                Member.class
+            ).setParameter("username", username).getResultList();
+
+        return result.stream().findAny();
+    }
+
+    @Override
     public void deleteById(Long id) {
-        this.findById(id).ifPresent((member) -> {em.remove(member);});
+        this.findById(id).ifPresent((member) -> em.remove(member));
     }
     
 }
