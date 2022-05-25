@@ -55,6 +55,7 @@ const Signup = () => {
             </div>
             <button type="submit">제출</button>
         </form>
+        <button onClick={() => {navigate('/login')}}>로그인</button>
     </>
 }
 

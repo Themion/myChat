@@ -2,8 +2,10 @@ import { useEffect, useState } from "react"
 import Tr, { Props as ChatroomProps } from "../components/Chatroom/Tr"
 import CreateChatroomForm from "../components/Chatroom/CreateChatroomForm"
 import { Callback, Fallback, sendTo, send } from "../utils/axios"
+import { useNavigate } from "react-router-dom"
 
 const Home = () => {
+    const navigate = useNavigate()
     const [table, setTable] = useState(<span>loading...</span>)
 
     useEffect(() => {
@@ -44,6 +46,7 @@ const Home = () => {
     return <>
         {table}
         <CreateChatroomForm />
+        <button onClick={() => {navigate('/login')}}>로그인</button>
     </>
 }
 
