@@ -19,7 +19,7 @@ public class WebSocketController {
     private final WebSocketService webSocketService;
 
     @MessageMapping("/{roomId}")
-    public void chat(
+    public void onPublish(
             @DestinationVariable final Long roomId,
             final Principal principal,
             final ChatDTO dto

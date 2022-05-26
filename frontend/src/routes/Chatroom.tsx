@@ -58,7 +58,7 @@ const Chatroom = (props: Props) => {
             setRoom(res.data)
         }
         const fallback: Fallback = (res) => {
-            navigate('/')
+            window.close()
         }
 
         send(to, {}, callback, fallback)

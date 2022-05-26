@@ -46,7 +46,6 @@ export const stompClient = (id: Id, dispatch: ChatDispatch) => {
             destination: `/ws/${id}/disconnect`
         })
         client.deactivate()
-        e.returnValue = ""
     }
     
     client.activate()
