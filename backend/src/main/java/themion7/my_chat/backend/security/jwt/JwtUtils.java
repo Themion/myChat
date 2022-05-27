@@ -7,19 +7,17 @@ import themion7.my_chat.backend.domain.Member;
 
 import java.util.Date;
 
-import javax.servlet.http.HttpServletRequest;
-
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTCreator.Builder;
 import com.auth0.jwt.algorithms.Algorithm;
 
 @Component
 public class JwtUtils {
-    public static Long ACCESS_TOKEN_LIFE_SPAN;
-    public static Long REFRESH_TOKEN_LIFE_SPAN;
-    public static String HEADER = "Authorization";
-    public static String ACCESS_TOKEN_HEADER = "access-token";
-    public static String REFRESH_TOKEN_HEADER = "refresh-token";
+    public static int ACCESS_TOKEN_LIFE_SPAN;
+    public static int REFRESH_TOKEN_LIFE_SPAN;
+    public static final String HEADER = "Authorization";
+    public static final String ACCESS_TOKEN_HEADER = "access-token";
+    public static final String REFRESH_TOKEN_HEADER = "refresh-token";
     public static String PREFIX = "Bearer ";
     private static String SECRET;
 
@@ -28,12 +26,12 @@ public class JwtUtils {
     }
 
     @Value("${jwt.token-life-span.access}")
-    public void setAccessTokenLifeSpan(Long accessTokenLifeSpan) {
+    public void setAccessTokenLifeSpan(int accessTokenLifeSpan) {
         JwtUtils.ACCESS_TOKEN_LIFE_SPAN = accessTokenLifeSpan;
     }
 
     @Value("${jwt.token-life-span.refresh}")
-    public void setRefreshTokenLifeSpan(Long refreshTokenLifeSpan) {
+    public void setRefreshTokenLifeSpan(int refreshTokenLifeSpan) {
         JwtUtils.REFRESH_TOKEN_LIFE_SPAN = refreshTokenLifeSpan;
     }
 
@@ -49,23 +47,22 @@ public class JwtUtils {
             .getSubject();
     }
 
-    public static Builder getJwtBuilder(HttpServletRequest request, Member member) {
+    public static Builder getJwtBuilder(Member member) {
         return JWT.create()
             .withSubject(member.getUsername())
-            .withIssuer(request.getRequestURI().toString())
             .withIssuedAt(new Date(System.currentTimeMillis()))
             ;
     }
 
-    public static String getAccessToken(Builder builder) {
-        return builder
+    public static String getAccessToken(Member member) {
+        return JwtUtils.getJwtBuilder(member)
             .withExpiresAt(new Date(System.currentTimeMillis() + JwtUtils.ACCESS_TOKEN_LIFE_SPAN))
             .sign(JwtUtils.HMAC512())
             ;
     }
 
-    public static String getRefreshToken(Builder builder) {
-        return builder
+    public static String getRefreshToken(Member member) {
+        return JwtUtils.getJwtBuilder(member)
             .withExpiresAt(new Date(System.currentTimeMillis() + JwtUtils.REFRESH_TOKEN_LIFE_SPAN))
             .sign(JwtUtils.HMAC512())
             ;

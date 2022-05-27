@@ -2,18 +2,15 @@ package themion7.my_chat.backend.security.jwt;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.auth0.jwt.JWTCreator.Builder;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.http.MediaType;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -72,13 +69,11 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Member member = (Member) authResult.getPrincipal();
 
         // Create JWT Tokens
-        Map<String, String> tokens = new HashMap<>();
-        Builder builder = JwtUtils.getJwtBuilder(request, member);
-        tokens.put(JwtUtils.ACCESS_TOKEN_HEADER, JwtUtils.getAccessToken(builder));
-        tokens.put(JwtUtils.REFRESH_TOKEN_HEADER, JwtUtils.getRefreshToken(builder));
+        Cookie refreshToken = new Cookie(JwtUtils.REFRESH_TOKEN_HEADER, JwtUtils.getAccessToken(member));
+        refreshToken.setMaxAge(JwtUtils.REFRESH_TOKEN_LIFE_SPAN);
+        refreshToken.setHttpOnly(true);
+        refreshToken.setSecure(true);
 
-        // Add tokens in response
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        new ObjectMapper().writeValue(response.getOutputStream(), tokens);
+        response.addCookie(refreshToken);
     }
 }
