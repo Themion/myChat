@@ -1,9 +1,8 @@
 import { Dispatch } from "@reduxjs/toolkit"
-import { Client } from "@stomp/stompjs"
 import React, { useEffect, useReducer, useState } from "react"
 import { connect } from "react-redux"
-import { Navigate, useNavigate, useParams } from "react-router-dom"
-import { ClientProps, clientSlice } from "../app/stompStore"
+import { Navigate, useParams } from "react-router-dom"
+import { ClientProps, slice, State } from "../app/store"
 import { Chat, Info } from "../components/Chatroom/Chat"
 import ChatForm from "../components/Chatroom/ChatForm"
 import {Props as ChatroomDTO} from "../components/Chatroom/Tr"
@@ -45,9 +44,8 @@ const reducer = (state: JSX.Element[], action: ChatAction) => {
 
 const Chatroom = (props: Props) => {
     const id: Id = Number(useParams().id)
-    const [room, setRoom] = useState<ChatroomDTO>({id: Number(id), title: "", population: 0})
+    const [room, setRoom] = useState<ChatroomDTO>({id: Number(id), title: "채팅방에 접속하려면 화면을 클릭하세요.", population: 0})
     const [chats, dispatch] = useReducer(reducer, [])
-    const navigate = useNavigate()
 
     useEffect(() => {
         const to: sendTo = {
@@ -62,7 +60,7 @@ const Chatroom = (props: Props) => {
         }
 
         send(to, {}, callback, fallback)
-    }, [id, navigate, chats])
+    }, [id, chats])
 
     if (!id) { return <Navigate to='/' /> }
 
@@ -77,14 +75,14 @@ const Chatroom = (props: Props) => {
     </>
 }
 
-const mapStateToProps = (state: Client) => {
-    return { client: state }
+const mapStateToProps = (state: State) => {
+    return { client: state.client }
 }
 
 const mapDispatchToProps = (reduxDispatch: Dispatch) => {
     return { 
         setClient: (id: Id, dispatch: ChatDispatch) => {
-            reduxDispatch(clientSlice.actions.create(
+            reduxDispatch(slice.actions.setClient(
                 stompClient(id, dispatch)
             ))
         }

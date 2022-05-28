@@ -24,7 +24,8 @@ export const send = (
         url: to.url,
         method: to.method,
         data: data,
-        baseURL: baseURL
+        baseURL: baseURL,
+        withCredentials: true
     }
     axios(config)
         .then((res: AxiosResponse) => callback(res))

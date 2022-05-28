@@ -1,7 +1,6 @@
-import { Client } from "@stomp/stompjs"
 import { FormEventHandler } from "react"
 import { connect } from "react-redux"
-import { ClientProps } from "../../app/stompStore"
+import { ClientProps, State } from "../../app/store"
 import { ChatDTO, Id } from "../../routes/Chatroom"
 
 interface Props extends ClientProps {
@@ -32,8 +31,8 @@ const ChatForm = (props: Props) => {
     </form>
 }
 
-const mapStateToProps = (state: Client) => {
-    return { client: state }
+const mapStateToProps = (state: State) => {
+    return { client: state.client }
 }
 
 export default connect(mapStateToProps)(ChatForm)

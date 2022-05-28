@@ -4,20 +4,22 @@ import {
     Route, 
     Routes
 } from 'react-router-dom';
-import { clientStore } from './app/stompStore';
+import { store } from './app/store';
 import Chatroom from './routes/Chatroom';
 import Home from './routes/Home';
 import Login from './routes/Login';
 import Signup from './routes/Signup';
+import { setAccessToken } from './utils/session';
 
 function App() {
+    setAccessToken()
     return (
         <Router>
             <div className="App">
                 <Routes>
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
-                    <Route path="/room/:id" element={<Provider store={clientStore}><Chatroom /></Provider>} />
+                    <Route path="/room/:id" element={<Provider store={store}><Chatroom /></Provider>} />
                     <Route path="/" element={<Home />} />
                 </Routes>
             </div>

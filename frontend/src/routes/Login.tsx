@@ -1,6 +1,7 @@
 import { FormEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
 import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { setAccessToken } from "../utils/session"
 
 interface LoginDTO {
     username: string
@@ -19,10 +20,12 @@ const Login = () => {
         }
 
         const callback: Callback = (res) => {
+            setAccessToken()
             navigate('/')
         }
         const fallback: Fallback = (res) => {
-            window.location.href = '/login?error'
+            // window.location.href = '/login?error'
+            console.log(res)
         }
 
         const username = document.querySelector('input#username') as HTMLInputElement

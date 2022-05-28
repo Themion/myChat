@@ -3,6 +3,7 @@ import Tr, { Props as ChatroomProps } from "../components/Chatroom/Tr"
 import CreateChatroomForm from "../components/Chatroom/CreateChatroomForm"
 import { Callback, Fallback, sendTo, send } from "../utils/axios"
 import { useNavigate } from "react-router-dom"
+import { getAccessToken } from "../utils/session"
 
 const Home = () => {
     const navigate = useNavigate()
@@ -43,10 +44,14 @@ const Home = () => {
         send(to, {}, callback, fallback)
     }, [])
 
+    const button = getAccessToken() ? 
+        undefined : 
+        <button onClick={() => {navigate('/login')}}>로그인</button>
+
     return <>
         {table}
         <CreateChatroomForm />
-        <button onClick={() => {navigate('/login')}}>로그인</button>
+        {button}
     </>
 }
 
