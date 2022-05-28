@@ -7,14 +7,18 @@ import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.dto.ChatDTO;
+import themion7.my_chat.backend.repository.MemberRepository;
 
 @Service
 @AllArgsConstructor
 public class WebSocketService {
+    private final MemberRepository memberRepository;
     private final SimpMessagingTemplate messagingTemplate;
     
     public void onPublish(final Long roomId, final Principal principal, final ChatDTO dto) {
-        dto.setSender(principal.getName().split("-")[0]);
+        memberRepository.findByUsername(principal.getName()).ifPresentOrElse(
+            member -> { dto.setSender(member.getUsername()); }, 
+            () -> { dto.setSender(principal.getName().split("-")[0]); });
 
         messagingTemplate.convertAndSend(
             "/topic/" + roomId.toString(), 

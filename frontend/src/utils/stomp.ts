@@ -1,18 +1,22 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../routes/Chatroom";
+import { getTokenPayload } from "./session";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
 export const stompClient = (id: Id, dispatch: ChatDispatch) => {
+    const payload = getTokenPayload()
+
     const client = new Client({
         webSocketFactory: () => new SockJS(WebSocketServer),
         debug: (str) => console.log(str),
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
+        connectHeaders: payload ? { username: payload.sub } : {}
     })
-    
+
     client.onConnect = (frame) => {
         client.subscribe(`/topic/${id}`, (message) => {
             const dto: ChatDTO = JSON.parse(message.body)
