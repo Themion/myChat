@@ -47,8 +47,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(HttpMethod.DELETE, "/member/**")
                     .authenticated()
-                .antMatchers(HttpMethod.DELETE, "token")
+                .antMatchers(HttpMethod.GET, "/token")
                     .permitAll()
+                
         ;
 
     }
