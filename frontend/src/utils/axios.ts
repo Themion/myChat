@@ -1,24 +1,13 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse, Method } from "axios"
+import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
+import { AxiosCallback, AxiosDestination, AxiosFallback } from "../types/axios"
 
 const baseURL = 'http://localhost:8080'
 
-export interface sendTo {
-    url: string,
-    method: Method
-}
-
-export interface Callback {
-    (res: AxiosResponse): any
-}
-export interface Fallback {
-    (response: AxiosResponse): any
-}
-
 export const send = (
-    to: sendTo, 
+    to: AxiosDestination, 
     data: object, 
-    callback: Callback, 
-    fallback: Fallback
+    callback: AxiosCallback, 
+    fallback: AxiosFallback
 ) => {
     const config: AxiosRequestConfig = {
         url: to.url,

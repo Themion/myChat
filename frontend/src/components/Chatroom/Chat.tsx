@@ -1,4 +1,4 @@
-import { ChatDTO } from '../../routes/Chatroom'
+import { ChatDTO } from '../../types/chat'
 import styles from './Chat.module.css'
 
 export const Info = (props: ChatDTO) => {

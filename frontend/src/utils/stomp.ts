@@ -1,6 +1,6 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../routes/Chatroom";
+import { Id, ChatDispatch, ChatDTO, ChatActionType } from "../types/chat";
 import { getTokenPayload } from "./session";
 
 const WebSocketServer = "http://localhost:8080/websocket"

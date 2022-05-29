@@ -1,6 +1,7 @@
 import { FormEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
-import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
+import { send } from "../utils/axios"
 import { setAccessToken } from "../utils/session"
 
 interface LoginDTO {
@@ -14,16 +15,16 @@ const Login = () => {
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
 
-        const to: sendTo = {
+        const to: AxiosDestination = {
             url: '/login',
             method: 'POST'
         }
 
-        const callback: Callback = (res) => {
+        const callback: AxiosCallback = (res) => {
             setAccessToken()
             navigate('/')
         }
-        const fallback: Fallback = (res) => {
+        const fallback: AxiosFallback = (res) => {
             // window.location.href = '/login?error'
             console.log(res)
         }

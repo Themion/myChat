@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react"
-import Tr, { Props as ChatroomProps } from "../components/Chatroom/Tr"
+import Tr from "../components/Chatroom/Tr"
 import CreateChatroomForm from "../components/Chatroom/CreateChatroomForm"
-import { Callback, Fallback, sendTo, send } from "../utils/axios"
 import { useNavigate } from "react-router-dom"
 import { getAccessToken } from "../utils/session"
+import { send } from "../utils/axios"
+import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
+import { ChatroomDTO } from "../types/chat"
 
 const Home = () => {
     const navigate = useNavigate()
     const [table, setTable] = useState(<span>loading...</span>)
 
     useEffect(() => {
-        const to: sendTo = {
+        const to: AxiosDestination = {
             url: "/room",
             method: "GET"
         }
 
-        const callback: Callback = (res) => {
+        const callback: AxiosCallback = (res) => {
             const trList: JSX.Element[] = []
-            const chatroomList: ChatroomProps[] = res.data
+            const chatroomList: ChatroomDTO[] = res.data
 
-            chatroomList.forEach((tr: ChatroomProps) => {
+            chatroomList.forEach((tr: ChatroomDTO) => {
                 trList.push(<Tr key={tr.id} {...tr} />)
             })
 
@@ -37,7 +39,7 @@ const Home = () => {
             )
         }
 
-        const fallback: Fallback = (res) => {
+        const fallback: AxiosFallback = (res) => {
             console.log(res.data)
         }
 

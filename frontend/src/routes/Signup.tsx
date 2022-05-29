@@ -1,6 +1,7 @@
 import { FormEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
-import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { AxiosCallback, AxiosDestination, AxiosFallback } from "../types/axios"
+import { send } from "../utils/axios"
 
 interface SignupDTO {
     username: string
@@ -14,15 +15,15 @@ const Signup = () => {
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
     
-        const to: sendTo = {
+        const to: AxiosDestination = {
             url: '/member',
             method: 'POST'
         }
     
-        const callback: Callback = (res) => {
+        const callback: AxiosCallback = (res) => {
             navigate('/login')
         }
-        const fallback: Fallback = (res) => {
+        const fallback: AxiosFallback = (res) => {
             window.location.href = '/signup'
         }
     

@@ -1,31 +1,15 @@
 import { Dispatch } from "@reduxjs/toolkit"
-import React, { useEffect, useReducer, useState } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { connect } from "react-redux"
 import { Navigate, useParams } from "react-router-dom"
-import { ClientProps, slice, State } from "../app/store"
+import { slice } from "../app/store"
 import { Chat, Info } from "../components/Chatroom/Chat"
 import ChatForm from "../components/Chatroom/ChatForm"
-import {Props as ChatroomDTO} from "../components/Chatroom/Tr"
-import { Callback, Fallback, send, sendTo } from "../utils/axios"
+import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
+import { ChatAction, ChatActionType, ChatDispatch, ChatroomDTO, Id } from "../types/chat"
+import { ClientProps, State } from "../types/redux"
+import { send } from "../utils/axios"
 import { stompClient } from "../utils/stomp"
-
-export interface ChatDTO {
-    chat: string
-    sender?: string
-}
-
-interface ChatAction {
-    type: string
-    payload: ChatDTO
-}
-
-export type Id = number
-
-export type ChatDispatch = React.Dispatch<ChatAction>
-
-export enum ChatActionType {
-    CHAT = "chat", INFO = "info"
-}
 
 interface Props extends ClientProps {
     setClient: (id: Id, dispatch: ChatDispatch) => void
@@ -48,14 +32,14 @@ const Chatroom = (props: Props) => {
     const [chats, dispatch] = useReducer(reducer, [])
 
     useEffect(() => {
-        const to: sendTo = {
+        const to: AxiosDestination = {
             url: `/room/${id}`,
             method: 'GET'
         }
-        const callback: Callback = (res) => {
+        const callback: AxiosCallback = (res) => {
             setRoom(res.data)
         }
-        const fallback: Fallback = (res) => {
+        const fallback: AxiosFallback = (res) => {
             window.close()
         }
 

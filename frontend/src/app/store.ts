@@ -1,27 +1,5 @@
 import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { Client } from "@stomp/stompjs";
-
-type ClientState = Client | undefined
-type TokenState = string | undefined
-
-interface ClientAction {
-    type: string
-    payload: ClientState
-}
-
-interface TokenAction {
-    type: string
-    payload: TokenState
-}
-
-export interface ClientProps {
-    client: ClientState
-}
-
-export interface State {
-    client: ClientState
-    accessToken: TokenState
-}
+import { ClientAction, State, TokenAction } from "../types/redux";
 
 export const slice = createSlice({
     name: "clientReducer",

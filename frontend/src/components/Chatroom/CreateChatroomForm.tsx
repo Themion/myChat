@@ -1,5 +1,6 @@
 import { FormEventHandler } from "react"
-import { Callback, Fallback, send, sendTo } from "../../utils/axios"
+import { AxiosCallback, AxiosDestination, AxiosFallback } from "../../types/axios"
+import { send } from "../../utils/axios"
 
 const CreateChatroomForm = () => {
     const onSubmit: FormEventHandler = (e) => {
@@ -8,7 +9,7 @@ const CreateChatroomForm = () => {
         const input = document.getElementById("title") as HTMLInputElement
         if (input.value === "") return
         
-        const to: sendTo = {
+        const to: AxiosDestination = {
             url: "/room",
             method: "POST"
         }
@@ -17,12 +18,12 @@ const CreateChatroomForm = () => {
             title: input.value
         }
 
-        const callback: Callback = (res) => {
+        const callback: AxiosCallback = (res) => {
             window.open(`/room/${res.data}`)
             window.location.reload()
         }
 
-        const fallback: Fallback = (res) => {
+        const fallback: AxiosFallback = (res) => {
             console.log(res)
         }
 

@@ -1,7 +1,7 @@
 import { FormEventHandler } from "react"
 import { connect } from "react-redux"
-import { ClientProps, State } from "../../app/store"
-import { ChatDTO, Id } from "../../routes/Chatroom"
+import { Id, ChatDTO } from "../../types/chat"
+import { ClientProps, State } from "../../types/redux"
 
 interface Props extends ClientProps {
     id: Id

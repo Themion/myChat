@@ -1,12 +1,6 @@
-import { Id } from "../../routes/Chatroom"
+import { ChatroomDTO } from "../../types/chat"
 
-export interface Props {
-    id: Id
-    title: string
-    population: number
-}
-
-const Tr = (props: Props) => {
+const Tr = (props: ChatroomDTO) => {
     const onClick = () => {
         window.open(`/room/${props.id}`)
     }
