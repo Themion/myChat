@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
-import Tr from "../components/Chatroom/Tr"
-import CreateChatroomForm from "../components/Chatroom/CreateChatroomForm"
+import Tr from "../components/Home/Tr"
+import CreateChatroomForm from "../components/Home/CreateChatroomForm"
 import { useNavigate } from "react-router-dom"
 import { getAccessToken } from "../utils/session"
 import { send } from "../utils/axios"

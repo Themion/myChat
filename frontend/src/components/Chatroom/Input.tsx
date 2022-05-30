@@ -7,7 +7,7 @@ interface Props extends ClientProps {
     id: Id
 }
 
-const ChatForm = (props: Props) => {
+const Input = (props: Props) => {
     const {id, client} = props
 
     const onSubmit: FormEventHandler = (e) => {
@@ -16,7 +16,7 @@ const ChatForm = (props: Props) => {
         const chat = document.getElementById("chat") as HTMLTextAreaElement
         if (chat.value === "") return
 
-        const data: ChatDTO = { chat: chat.value }
+        const data: Partial<ChatDTO> = { chat: chat.value }
         if (client) client.publish({
             destination: `/ws/${id}`,
             body: JSON.stringify(data)
@@ -35,4 +35,4 @@ const mapStateToProps = (state: State) => {
     return { client: state.client }
 }
 
-export default connect(mapStateToProps)(ChatForm)
+export default connect(mapStateToProps)(Input)
