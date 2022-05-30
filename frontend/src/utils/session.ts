@@ -28,7 +28,3 @@ export const setAccessToken = () => {
 
     send(to, {}, callback, fallback)
 }
-
-export const refreshAccessToken = () => {
-
-}

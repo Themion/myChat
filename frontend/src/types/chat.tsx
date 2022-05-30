@@ -4,7 +4,7 @@ export type Id = number
 
 export interface ChatDTO {
     chat: string
-    sender?: string
+    sender: string
 }
 
 export interface ChatroomDTO {

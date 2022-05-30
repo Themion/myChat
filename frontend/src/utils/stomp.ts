@@ -1,11 +1,10 @@
 import { Client } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { Id, ChatDispatch, ChatDTO, ChatActionType } from "../types/chat";
 import { getTokenPayload } from "./session";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
-export const stompClient = (id: Id, dispatch: ChatDispatch) => {
+export const stompClient = () => {
     const payload = getTokenPayload()
 
     const client = new Client({
@@ -16,25 +15,6 @@ export const stompClient = (id: Id, dispatch: ChatDispatch) => {
         heartbeatOutgoing: 4000,
         connectHeaders: payload ? { username: payload.sub } : {}
     })
-
-    client.onConnect = (frame) => {
-        client.subscribe(`/topic/${id}`, (message) => {
-            const dto: ChatDTO = JSON.parse(message.body)
-            dispatch({type: ChatActionType.CHAT, payload: dto})
-        })
-        client.subscribe(`/topic/${id}/connect`, (message) => {
-            const dto: ChatDTO = JSON.parse(message.body)
-            dispatch({type: ChatActionType.INFO, payload: dto})
-        })
-        client.subscribe(`/topic/${id}/disconnect`, (message) => {
-            const dto: ChatDTO = JSON.parse(message.body)
-            dispatch({type: ChatActionType.INFO, payload: dto})
-        })
-
-        client.publish({
-            destination: `/ws/${id}/connect`
-        })
-    };
     
     client.onStompError = (frame) => {
         // Will be invoked in case of error encountered at Broker
@@ -43,16 +23,7 @@ export const stompClient = (id: Id, dispatch: ChatDispatch) => {
         // Compliant brokers will terminate the connection after any error
         console.log('Broker reported error: ' + frame.headers['message']);
         console.log('Additional details: ' + frame.body);
-    };
-
-    window.onbeforeunload = (e) => { 
-        client.publish({
-            destination: `/ws/${id}/disconnect`
-        })
-        client.deactivate()
     }
-    
-    client.activate()
 
     return client
 }
