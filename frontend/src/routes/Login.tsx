@@ -15,6 +15,9 @@ const Login = () => {
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
 
+        const username = document.querySelector('input#username') as HTMLInputElement
+        const password = document.querySelector('input#password') as HTMLInputElement
+
         const to: AxiosDestination = {
             url: '/login',
             method: 'POST'
@@ -25,12 +28,10 @@ const Login = () => {
             navigate('/')
         }
         const fallback: AxiosFallback = (res) => {
-            // window.location.href = '/login?error'
+            username.value = ""
+            password.value = ""
             console.log(res)
         }
-
-        const username = document.querySelector('input#username') as HTMLInputElement
-        const password = document.querySelector('input#password') as HTMLInputElement
 
         const data: LoginDTO = {
             username: username.value,

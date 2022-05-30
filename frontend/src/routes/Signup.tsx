@@ -31,7 +31,11 @@ const Signup = () => {
         const password = document.querySelector('input#password') as HTMLInputElement
         const password_check = document.querySelector('input#password_check') as HTMLInputElement
     
-        if (password.value !== password_check.value) return
+        if (password.value !== password_check.value) {
+            password.value = ""
+            password_check.value = ""
+            return
+        }
     
         const data: SignupDTO = {
             username: username.value,
