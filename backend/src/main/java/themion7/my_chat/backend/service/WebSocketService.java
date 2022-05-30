@@ -31,6 +31,7 @@ public class WebSocketService {
             "/topic/" + roomId.toString() + "/connect", 
             ChatDTO.builder()
                 .chat("someone has connected")
+                .sender("")
                 .build()
         );
     }
@@ -40,6 +41,7 @@ public class WebSocketService {
             "/topic/" + roomId.toString() + "/disconnect", 
             ChatDTO.builder()
                 .chat("someone has disconnected")
+                .sender("")
                 .build()
         );
     }
