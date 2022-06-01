@@ -22,7 +22,6 @@ import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
 import lombok.AllArgsConstructor;
-import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.service.MemberService;
 
 @Configuration
@@ -55,28 +54,32 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    Authentication user = null;
                     List<String> result = accessor.getNativeHeader("username");
-
-                    if (result != null) {
-                        String username = result.get(0);
-                        Member member = memberService.findByUsername(username);
-                        user = new UsernamePasswordAuthenticationToken(username, null, member.getAuthorities());
-                    }
-                    else {
-                        final String randomId = UUID.randomUUID().toString();
-                        System.out.println(randomId);
-                        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-                        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
-                        user = new AnonymousAuthenticationToken(randomId, randomId, authorities);
-                    }
-
-                    accessor.setUser(user);
+                    accessor.setUser(
+                        (result != null) ? 
+                            findMemberFromRepo(result) : 
+                            createNewAnonymousAuthentication()
+                    );
                 }
 
                 return message;
             }
         });
+    }
+
+    private Authentication findMemberFromRepo(List<String> list) {
+        String username = list.get(0);
+        return new UsernamePasswordAuthenticationToken(
+            username, null, 
+            memberService.findByUsername(username).getAuthorities()
+        );
+    }
+
+    private Authentication createNewAnonymousAuthentication() {
+        final String randomId = UUID.randomUUID().toString();
+        List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+        authorities.add(new SimpleGrantedAuthority("ROLE_USER"));
+        return new AnonymousAuthenticationToken(randomId, randomId, authorities);
     }
     
 }
