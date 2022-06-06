@@ -9,7 +9,7 @@ export const stompClient = () => {
 
     const client = new Client({
         webSocketFactory: () => new SockJS(WebSocketServer),
-        debug: (str) => console.log(str),
+        // debug: (str) => console.log(str),
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,

@@ -3,20 +3,26 @@ import { AxiosCallback, AxiosDestination, AxiosFallback } from "../types/axios"
 
 const baseURL = 'http://localhost:8080'
 
-export const send = (
+const makeConfig = (
     to: AxiosDestination, 
-    data: object, 
-    callback: AxiosCallback, 
-    fallback: AxiosFallback
-) => {
-    const config: AxiosRequestConfig = {
+    data: object
+): AxiosRequestConfig => {
+    return {
         url: to.url,
         method: to.method,
         data: data,
         baseURL: baseURL,
         withCredentials: true
     }
-    axios(config)
+}
+
+export const send = (
+    to: AxiosDestination, 
+    data: object, 
+    callback: AxiosCallback, 
+    fallback: AxiosFallback
+) => {
+    axios(makeConfig(to, data))
         .then((res: AxiosResponse) => callback(res))
         .catch((err: Error | AxiosError) => {
             if (axios.isAxiosError(err)) {
@@ -24,4 +30,15 @@ export const send = (
                 if (err.response) fallback(err.response)
             } else console.log(err)
     })
+}
+
+export const sendSync = async (
+    to: AxiosDestination, 
+    data: object, 
+    callback: AxiosCallback, 
+    fallback: AxiosFallback
+) => {
+    const res = await axios(makeConfig(to, data))
+    if (res.status === 200) callback(res)
+    else fallback(res)
 }
