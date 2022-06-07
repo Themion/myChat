@@ -13,27 +13,33 @@ type Props = ClientProps & {
     setClient: () => void
 }
 
-const ChatList = (props: Props) => {
+const reducerFactory = (getRoom: Function) => {
     const reducer = (state: JSX.Element[], action: ChatAction) => {
         const { type, payload } = action
         switch (type) {
             case ChatActionType.CHAT:
                 return state.concat(<Chat key={payload.chatId} {...payload} />)
             case ChatActionType.INFO: 
-                props.getRoom()
+                getRoom()
                 return state.concat(<Info key={payload.chatId} {...payload} />)
             default:
                 return state
         }
     }
 
-    const [chats, dispatch] = useReducer(reducer, [])
+    return reducer
+}
+
+const ChatList = (props: Props) => {
+    const [chats, dispatch] = useReducer(reducerFactory(props.getRoom), [])
     const { id, client, setClient } = props
+
 
     useEffect(() => {
         if (!client) setClient()
         else activateClient(id, client, dispatch)
-    }, [id, client, setClient])
+        // eslint-disable-next-line
+    }, [client])
 
     window.onbeforeunload = () => {
         if (client) {
