@@ -7,7 +7,7 @@ import { ClientProps, State } from "../../types/redux"
 import { activateClient, stompClient } from "../../utils/stomp"
 import { Chat, Info } from "./Chat"
 
-interface Props extends ClientProps {
+type Props = ClientProps & {
     id: Id
     getRoom: Function
     setClient: () => void

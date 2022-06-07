@@ -2,19 +2,19 @@ import React from "react"
 
 export type Id = number
 
-export interface ChatDTO {
+export type ChatDTO = {
     chat: string
     sender: string
     chatId: string
 }
 
-export interface ChatroomDTO {
+export type ChatroomDTO = {
     id: Id
     title: string
     population: number
 }
 
-export interface ChatAction {
+export type ChatAction = {
     type: string
     payload: ChatDTO
 }

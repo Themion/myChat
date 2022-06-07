@@ -1,4 +1,4 @@
-export interface TokenPayload {
+export type TokenPayload = {
     sub: string,
     exp: number,
     iat: number

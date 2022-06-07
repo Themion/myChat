@@ -1,7 +1,7 @@
 import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../types/chat";
-import { getTokenPayload, setAccessToken } from "./session";
+import { getTokenPayload } from "./session";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 

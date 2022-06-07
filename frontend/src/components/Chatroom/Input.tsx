@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Id, ChatDTO } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
 
-interface Props extends ClientProps {
+type Props = ClientProps & {
     id: Id
 }
 

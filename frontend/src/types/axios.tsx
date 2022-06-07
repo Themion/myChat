@@ -1,6 +1,6 @@
 import { Method, AxiosResponse } from "axios"
 
-export interface AxiosDestination {
+export type AxiosDestination = {
     url: string,
     method: Method
 }
