@@ -3,17 +3,16 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { TokenPayload } from "../types/token"
 import { sendSync } from "./axios"
 
-export const getTokenPayload = () => {
+export const getTokenPayload = (): TokenPayload => {
     const token = getAccessToken()
-    if (!token) return
-    return JSON.parse(atob(token.split(".")[1])) as TokenPayload
+    return token ? JSON.parse(atob(token.split(".")[1])) : undefined;
 }
 
 export const getAccessToken = () => {
     return store.getState().accessToken
 }
 
-export const setAccessToken = () => {
+export const setAccessToken = async () => {
     const to: AxiosDestination = {
         url: '/token',
         method: 'GET'
@@ -26,5 +25,5 @@ export const setAccessToken = () => {
         // console.log(res)
     }
 
-    sendSync(to, {}, callback, fallback)
+    return await sendSync(to, {}, callback, fallback)
 }

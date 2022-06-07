@@ -39,6 +39,5 @@ export const sendSync = async (
     fallback: AxiosFallback
 ) => {
     const res = await axios(makeConfig(to, data))
-    if (res.status === 200) callback(res)
-    else fallback(res)
+    return (res.status === 200) ? callback(res) : fallback(res)
 }

@@ -5,9 +5,5 @@ export interface AxiosDestination {
     method: Method
 }
 
-export interface AxiosCallback {
-    (res: AxiosResponse): any
-}
-export interface AxiosFallback {
-    (response: AxiosResponse): any
-}
+export type AxiosCallback = (res: AxiosResponse) => any
+export type AxiosFallback = (response: AxiosResponse) => any
