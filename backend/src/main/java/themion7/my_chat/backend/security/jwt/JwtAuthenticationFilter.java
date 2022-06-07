@@ -69,7 +69,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         Member member = (Member) authResult.getPrincipal();
 
         // Create JWT Tokens
-        Cookie refreshToken = new Cookie(JwtUtils.REFRESH_TOKEN_HEADER, JwtUtils.getAccessToken(member));
+        Cookie refreshToken = new Cookie(JwtUtils.REFRESH_TOKEN_HEADER, JwtUtils.getRefreshToken(member));
         // lifeSpan은 millisecond 단위이므로 second로 변환
         refreshToken.setMaxAge(JwtUtils.REFRESH_TOKEN_LIFE_SPAN / 1000);
         refreshToken.setHttpOnly(true);

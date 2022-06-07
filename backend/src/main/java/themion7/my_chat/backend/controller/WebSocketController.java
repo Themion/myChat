@@ -28,14 +28,20 @@ public class WebSocketController {
     }
 
     @MessageMapping("/{roomId}/connect")
-    public void onConnect(@DestinationVariable final Long roomId) {
+    public void onConnect(
+        @DestinationVariable final Long roomId,
+        final Principal principal
+    ) {
         chatroomService.join(roomId);
-        webSocketService.onConnect(roomId);
+        webSocketService.onConnect(roomId, principal);
     }
 
     @MessageMapping("/{roomId}/disconnect")
-    public void onDisconnect(@DestinationVariable final Long roomId) {
+    public void onDisconnect(
+        @DestinationVariable final Long roomId,
+        final Principal principal
+    ) {
         chatroomService.leave(roomId);
-        webSocketService.onDisconnect(roomId);
+        webSocketService.onDisconnect(roomId, principal);
     }
 }
