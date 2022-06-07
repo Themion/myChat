@@ -1,6 +1,7 @@
-import { Client } from "@stomp/stompjs";
+import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
-import { getTokenPayload } from "./session";
+import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../types/chat";
+import { getTokenPayload, setAccessToken } from "./session";
 
 const WebSocketServer = "http://localhost:8080/websocket"
 
@@ -26,4 +27,38 @@ export const stompClient = () => {
     }
 
     return client
+}
+
+const messageToDTO = (message: IMessage) => {
+    const dto: ChatDTO = JSON.parse(message.body)
+    dto.chatId = message.headers['message-id']
+
+    return dto
+}
+
+export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) => {
+    client.onConnect = (frame) => {
+        client.subscribe(`/topic/${id}`, (message) => {
+            dispatch({
+                type: ChatActionType.CHAT, 
+                payload: messageToDTO(message)
+            })
+        })
+        client.subscribe(`/topic/${id}/connect`, (message) => {
+            dispatch({
+                type: ChatActionType.INFO, 
+                payload: messageToDTO(message)
+            })
+        })
+        client.subscribe(`/topic/${id}/disconnect`, (message) => {
+            dispatch({
+                type: ChatActionType.INFO, 
+                payload: messageToDTO(message)
+            })
+        })
+
+        client.publish({
+            destination: `/ws/${id}/connect`
+        })
+    }
 }

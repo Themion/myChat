@@ -11,7 +11,7 @@ import Login from './routes/Login';
 import Signup from './routes/Signup';
 import { setAccessToken } from './utils/session';
 
-function App() {
+const App = () => {
     setAccessToken()
     return (
         <Router>
