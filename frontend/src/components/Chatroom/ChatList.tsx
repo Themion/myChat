@@ -1,21 +1,30 @@
 import { Dispatch } from "@reduxjs/toolkit"
-import { useEffect, useReducer } from "react"
+import { useEffect, useReducer, useState } from "react"
 import { connect } from "react-redux"
 import { slice } from "../../app/store"
 import { ChatAction, ChatActionType, Id } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
 import { activateClient, stompClient } from "../../utils/stomp"
-import { Chat, Info } from "./Chat"
+import { Chat, Info, Sender } from "./Chat"
 
 type Props = ClientProps & {
     id: Id
-    getRoom: Function
+    getRoom: () => void
     setClient: () => void
 }
 
-const reducerFactory = (getRoom: Function) => {
+const reducerFactory = (
+    getRoom: Props["getRoom"], 
+    lastSender: string,
+    setLastSender: (lastSender: string) => any
+) => {
     const reducer = (state: JSX.Element[], action: ChatAction) => {
         const { type, payload } = action
+        if (payload.sender !== lastSender) {
+            state.push(<Sender {...payload} />)
+            setLastSender(payload.sender)
+        }
+
         switch (type) {
             case ChatActionType.CHAT:
                 return state.concat(<Chat key={payload.chatId} {...payload} />)
@@ -31,13 +40,11 @@ const reducerFactory = (getRoom: Function) => {
 }
 
 const ChatList = (props: Props) => {
-    const [chats, dispatch] = useReducer(reducerFactory(props.getRoom), [])
-    const { id, client, setClient } = props
-
+    const { id, client, setClient, getRoom } = props
+    const [chats, dispatch] = useReducer(reducerFactory(getRoom, ...useState("")), [])
 
     useEffect(() => {
-        if (!client) setClient()
-        else activateClient(id, client, dispatch)
+        client ? activateClient(id, client, dispatch) : setClient()
         // eslint-disable-next-line
     }, [client])
 

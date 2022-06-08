@@ -8,9 +8,13 @@ export const Info = (props: ChatDTO) => {
 }
 
 export const Chat = (props: ChatDTO) => {
-    const sender = props.sender ? <>{props.sender}<br /></> : <></>
-    return <div className={styles.chat}>
-        {sender}
+    return <div>
         {props.chat}
+    </div>
+}
+
+export const Sender = (props: ChatDTO) => {
+    return <div className={styles.sender}>
+        {props.sender}
     </div>
 }
