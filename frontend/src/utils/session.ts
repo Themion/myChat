@@ -22,6 +22,7 @@ export const setAccessToken = async () => {
         store.dispatch(slice.actions.setAccessToken(res.data))
     }
     const fallback: AxiosFallback = (res) => {
+        store.dispatch(slice.actions.setAccessToken())
     }
 
     return await sendAsync(to, {}, callback, fallback)

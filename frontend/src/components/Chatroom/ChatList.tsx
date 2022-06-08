@@ -4,6 +4,7 @@ import { connect } from "react-redux"
 import { slice } from "../../app/store"
 import { ChatAction, ChatActionType, Id } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
+import { setAccessToken } from "../../utils/session"
 import { activateClient, stompClient } from "../../utils/stomp"
 import { Chat, Info, Sender } from "./Chat"
 
@@ -44,7 +45,7 @@ const ChatList = (props: Props) => {
     const [chats, dispatch] = useReducer(reducerFactory(getRoom, ...useState("")), [])
 
     useEffect(() => {
-        client ? activateClient(id, client, dispatch) : setClient()
+        client ? activateClient(id, client, dispatch) : setAccessToken().finally(() => setClient())
         // eslint-disable-next-line
     }, [client])
 
