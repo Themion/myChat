@@ -2,7 +2,7 @@ import { useEffect, useState } from "react"
 import Tr from "../components/Home/Tr"
 import CreateChatroomForm from "../components/Home/CreateChatroomForm"
 import { useNavigate } from "react-router-dom"
-import { getAccessToken } from "../utils/session"
+import { getAccessToken, setAccessToken } from "../utils/session"
 import { send } from "../utils/axios"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { ChatroomDTO } from "../types/chat"
@@ -12,6 +12,8 @@ const Home = () => {
     const [table, setTable] = useState(<span>loading...</span>)
 
     useEffect(() => {
+        setAccessToken()
+
         const to: AxiosDestination = {
             url: "/room",
             method: "GET"
@@ -47,7 +49,7 @@ const Home = () => {
     }, [])
 
     const button = getAccessToken() ? 
-        undefined : 
+        <button onClick={() => {navigate('/logout')}}>로그아웃</button> : 
         <button onClick={() => {navigate('/login')}}>로그인</button>
 
     return <>

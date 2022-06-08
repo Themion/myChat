@@ -1,7 +1,7 @@
 import { slice, store } from "../app/store"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { TokenPayload } from "../types/token"
-import { sendSync } from "./axios"
+import { sendAsync } from "./axios"
 
 export const getTokenPayload = (): TokenPayload => {
     const token = getAccessToken()
@@ -22,8 +22,22 @@ export const setAccessToken = async () => {
         store.dispatch(slice.actions.setAccessToken(res.data))
     }
     const fallback: AxiosFallback = (res) => {
-        // console.log(res)
     }
 
-    return await sendSync(to, {}, callback, fallback)
+    return await sendAsync(to, {}, callback, fallback)
+}
+
+export const removeAccessToken = () => {
+    const to: AxiosDestination = {
+        url: '/token',
+        method: 'DELETE'
+    }
+
+    const callback: AxiosCallback = (res) => {
+        store.dispatch(slice.actions.setAccessToken())
+    }
+    const fallback: AxiosFallback = (res) => {
+    }
+
+    sendAsync(to, {}, callback, fallback)
 }

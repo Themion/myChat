@@ -8,17 +8,17 @@ import { store } from './app/store';
 import Chatroom from './routes/Chatroom';
 import Home from './routes/Home';
 import Login from './routes/Login';
+import Logout from './routes/Logout';
 import Signup from './routes/Signup';
-import { setAccessToken } from './utils/session';
 
 const App = () => {
-    setAccessToken()
     return (
         <Router>
             <div className="App">
                 <Routes>
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />
+                    <Route path="/logout" element={<Logout />} />
                     <Route path="/room/:id" element={<Provider store={store}><Chatroom /></Provider>} />
                     <Route path="/" element={<Home />} />
                 </Routes>

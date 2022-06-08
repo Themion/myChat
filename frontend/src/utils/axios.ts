@@ -32,7 +32,7 @@ export const send = (
     })
 }
 
-export const sendSync = async (
+export const sendAsync = async (
     to: AxiosDestination, 
     data: object, 
     callback: AxiosCallback, 
