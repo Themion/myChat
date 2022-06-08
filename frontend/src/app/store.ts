@@ -1,5 +1,5 @@
-import { configureStore, createSlice } from "@reduxjs/toolkit";
-import { ClientAction, State, TokenAction } from "../types/redux";
+import { createSlice, configureStore } from "@reduxjs/toolkit"
+import { ClientAction, State, TokenAction } from "../types/redux"
 
 export const slice = createSlice({
     name: "clientReducer",

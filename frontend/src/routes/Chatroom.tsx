@@ -1,10 +1,11 @@
-import { useEffect, useState } from "react"
-import { Navigate, useParams } from "react-router-dom"
-import Input from "../components/Chatroom/Input"
+import { useState, useEffect } from "react"
+import { useParams, Navigate } from "react-router-dom"
 import ChatList from "../components/Chatroom/ChatList"
+import Input from "../components/Chatroom/Input"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
-import { ChatroomDTO, Id } from "../types/chat"
+import { Id, ChatroomDTO } from "../types/chat"
 import { send } from "../utils/axios"
+
 
 const Chatroom = () => {
     const id: Id = Number(useParams().id)

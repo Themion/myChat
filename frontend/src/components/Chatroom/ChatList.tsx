@@ -1,12 +1,13 @@
 import { Dispatch } from "@reduxjs/toolkit"
-import { useEffect, useReducer, useState } from "react"
+import { useReducer, useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { slice } from "../../app/store"
-import { ChatAction, ChatActionType, Id } from "../../types/chat"
+import { Id, ChatAction, ChatActionType } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
 import { setAccessToken } from "../../utils/session"
 import { activateClient, stompClient } from "../../utils/stomp"
-import { Chat, Info, Sender } from "./Chat"
+import { Sender, Chat, Info } from "./Chat"
+
 
 type Props = ClientProps & {
     id: Id
@@ -22,7 +23,7 @@ const reducerFactory = (
     const reducer = (state: JSX.Element[], action: ChatAction) => {
         const { type, payload } = action
         if (payload.sender !== lastSender) {
-            state.push(<Sender {...payload} />)
+            state.push(<Sender key={payload.sender + '_' + Date()} {...payload} />)
             setLastSender(payload.sender)
         }
 

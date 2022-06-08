@@ -1,6 +1,6 @@
 import { FormEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
-import { AxiosCallback, AxiosDestination, AxiosFallback } from "../types/axios"
+import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { send } from "../utils/axios"
 
 interface SignupDTO {

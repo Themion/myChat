@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react"
-import Tr from "../components/Home/Tr"
-import CreateChatroomForm from "../components/Home/CreateChatroomForm"
+import { useState, useEffect } from "react"
 import { useNavigate } from "react-router-dom"
-import { getAccessToken, setAccessToken } from "../utils/session"
-import { send } from "../utils/axios"
+import CreateChatroomForm from "../components/Home/CreateChatroomForm"
+import Tr from "../components/Home/Tr"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { ChatroomDTO } from "../types/chat"
+import { send } from "../utils/axios"
+import { setAccessToken, getAccessToken } from "../utils/session"
+
 
 const Home = () => {
     const navigate = useNavigate()
@@ -20,12 +21,7 @@ const Home = () => {
         }
 
         const callback: AxiosCallback = (res) => {
-            const trList: JSX.Element[] = []
             const chatroomList: ChatroomDTO[] = res.data
-
-            chatroomList.forEach((tr: ChatroomDTO) => {
-                trList.push(<Tr key={tr.id} {...tr} />)
-            })
 
             setTable(
                 <table>
@@ -36,7 +32,9 @@ const Home = () => {
                             <th>현재 인원</th>
                         </tr>
                     </thead>
-                    <tbody>{trList}</tbody>
+                    <tbody>{chatroomList.map(chatroom => 
+                        <Tr key={chatroom.id} {...chatroom} />
+                    )}</tbody>
                 </table>
             )
         }
