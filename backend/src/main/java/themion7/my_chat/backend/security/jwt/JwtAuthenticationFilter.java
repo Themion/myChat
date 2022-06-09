@@ -78,16 +78,4 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
         response.addCookie(refreshToken);
     }
-
-    @Override
-    protected void unsuccessfulAuthentication(
-        HttpServletRequest request,
-        HttpServletResponse response,
-        AuthenticationException failed
-    ) throws IOException, ServletException {
-        Cookie refreshToken = new Cookie(JwtUtils.REFRESH_TOKEN_HEADER, null);
-        refreshToken.setMaxAge(0);
-
-        response.addCookie(refreshToken);
-    }
 }

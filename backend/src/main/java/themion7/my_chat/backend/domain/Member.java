@@ -9,6 +9,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -25,15 +26,19 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Member implements UserDetails {
-    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Id
     private Long id;
     
     @Column(length = 20, unique = true, nullable = false)
     private String username;
-
+    
     @Column(nullable = false)
     private String password;
+
+    @OneToMany(mappedBy = "member", orphanRemoval = true)
+    @Builder.Default
+    private List<MemberChatroom> chatrooms = new ArrayList<>();
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
