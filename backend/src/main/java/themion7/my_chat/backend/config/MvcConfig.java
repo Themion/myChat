@@ -9,6 +9,8 @@ import org.springframework.context.annotation.Configuration;
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.repository.ChatroomRepository;
 import themion7.my_chat.backend.repository.ChatroomRepositoryImpl;
+import themion7.my_chat.backend.repository.MemberChatroomRepository;
+import themion7.my_chat.backend.repository.MemberChatroomRepositoryImpl;
 import themion7.my_chat.backend.repository.MemberRepository;
 import themion7.my_chat.backend.repository.MemberRepositoryImpl;
 import themion7.my_chat.backend.service.ChatroomService;
@@ -39,6 +41,11 @@ public class MvcConfig {
     @Bean
     public MemberService memberService() {
         return new MemberService(this.memberRepository());
+    }
+
+    @Bean
+    public MemberChatroomRepository memberChatroomRepository() {
+        return new MemberChatroomRepositoryImpl(em);
     }
 
 }
