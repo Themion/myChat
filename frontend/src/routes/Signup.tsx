@@ -24,7 +24,7 @@ const Signup = () => {
             navigate('/login')
         }
         const fallback: AxiosFallback = (res) => {
-            window.location.href = '/signup'
+            // window.location.href = '/signup'
         }
     
         const username = document.querySelector('input#username') as HTMLInputElement

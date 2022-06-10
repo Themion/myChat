@@ -13,37 +13,39 @@ const Home = () => {
     const [table, setTable] = useState(<span>loading...</span>)
 
     useEffect(() => {
-        setAccessToken()
-
-        const to: AxiosDestination = {
-            url: "/room",
-            method: "GET"
+        const updateTable = () => {
+            const to: AxiosDestination = {
+                url: "/room",
+                method: "GET"
+            }
+    
+            const callback: AxiosCallback = (res) => {
+                const chatroomList: ChatroomDTO[] = res.data
+    
+                setTable(
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>이름</th>
+                                <th>현재 인원</th>
+                            </tr>
+                        </thead>
+                        <tbody>{chatroomList.map(chatroom => 
+                            <Tr key={chatroom.id} {...chatroom} />
+                        )}</tbody>
+                    </table>
+                )
+            }
+    
+            const fallback: AxiosFallback = (res) => {
+                console.log(res.data)
+            }
+    
+            send(to, {}, callback, fallback)
         }
 
-        const callback: AxiosCallback = (res) => {
-            const chatroomList: ChatroomDTO[] = res.data
-
-            setTable(
-                <table>
-                    <thead>
-                        <tr>
-                            <th>#</th>
-                            <th>이름</th>
-                            <th>현재 인원</th>
-                        </tr>
-                    </thead>
-                    <tbody>{chatroomList.map(chatroom => 
-                        <Tr key={chatroom.id} {...chatroom} />
-                    )}</tbody>
-                </table>
-            )
-        }
-
-        const fallback: AxiosFallback = (res) => {
-            console.log(res.data)
-        }
-
-        send(to, {}, callback, fallback)
+        setAccessToken().then(updateTable)
     }, [])
 
     const button = getAccessToken() ? 
