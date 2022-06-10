@@ -1,14 +1,12 @@
 package themion7.my_chat.backend.repository;
 
 import java.util.List;
-import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
 import org.springframework.transaction.annotation.Transactional;
 
 import lombok.AllArgsConstructor;
-import lombok.var;
 import themion7.my_chat.backend.domain.Chatroom;
 
 @AllArgsConstructor
@@ -24,8 +22,19 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public Optional<Chatroom> findById(Long id) {
-        return Optional.ofNullable(em.find(Chatroom.class, id));
+    public Chatroom findById(Long id) {
+        return em.find(Chatroom.class, id);
+    }
+
+    @Override
+    public Chatroom findByTitle(String title) {
+        return em
+            .createQuery(
+                "select c from Chatroom c where m.title = :title",
+                Chatroom.class
+            )
+            .setParameter("title", title)
+            .getSingleResult();
     }
 
     @Override
@@ -34,26 +43,33 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public Optional<Chatroom> increaseRoomPopulationById(Long id) {
-        var chatroom = this.findById(id);
-        chatroom.ifPresent(room -> {
-            room.setPopulation(room.getPopulation() + 1);
-        });
+    public boolean isTitle(String title) {
+        try {
+            this.findByTitle(title);
+        } catch (Exception e) {
+            return false;
+        } 
+
+        return true;
+    }
+
+    @Override
+    public Chatroom increaseRoomPopulationById(Long id) {
+        Chatroom chatroom = this.findById(id);
+        if (chatroom != null) chatroom.setPopulation(chatroom.getPopulation() + 1);
         return chatroom;
     }
 
     @Override
-    public Optional<Chatroom> decreaseRoomPopulationById(Long id) {
-        var chatroom = this.findById(id);
-        chatroom.ifPresent(room -> {
-            room.setPopulation(room.getPopulation() - 1);
-        });
+    public Chatroom decreaseRoomPopulationById(Long id) {
+        Chatroom chatroom = this.findById(id);
+        if (chatroom != null) chatroom.setPopulation(chatroom.getPopulation() - 1);
         return chatroom;
     }
 
     @Override
     public void deleteById(Long id) {
-        this.findById(id).ifPresent((chatroom) -> { em.remove(chatroom); });
+        em.remove(this.findById(id));
     }
 
 }

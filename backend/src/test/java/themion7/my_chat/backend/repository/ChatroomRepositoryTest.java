@@ -35,7 +35,7 @@ public class ChatroomRepositoryTest {
         chatroomRepository.save(chatroom);
         Assertions
             .assertThat(chatroomRepository.findById(chatroom.getId()))
-            .isNotEmpty();
+            .isNotNull();
     }
 
     @Test
@@ -87,6 +87,6 @@ public class ChatroomRepositoryTest {
         chatroomRepository.deleteById(chatroom.getId());
         Assertions
             .assertThat(chatroomRepository.findById(chatroom.getId()))
-            .isEmpty();
+            .isNull();
     }
 }

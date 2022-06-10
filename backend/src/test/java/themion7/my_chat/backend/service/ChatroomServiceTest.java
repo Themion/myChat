@@ -1,9 +1,5 @@
 package themion7.my_chat.backend.service;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-
-import java.util.NoSuchElementException;
-
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -43,14 +39,13 @@ public class ChatroomServiceTest {
             .assertThat(chatroom.getPopulation())
             .isZero();
     
-        Exception e = assertThrows(NoSuchElementException.class, () -> { service.findById(id); });
         Assertions
-            .assertThat(e)
-            .isInstanceOf(NoSuchElementException.class);
+            .assertThat(service.findById(id))
+            .isNull();
     }
 
     @Test
-    public void autoDelete() {
+    public void autoDelete() throws InterruptedException {
         Long id;
         Chatroom chatroom = Chatroom.builder()
             .title("test")
@@ -59,6 +54,8 @@ public class ChatroomServiceTest {
         this.service.save(chatroom);
         id = chatroom.getId();
         this.service.deleteIfRoomEmpty(id);
+
+        Thread.sleep(1000 * 70);
 
         Assertions
             .assertThat(service.findById(id))

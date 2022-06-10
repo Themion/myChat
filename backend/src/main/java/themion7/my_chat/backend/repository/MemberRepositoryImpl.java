@@ -36,16 +36,6 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public void deleteById(Long id) {
-        em.remove(this.findById(id));
-    }
-
-	@Override
-	public void deleteByUsername(String username) {
-		em.remove(this.findByUsername(username));
-	}
-
-    @Override
     public boolean isUsername(String username) {
         try {
             this.findByUsername(username);
@@ -55,5 +45,15 @@ public class MemberRepositoryImpl implements MemberRepository {
 
         return true;
     }
+
+    @Override
+    public void deleteById(Long id) {
+        em.remove(this.findById(id));
+    }
+
+	@Override
+	public void deleteByUsername(String username) {
+		em.remove(this.findByUsername(username));
+	}
     
 }

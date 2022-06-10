@@ -4,4 +4,3 @@
     백엔드에 member_chatroom 테이블을 만든 뒤
     primary key로 memberId와 chatroomId를 주고
     delete 시 on cascade option 사용하기
-repository의 Exception을 별개 패키지의 파일로 이동?
