@@ -1,5 +1,7 @@
 package themion7.my_chat.backend.repository;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -120,5 +122,50 @@ public class MemberChatroomRepositoryTest {
                 memberChatroomRepository
                     .findByMemberId(member.getId())
             ).isEmpty();
+    }
+
+    @Test
+    public void UniqueConstraint() {
+        Member member = Member.builder()
+            .username("username")
+            .password("password")
+            .build();
+
+        Chatroom chatroom = Chatroom.builder()
+            .title("title")
+            .build();
+
+        memberRepository.save(member);
+        chatroomRepository.save(chatroom);
+
+        memberChatroomRepository.save(
+            MemberChatroom.builder()
+                .member(member)
+                .chatroom(chatroom)
+                .build()
+        );
+
+        assertThrows(
+            Exception.class, 
+            () -> {
+                memberChatroomRepository.save(
+                    MemberChatroom.builder()
+                        .member(member)
+                        .build()
+                );
+            }
+        );
+
+        assertThrows(
+            Exception.class, 
+            () -> {
+                memberChatroomRepository.save(
+                    MemberChatroom.builder()
+                        .member(member)
+                        .chatroom(chatroom)
+                        .build()
+                );
+            }
+        );
     }
 }
