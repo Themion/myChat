@@ -39,7 +39,11 @@ public class MemberRepositoryTest {
         Assertions
             .assertThat(memberRepository.findById(member.getId()))
             .isNotNull();
-        memberRepository.save(member);
+        
+        assertThrows(
+            Exception.class, 
+            () -> { memberRepository.findByUsername(member.getUsername() + 'a'); }
+        );
     }
 
     @Test
@@ -50,7 +54,7 @@ public class MemberRepositoryTest {
             .build();
         
         memberRepository.save(member);
-        memberRepository.deleteById(member.getId());
+        memberRepository.deleteByUsername(member.getUsername());
         
         assertThrows(
             Exception.class, 
@@ -70,13 +74,13 @@ public class MemberRepositoryTest {
             .build();
 
         Assertions
-            .assertThat(memberRepository.isUsername(member.getUsername()))
+            .assertThat(memberRepository.isMember(member.getUsername()))
             .isFalse();
             
         memberRepository.save(member);
             
         Assertions
-            .assertThat(memberRepository.isUsername(member.getUsername()))
+            .assertThat(memberRepository.isMember(member.getUsername()))
             .isTrue();
     }
 }

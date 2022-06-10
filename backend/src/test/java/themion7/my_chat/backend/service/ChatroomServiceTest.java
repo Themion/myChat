@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import themion7.my_chat.backend.domain.Chatroom;
+import themion7.my_chat.backend.domain.Member;
+import themion7.my_chat.backend.dto.ChatroomDTO;
 
 @Transactional
 @SpringBootTest
@@ -18,23 +20,29 @@ public class ChatroomServiceTest {
     @Test
     public void joinAndLeave() {
         Long id;
-        Chatroom chatroom = Chatroom.builder()
-            .title("test")
+
+        ChatroomDTO chatroomDTO = new ChatroomDTO("test");
+        Member member = Member.builder()
+            .username("username")
+            .password("password")
             .build();
 
-        service.save(chatroom);
+        service.save(chatroomDTO);
+
+        Chatroom chatroom = service.findAll().get(0);
+
         Assertions
             .assertThat(chatroom.getPopulation())
             .isZero();
 
         id = chatroom.getId();
 
-        service.join(id);
+        service.join(id, member);
         Assertions
             .assertThat(chatroom.getPopulation())
             .isEqualTo(1L);
         
-        service.leave(id);
+        service.leave(id, member);
         Assertions
             .assertThat(chatroom.getPopulation())
             .isZero();
@@ -47,12 +55,11 @@ public class ChatroomServiceTest {
     @Test
     public void autoDelete() throws InterruptedException {
         Long id;
-        Chatroom chatroom = Chatroom.builder()
-            .title("test")
-            .build();
 
-        this.service.save(chatroom);
-        id = chatroom.getId();
+        ChatroomDTO chatroomDTO = new ChatroomDTO("test");
+
+        this.service.save(chatroomDTO);
+        id = service.findAll().get(0).getId();
         this.service.deleteIfRoomEmpty(id);
 
         Thread.sleep(1000 * 70);
