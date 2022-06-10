@@ -49,7 +49,7 @@ public class WebSocketService {
     }
 
     private String getSender(final Principal principal) {
-        if (this.memberRepository.isUsername(principal.getName()))
+        if (this.memberRepository.isMember(principal.getName()))
             return principal.getName();
         return principal.getName().split("-")[0];
     }

@@ -26,7 +26,7 @@ public class MemberService implements UserDetailsService {
             .password(encoder.encode(dto.getPassword()))
             .build();
 
-        if (!this.memberRepository.isUsername(member.getUsername()))
+        if (!this.memberRepository.isMember(member.getUsername()))
             this.memberRepository.save(member);
 
         return member;
@@ -38,6 +38,10 @@ public class MemberService implements UserDetailsService {
 
     public Member findByUsername(String username) {
         return this.memberRepository.findByUsername(username);
+    }
+
+    public boolean isUsername(String username) {
+        return this.memberRepository.isMember(username);
     }
 
     public void deleteById(Long id) {

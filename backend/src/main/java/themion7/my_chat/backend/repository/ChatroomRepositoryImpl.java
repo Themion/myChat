@@ -43,7 +43,12 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public boolean isTitle(String title) {
+    public boolean isChatroom(Long id) {
+        return this.findById(id) != null;
+    }
+
+    @Override
+    public boolean isChatroom(String title) {
         try {
             this.findByTitle(title);
         } catch (Exception e) {

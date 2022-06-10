@@ -17,8 +17,8 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
     private final EntityManager em;
 
     private final String ql = "select mc from MemberChatroom mc ";
-    private final String mql = "mc.member.id = :memberId";
-    private final String cql = "mc.chatroom.id = :chatroomId";
+    private final String mql = " mc.member.id = :memberId ";
+    private final String cql = " mc.chatroom.id = :chatroomId ";
 
     @Override
     public MemberChatroom save(MemberChatroom memberChatroom) {
@@ -28,7 +28,7 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
 
     @Override
     public List<MemberChatroom> findByMemberId(Long memberId) {
-        String qlString = ql + "where " + mql;
+        String qlString = ql + "where" + mql;
         return em
             .createQuery(qlString, MemberChatroom.class)
             .setParameter("memberId", memberId)
@@ -38,7 +38,7 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
 
     @Override
     public List<MemberChatroom> findByChatroomId(Long chatroomId) {
-        String qlString = ql + "where " + cql;
+        String qlString = ql + "where" + cql;
         return em
             .createQuery(qlString, MemberChatroom.class)
             .setParameter("chatroomId", chatroomId)
@@ -48,7 +48,7 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
 
     @Override
     public MemberChatroom findByMemberIdAndChatroomId(Long memberId, Long chatroomId) {
-        String qlString = ql + "where " + mql + " and " + cql;
+        String qlString = ql + "where" + mql + "and" + cql;
         return em
             .createQuery(qlString, MemberChatroom.class)
             .setParameter("memberId", memberId)
@@ -58,10 +58,8 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
     }
 
     @Override
-    public void delete(Long memberId, Long chatroomId) {
-        em.remove(
-            this.findByMemberIdAndChatroomId(memberId, chatroomId)
-        );
+    public void delete(MemberChatroom memberChatroom) {
+        em.remove(memberChatroom);
     }
 
 }

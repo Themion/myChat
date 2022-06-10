@@ -9,7 +9,8 @@ public interface ChatroomRepository {
     public Chatroom findById(Long id);
     public Chatroom findByTitle(String title);
     public List<Chatroom> findAll();
-    public boolean isTitle(String title);
+    public boolean isChatroom(Long id);
+    public boolean isChatroom(String title);
     public Chatroom increaseRoomPopulationById(Long id);
     public Chatroom decreaseRoomPopulationById(Long id);
     public void deleteById(Long id);

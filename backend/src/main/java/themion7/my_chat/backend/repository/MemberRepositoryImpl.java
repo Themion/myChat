@@ -36,7 +36,12 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public boolean isUsername(String username) {
+    public boolean isMember(Long id) {
+        return this.findById(id) != null;
+    }
+
+    @Override
+    public boolean isMember(String username) {
         try {
             this.findByUsername(username);
         } catch (Exception e) {
