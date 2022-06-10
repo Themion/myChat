@@ -14,6 +14,7 @@ import themion7.my_chat.backend.repository.MemberChatroomRepositoryImpl;
 import themion7.my_chat.backend.repository.MemberRepository;
 import themion7.my_chat.backend.repository.MemberRepositoryImpl;
 import themion7.my_chat.backend.service.ChatroomService;
+import themion7.my_chat.backend.service.MemberChatroomService;
 import themion7.my_chat.backend.service.MemberService;
 
 @Configuration
@@ -46,6 +47,15 @@ public class MvcConfig {
     @Bean
     public MemberChatroomRepository memberChatroomRepository() {
         return new MemberChatroomRepositoryImpl(em);
+    }
+
+    @Bean
+    public MemberChatroomService memberChatroomService() {
+        return new MemberChatroomService(
+            this.memberRepository(),
+            this.chatroomRepository(),
+            this.memberChatroomRepository()
+        );
     }
 
 }

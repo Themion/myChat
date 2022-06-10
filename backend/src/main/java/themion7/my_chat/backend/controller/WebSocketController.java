@@ -9,12 +9,14 @@ import org.springframework.stereotype.Controller;
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.dto.ChatDTO;
 import themion7.my_chat.backend.service.ChatroomService;
+import themion7.my_chat.backend.service.MemberChatroomService;
 import themion7.my_chat.backend.service.WebSocketService;
 
 @Controller
 @AllArgsConstructor
 public class WebSocketController {
-    
+
+    private final MemberChatroomService memberChatroomService;
     private final ChatroomService chatroomService;
     private final WebSocketService webSocketService;
 
@@ -34,6 +36,8 @@ public class WebSocketController {
     ) {
         chatroomService.join(roomId);
         webSocketService.onConnect(roomId, principal);
+
+        memberChatroomService.save(principal.getName(), roomId);
     }
 
     @MessageMapping("/{roomId}/disconnect")
