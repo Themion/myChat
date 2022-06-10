@@ -74,7 +74,6 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         refreshToken.setMaxAge(JwtUtils.REFRESH_TOKEN_LIFE_SPAN / 1000);
         refreshToken.setHttpOnly(true);
         refreshToken.setSecure(true);
-        refreshToken.setPath("/token");
 
         response.addCookie(refreshToken);
     }

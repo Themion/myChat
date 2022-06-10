@@ -3,7 +3,6 @@ package themion7.my_chat.backend.controller;
 import com.auth0.jwt.JWT;
 
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.web.bind.annotation.CookieValue;
@@ -34,10 +33,7 @@ public class TokenController {
     }
     
     @RequestMapping(method = RequestMethod.DELETE)
-    public void removeAccessToken(
-        HttpServletRequest request,
-        HttpServletResponse response
-    ) {
+    public void removeAccessToken(HttpServletResponse response) {
         Cookie refreshToken = new Cookie(JwtUtils.REFRESH_TOKEN_HEADER, null);
         refreshToken.setMaxAge(0);
 
