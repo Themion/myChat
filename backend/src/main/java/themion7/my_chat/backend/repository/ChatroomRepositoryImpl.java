@@ -27,35 +27,8 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public Chatroom findByTitle(String title) {
-        return em
-            .createQuery(
-                "select c from Chatroom c where m.title = :title",
-                Chatroom.class
-            )
-            .setParameter("title", title)
-            .getSingleResult();
-    }
-
-    @Override
     public List<Chatroom> findAll() {
         return em.createQuery("select c from Chatroom as c", Chatroom.class).getResultList();
-    }
-
-    @Override
-    public boolean isChatroom(Long id) {
-        return this.findById(id) != null;
-    }
-
-    @Override
-    public boolean isChatroom(String title) {
-        try {
-            this.findByTitle(title);
-        } catch (Exception e) {
-            return false;
-        } 
-
-        return true;
     }
 
     @Override

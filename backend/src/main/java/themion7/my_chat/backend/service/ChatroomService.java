@@ -67,7 +67,7 @@ public class ChatroomService {
             memberChatroomRepository.save(
                 MemberChatroom.builder()
                     .member(memberRepository.findByUsername(principal.getName()))
-                    .chatroom(chatroomRepository.findById(id))
+                    .chatroom(this.findById(id))
                     .build()
             );
     }

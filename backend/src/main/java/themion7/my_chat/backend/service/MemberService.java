@@ -32,20 +32,13 @@ public class MemberService implements UserDetailsService {
         return member;
     }
 
-    public Member findById(Long id) {
-        return this.memberRepository.findById(id);
-    }
-
     public Member findByUsername(String username) {
-        return this.memberRepository.findByUsername(username);
+        Member member = this.memberRepository.findByUsername(username);
+        return member;
     }
 
-    public boolean isUsername(String username) {
+    public boolean isMember(String username) {
         return this.memberRepository.isMember(username);
-    }
-
-    public void deleteById(Long id) {
-        this.memberRepository.deleteById(id);
     }
 
     public void deleteByUsername(String username) {

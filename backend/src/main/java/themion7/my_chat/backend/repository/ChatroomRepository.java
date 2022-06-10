@@ -7,10 +7,7 @@ import themion7.my_chat.backend.domain.Chatroom;
 public interface ChatroomRepository {
     public Chatroom save(Chatroom chatroom);
     public Chatroom findById(Long id);
-    public Chatroom findByTitle(String title);
     public List<Chatroom> findAll();
-    public boolean isChatroom(Long id);
-    public boolean isChatroom(String title);
     public Chatroom increaseRoomPopulationById(Long id);
     public Chatroom decreaseRoomPopulationById(Long id);
     public void deleteById(Long id);

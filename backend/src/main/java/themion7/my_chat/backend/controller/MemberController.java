@@ -22,7 +22,7 @@ public class MemberController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE)
-    public void deleteById(@AuthenticationPrincipal String username) {
+    public void delete(@AuthenticationPrincipal String username) {
         this.memberService.deleteByUsername(username);
     }
 }

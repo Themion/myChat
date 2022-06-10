@@ -14,7 +14,6 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
@@ -56,8 +55,8 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
                     List<String> result = accessor.getNativeHeader("username");
                     accessor.setUser(
-                        (result != null) ? 
-                            findMemberFromRepo(result) : 
+                        (result != null && memberService.isMember(result.get(0))) ? 
+                            memberService.findByUsername(result.get(0)) : 
                             createNewAnonymousAuthentication()
                     );
                 }
@@ -65,14 +64,6 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 return message;
             }
         });
-    }
-
-    private Authentication findMemberFromRepo(List<String> list) {
-        String username = list.get(0);
-        return new UsernamePasswordAuthenticationToken(
-            username, null, 
-            memberService.findByUsername(username).getAuthorities()
-        );
     }
 
     private Authentication createNewAnonymousAuthentication() {
