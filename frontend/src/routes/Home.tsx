@@ -39,13 +39,13 @@ const Home = () => {
             }
     
             const fallback: AxiosFallback = (res) => {
-                console.log(res.data)
+                console.log(res)
             }
     
             send(to, {}, callback, fallback)
         }
 
-        setAccessToken().then(updateTable)
+        setAccessToken().finally(updateTable)
     }, [])
 
     const button = getAccessToken() ? 
@@ -58,6 +58,5 @@ const Home = () => {
         {button}
     </>
 }
-
 
 export default Home
