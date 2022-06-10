@@ -1,6 +1,5 @@
 package themion7.my_chat.backend.service;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -27,24 +26,18 @@ public class MemberService implements UserDetailsService {
             .password(encoder.encode(dto.getPassword()))
             .build();
 
-        this.memberRepository.findByUsername(member.getUsername()).ifPresentOrElse(
-            m -> new DuplicateKeyException("Member already exists with username: " + m.getUsername()),
-            () -> { this.memberRepository.save(member); }
-        );
+        if (!this.memberRepository.isUsername(member.getUsername()))
+            this.memberRepository.save(member);
 
         return member;
     }
 
     public Member findById(Long id) {
-        return this.memberRepository.findById(id).orElseThrow(
-            () -> this.memberRepository.idNotFoundException(id)
-        );
+        return this.memberRepository.findById(id);
     }
 
     public Member findByUsername(String username) {
-        return this.memberRepository.findByUsername(username).orElseThrow(
-            () -> this.memberRepository.usernameNotFoundException(username)
-        );
+        return this.memberRepository.findByUsername(username);
     }
 
     public void deleteById(Long id) {

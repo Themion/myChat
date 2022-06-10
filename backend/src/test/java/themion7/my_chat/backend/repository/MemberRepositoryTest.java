@@ -1,5 +1,7 @@
 package themion7.my_chat.backend.repository;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -36,7 +38,8 @@ public class MemberRepositoryTest {
         memberRepository.save(member);
         Assertions
             .assertThat(memberRepository.findById(member.getId()))
-            .isNotEmpty();
+            .isNotNull();
+        memberRepository.save(member);
     }
 
     @Test
@@ -48,9 +51,32 @@ public class MemberRepositoryTest {
         
         memberRepository.save(member);
         memberRepository.deleteById(member.getId());
+        
+        assertThrows(
+            Exception.class, 
+            () -> { memberRepository.findByUsername(member.getUsername()); }
+        );
+
         Assertions
             .assertThat(memberRepository.findById(member.getId()))
-            .isEmpty();
+            .isNull();
+    }
 
+    @Test
+    public void isUsername() {
+        Member member = Member.builder()
+            .username("test123")
+            .password("password123")
+            .build();
+
+        Assertions
+            .assertThat(memberRepository.isUsername(member.getUsername()))
+            .isFalse();
+            
+        memberRepository.save(member);
+            
+        Assertions
+            .assertThat(memberRepository.isUsername(member.getUsername()))
+            .isTrue();
     }
 }

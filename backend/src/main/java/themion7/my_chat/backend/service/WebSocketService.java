@@ -1,13 +1,11 @@
 package themion7.my_chat.backend.service;
 
 import java.security.Principal;
-import java.util.Optional;
 
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
-import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.dto.ChatDTO;
 import themion7.my_chat.backend.repository.MemberRepository;
 
@@ -51,7 +49,8 @@ public class WebSocketService {
     }
 
     private String getSender(final Principal principal) {
-        Optional<Member> member = memberRepository.findByUsername(principal.getName());
-        return member.isPresent() ? member.get().getUsername() : principal.getName().split("-")[0];
+        if (this.memberRepository.isUsername(principal.getName()))
+            return principal.getName();
+        return principal.getName().split("-")[0];
     }
 }
