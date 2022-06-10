@@ -49,7 +49,10 @@ public class MvcConfig {
 
     @Bean
     public MemberService memberService() {
-        return new MemberService(this.memberRepository());
+        return new MemberService(
+            this.memberRepository(), 
+            this.memberChatroomRepository()
+        );
     }
 
 }

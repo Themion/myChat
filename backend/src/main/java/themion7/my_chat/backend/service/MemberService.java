@@ -9,6 +9,7 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.dto.SignupDTO;
+import themion7.my_chat.backend.repository.MemberChatroomRepository;
 import themion7.my_chat.backend.repository.MemberRepository;
 
 @RequiredArgsConstructor
@@ -16,6 +17,9 @@ public class MemberService implements UserDetailsService {
 
     @NonNull
     private final MemberRepository memberRepository;
+
+    @NonNull
+    private final MemberChatroomRepository memberChatroomRepository;
 
     private final PasswordEncoder encoder = 
         new themion7.my_chat.backend.security.PasswordEncoder();
@@ -32,8 +36,15 @@ public class MemberService implements UserDetailsService {
         return member;
     }
 
+    private void setChatrooms(Member member) {
+        member.setChatrooms(
+            this.memberChatroomRepository.findByMemberId(member.getId())
+        );
+    }
+
     public Member findByUsername(String username) {
         Member member = this.memberRepository.findByUsername(username);
+        this.setChatrooms(member);
         return member;
     }
 
