@@ -4,10 +4,12 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.web.util.HtmlUtils;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
+import themion7.my_chat.backend.dto.ChatroomDTO;
 import themion7.my_chat.backend.repository.ChatroomRepository;
 
 @RequiredArgsConstructor
@@ -32,8 +34,13 @@ public class ChatroomService {
         }
     }
 
-    public Long save(Chatroom chatroom) {
-        return this.chatroomRepository.save(chatroom).getId();
+    public Long save(ChatroomDTO chatroomDTO) {
+        return this.chatroomRepository.save(
+            Chatroom.builder()
+                .title(HtmlUtils.htmlEscape(chatroomDTO.getTitle()))  
+                .population(0L)
+                .build()
+        ).getId();
     }
 
     public Chatroom findById(Long id) {

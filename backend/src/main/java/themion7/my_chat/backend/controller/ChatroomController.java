@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.util.HtmlUtils;
 
 import lombok.AllArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
@@ -28,15 +27,8 @@ public class ChatroomController {
 
     @RequestMapping(method = RequestMethod.POST)
     public Long makeChatroom(@RequestBody ChatroomDTO dto) {
-        Long id = this.chatroomService.save(
-            Chatroom.builder()
-                .title(HtmlUtils.htmlEscape(dto.getTitle()))  
-                .population(0L)
-                .build()
-        );
-
-        chatroomService.deleteIfRoomEmpty(id);
-
+        Long id = this.chatroomService.save(dto);
+        this.chatroomService.deleteIfRoomEmpty(id);
         return id;
     }
 
