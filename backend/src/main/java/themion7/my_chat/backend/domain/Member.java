@@ -1,5 +1,6 @@
 package themion7.my_chat.backend.domain;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -25,7 +26,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @Data
 @NoArgsConstructor
-public class Member implements UserDetails {
+public class Member implements UserDetails, Principal {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Long id;
@@ -55,4 +56,7 @@ public class Member implements UserDetails {
     public boolean isCredentialsNonExpired() { return true; }
     @Override
     public boolean isEnabled() { return true; }
+
+    @Override
+    public String getName() { return this.getUsername(); }
 }
