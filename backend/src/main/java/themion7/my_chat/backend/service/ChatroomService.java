@@ -79,10 +79,8 @@ public class ChatroomService {
 
         if (memberRepository.isMember(principal.getName()))
             memberChatroomRepository.delete(
-                memberChatroomRepository.findByMemberIdAndChatroomId(
-                    memberRepository.findByUsername(principal.getName()).getId(),
-                    id
-                )
+                memberRepository.findByUsername(principal.getName()).getId(),
+                id
             );
     }
 }

@@ -115,7 +115,7 @@ public class MemberChatroomRepositoryTest {
         chatroomRepository.save(chatroom);
         memberChatroomRepository.save(memberChatroom);
 
-        memberChatroomRepository.delete(memberChatroom);
+        memberChatroomRepository.delete(member.getId(), chatroom.getId());
 
         Assertions
             .assertThat(

@@ -9,5 +9,5 @@ public interface MemberChatroomRepository {
     public List<MemberChatroom> findByMemberId(Long memberId); 
     public List<MemberChatroom> findByChatroomId(Long chatroomId);
     public MemberChatroom findByMemberIdAndChatroomId(Long memberId, Long chatroomId);
-    public void delete(MemberChatroom memberChatroom);
+    public void delete(Long memberId, Long chatroomId);
 }
