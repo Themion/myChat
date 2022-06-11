@@ -1,6 +1,4 @@
 카카오톡처럼 연속해서 말할 때는 묶을 수 없을까?
     +내 채팅인지 구분하기 위해 css 클래스를 따로 만들어 사용해볼 것
-회원의 경우 채팅방 입장/퇴장과 웹소켓 연결/분리를 따로 만들어볼 것
-    백엔드에 member_chatroom 테이블을 만든 뒤
-    primary key로 memberId와 chatroomId를 주고
-    delete 시 on cascade option 사용하기
+DB 쿼리 수 줄이기
+accessToken을 Bearer 방식으로 전달
