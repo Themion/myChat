@@ -9,6 +9,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 import javax.persistence.UniqueConstraint;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -31,9 +34,11 @@ public class MemberChatroom {
 
     @ManyToOne
     @JoinColumn(name = "member_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-
+    
     @ManyToOne
     @JoinColumn(name = "chatroom_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Chatroom chatroom;
 }
