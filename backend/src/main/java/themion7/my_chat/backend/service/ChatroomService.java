@@ -72,15 +72,9 @@ public class ChatroomService {
             );
     }
 
-    public void leave(final Long id, Principal principal) {
+    public void leave(final Long id) {
         Chatroom chatroom = this.chatroomRepository.decreaseRoomPopulationById(id);
         if (chatroom != null && chatroom.getPopulation() == 0L)
             this.chatroomRepository.deleteById(id);
-
-        if (memberRepository.isMember(principal.getName()))
-            memberChatroomRepository.delete(
-                memberRepository.findByUsername(principal.getName()).getId(),
-                id
-            );
     }
 }

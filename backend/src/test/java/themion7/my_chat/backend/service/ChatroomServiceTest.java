@@ -42,7 +42,7 @@ public class ChatroomServiceTest {
             .assertThat(chatroom.getPopulation())
             .isEqualTo(1L);
         
-        service.leave(id, member);
+        service.leave(id);
         Assertions
             .assertThat(chatroom.getPopulation())
             .isZero();

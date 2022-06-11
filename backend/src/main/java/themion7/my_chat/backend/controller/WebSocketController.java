@@ -41,7 +41,7 @@ public class WebSocketController {
         @DestinationVariable final Long roomId,
         final Principal principal
     ) {
-        chatroomService.leave(roomId, principal);
+        chatroomService.leave(roomId);
         webSocketService.onDisconnect(roomId, principal);
     }
 }
