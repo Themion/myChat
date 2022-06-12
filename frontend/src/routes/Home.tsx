@@ -1,51 +1,56 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect, Dispatch } from "react"
 import { useNavigate } from "react-router-dom"
+import Chatrooms from "../components/Home/Chatrooms"
 import CreateChatroomForm from "../components/Home/CreateChatroomForm"
-import Tr from "../components/Home/Tr"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
-import { ChatroomDTO } from "../types/chat"
 import { send } from "../utils/axios"
 import { setAccessToken, getAccessToken } from "../utils/session"
+
+const updateTable = (to: AxiosDestination, setTable: Dispatch<any>) => {
+    const callback: AxiosCallback = (res) => {
+        setTable(<Chatrooms chatroomDTO={res.data} />)
+    }
+
+    const fallback: AxiosFallback = (res) => {
+        console.log(res)
+    }
+
+    send(to, {}, callback, fallback)
+}
 
 
 const Home = () => {
     const navigate = useNavigate()
+    const [visited, setVisited] = useState(<></>)
     const [table, setTable] = useState(<span>loading...</span>)
 
     useEffect(() => {
-        const updateTable = () => {
-            const to: AxiosDestination = {
-                url: "/room",
-                method: "GET"
-            }
-    
-            const callback: AxiosCallback = (res) => {
-                const chatroomList: ChatroomDTO[] = res.data
-    
-                setTable(
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>#</th>
-                                <th>이름</th>
-                                <th>현재 인원</th>
-                            </tr>
-                        </thead>
-                        <tbody>{chatroomList.map(chatroom => 
-                            <Tr key={chatroom.id} {...chatroom} />
-                        )}</tbody>
-                    </table>
-                )
-            }
-    
-            const fallback: AxiosFallback = (res) => {
-                console.log(res)
-            }
-    
-            send(to, {}, callback, fallback)
-        }
-
-        setAccessToken().finally(updateTable)
+        setAccessToken()
+            .then(() => {
+                const to: AxiosDestination = {
+                    url: "/member",
+                    method: "GET"
+                }
+                updateTable(to, (res: JSX.Element) => { setVisited(
+                    <>
+                        사용자가 들어간 적 있는 채팅방: 
+                        {res}
+                        <br />
+                    </>
+                ) }) 
+            })
+            .finally(() => { 
+                const to: AxiosDestination = {
+                    url: "/room",
+                    method: "GET"
+                }
+                updateTable(to, (res: JSX.Element) => { setTable(
+                    <>
+                        현재 열려있는 채팅방: 
+                        {res}
+                    </>
+                ) }) 
+            })
     }, [])
 
     const button = getAccessToken() ? 
@@ -53,6 +58,7 @@ const Home = () => {
         <button onClick={() => {navigate('/login')}}>로그인</button>
 
     return <>
+        {visited}
         {table}
         <CreateChatroomForm />
         {button}
