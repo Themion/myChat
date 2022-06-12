@@ -3,6 +3,8 @@ package themion7.my_chat.backend.service;
 import java.security.Principal;
 import java.util.List;
 
+import javax.persistence.NoResultException;
+
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.util.HtmlUtils;
@@ -10,6 +12,7 @@ import org.springframework.web.util.HtmlUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
+import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.domain.MemberChatroom;
 import themion7.my_chat.backend.dto.ChatroomDTO;
 import themion7.my_chat.backend.repository.ChatroomRepository;
@@ -63,13 +66,20 @@ public class ChatroomService {
     public void join(final Long id, Principal principal) {
         this.chatroomRepository.increaseRoomPopulationById(id);
 
-        if (memberRepository.isMember(principal.getName()))
-            memberChatroomRepository.save(
-                MemberChatroom.builder()
-                    .member(memberRepository.findByUsername(principal.getName()))
-                    .chatroom(this.findById(id))
-                    .build()
-            );
+        if (memberRepository.isMember(principal.getName())) {
+            Member member = memberRepository.findByUsername(principal.getName());
+
+            try {
+                memberChatroomRepository.findByMemberIdAndChatroomId(member.getId(), id);
+            } catch (NoResultException e) {
+                memberChatroomRepository.save(
+                    MemberChatroom.builder()
+                        .member(member)
+                        .chatroom(this.findById(id))
+                        .build()
+                );
+            }
+        }
     }
 
     public void leave(final Long id) {

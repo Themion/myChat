@@ -2,6 +2,7 @@ package themion7.my_chat.backend.repository;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -55,7 +56,7 @@ public class MemberChatroomRepositoryTest {
     @Test
     public void read() {
         Member member = Member.builder()
-            .username("username")
+            .username("usernameTester")
             .password("password")
             .build();
         
@@ -93,6 +94,13 @@ public class MemberChatroomRepositoryTest {
                 memberChatroomRepository
                     .findByChatroomId(chatroom.getId() + 1)
             ).isEmpty();
+
+        assertThrows(
+            NoResultException.class, 
+            () -> {
+                memberChatroomRepository
+                    .findByMemberIdAndChatroomId(30L, 30L);
+            });
     }
 
     @Test
