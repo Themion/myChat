@@ -1,5 +1,6 @@
-import axios, { AxiosError, AxiosRequestConfig, AxiosResponse } from "axios"
+import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from "axios"
 import { AxiosCallback, AxiosDestination, AxiosFallback } from "../types/axios"
+import { getAccessToken } from "./session"
 
 const baseURL = 'http://localhost:8080'
 
@@ -7,9 +8,13 @@ const makeConfig = (
     to: AxiosDestination, 
     data: object
 ): AxiosRequestConfig => {
+    const accessToken = getAccessToken()
+    const headers: AxiosRequestHeaders = { authorization: accessToken ? "Bearer " + accessToken : "" }
+
     return {
         url: to.url,
         method: to.method,
+        headers: headers,
         data: data,
         baseURL: baseURL,
         withCredentials: true
