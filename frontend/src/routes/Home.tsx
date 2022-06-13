@@ -6,18 +6,16 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { send } from "../utils/axios"
 import { setAccessToken, getAccessToken } from "../utils/session"
 
-const updateTable = (to: AxiosDestination, setTable: Dispatch<any>) => {
-    const callback: AxiosCallback = (res) => {
-        setTable(<Chatrooms chatroomDTO={res.data} />)
-    }
-
-    const fallback: AxiosFallback = (res) => {
-        console.log(res)
-    }
+const updateTable = (to: AxiosDestination, setTable: Dispatch<any>, text: string) => {
+    const callback: AxiosCallback = (res) => setTable(<>
+        {text}
+        <Chatrooms chatroomDTO={res.data} />
+        <br />
+    </>)
+    const fallback: AxiosFallback = (res) => console.log(res)
 
     send(to, {}, callback, fallback)
 }
-
 
 const Home = () => {
     const navigate = useNavigate()
@@ -27,29 +25,12 @@ const Home = () => {
     useEffect(() => {
         setAccessToken()
             .then(() => {
-                const to: AxiosDestination = {
-                    url: "/member",
-                    method: "GET"
-                }
-                updateTable(to, (res: JSX.Element) => { setVisited(
-                    <>
-                        사용자가 들어간 적 있는 채팅방: 
-                        {res}
-                        <br />
-                    </>
-                ) }) 
+                const to: AxiosDestination = { url: "/member", method: "GET" }
+                updateTable(to, setVisited, "사용자가 들어간 적 있는 채팅방:") 
             })
             .finally(() => { 
-                const to: AxiosDestination = {
-                    url: "/room",
-                    method: "GET"
-                }
-                updateTable(to, (res: JSX.Element) => { setTable(
-                    <>
-                        현재 열려있는 채팅방: 
-                        {res}
-                    </>
-                ) }) 
+                const to: AxiosDestination = { url: "/room", method: "GET" }
+                updateTable(to, setTable, "현재 열려있는 채팅방:") 
             })
     }, [])
 
