@@ -9,6 +9,9 @@ export const slice = createSlice({
             if (action.payload) {
                 state.client = action.payload
                 state.client.activate()
+            } else {
+                state.client?.deactivate()
+                state.client = undefined
             }
             return state
         },

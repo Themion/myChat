@@ -1,4 +1,5 @@
 import { Dispatch } from "@reduxjs/toolkit"
+import { Client } from "@stomp/stompjs"
 import { useReducer, useState, useEffect } from "react"
 import { connect } from "react-redux"
 import { slice } from "../../app/store"
@@ -8,22 +9,21 @@ import { setAccessToken } from "../../utils/session"
 import { activateClient, stompClient } from "../../utils/stomp"
 import { Sender, Chat, Info } from "./Chat"
 
-
 type Props = ClientProps & {
     id: Id
     getRoom: () => void
-    setClient: () => void
+    setClient: (client?: Client) => void
 }
 
-const reducerFactory = (
+const reducer = (
     getRoom: Props["getRoom"], 
     lastSender: string,
     setLastSender: (lastSender: string) => any
 ) => {
-    const reducer = (state: JSX.Element[], action: ChatAction) => {
+    return (state: JSX.Element[], action: ChatAction) => {
         const { type, payload } = action
         if (payload.sender !== lastSender) {
-            state.push(<Sender key={payload.sender + '_' + Date()} {...payload} />)
+            state.push(<Sender key={payload.sender} {...payload} />)
             setLastSender(payload.sender)
         }
 
@@ -33,45 +33,43 @@ const reducerFactory = (
             case ChatActionType.INFO: 
                 getRoom()
                 return state.concat(<Info key={payload.chatId} {...payload} />)
-            default:
-                return state
         }
-    }
 
-    return reducer
+        return state
+    }
 }
 
 const ChatList = (props: Props) => {
     const { id, client, setClient, getRoom } = props
-    const [chats, dispatch] = useReducer(reducerFactory(getRoom, ...useState("")), [])
+    const [chats, dispatch] = useReducer(
+        reducer(getRoom, ...useState("")), []
+    )
+
+    const closeClient = () => {
+        if (client) {
+            client.publish({ destination: `/ws/${id}/disconnect` })
+            setClient()
+        }
+    }
 
     useEffect(() => {
-        client ? activateClient(id, client, dispatch) : setAccessToken().finally(() => setClient())
+        client ? 
+            activateClient(id, client, dispatch) :
+            setAccessToken().finally(() => setClient(stompClient()))
+
+        return closeClient
         // eslint-disable-next-line
     }, [client])
 
-    window.onbeforeunload = () => {
-        if (client) {
-            client.publish({
-                destination: `/ws/${id}/disconnect`
-            })
-            client.deactivate()
-        }
-    }
+    window.onbeforeunload = closeClient
 
     return <div id="chatlist">{chats}</div>
 }
 
-const mapStateToProps = (state: State) => {
-    return { client: state.client }
-}
+const mapStateToProps = (state: State) => ({ client: state.client })
 
-const mapDispatchToProps = (dispatch: Dispatch) => {
-    return { 
-        setClient: () => {
-            dispatch(slice.actions.setClient(stompClient()))
-        }
-    }
-}
+const mapDispatchToProps = (dispatch: Dispatch): {
+    setClient: Props["setClient"]
+} => ({ setClient: (client) => dispatch(slice.actions.setClient(client)) })
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatList)

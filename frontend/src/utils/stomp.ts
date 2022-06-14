@@ -37,7 +37,7 @@ const messageToDTO = (message: IMessage) => {
 }
 
 export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) => {
-    client.onConnect = (frame) => {
+    client.onConnect = (frame) => {        
         client.subscribe(`/topic/${id}`, (message) => {
             dispatch({
                 type: ChatActionType.CHAT, 
@@ -57,8 +57,12 @@ export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) =
             })
         })
 
-        client.publish({
-            destination: `/ws/${id}/connect`
-        })
+        client.publish({ destination: `/ws/${id}/connect` })
+    }
+
+    client.onDisconnect = (receipt) => {
+        client.unsubscribe(`/topic/${id}`)
+        client.unsubscribe(`/topic/${id}/connect`)
+        client.unsubscribe(`/topic/${id}/disconnect`)
     }
 }
