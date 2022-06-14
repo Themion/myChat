@@ -3,6 +3,7 @@ import { connect } from "react-redux"
 import { Id, ChatDTO } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
 
+import styles from './input.module.css'
 
 type Props = ClientProps & {
     id: Id
@@ -27,8 +28,16 @@ const Input = (props: Props) => {
     }
 
     return <form onSubmit={onSubmit}>
-        <textarea id="chat"></textarea>
-        <button type="submit">보내기</button>
+        <div className="input-group mt-3">
+            <textarea 
+                id="chat" 
+                className={`form-control ${styles.textarea}`} />
+            <button 
+                className="btn btn-outline-secondary" 
+                type="submit">
+                보내기
+            </button>
+        </div>
     </form>
 }
 

@@ -10,7 +10,6 @@ const updateTable = (to: AxiosDestination, setTable: Dispatch<any>, text: string
     const callback: AxiosCallback = (res) => setTable(<>
         {text}
         <Chatrooms chatroomDTO={res.data} />
-        <br />
     </>)
     const fallback: AxiosFallback = (res) => console.log(res)
 

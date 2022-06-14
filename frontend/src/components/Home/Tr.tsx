@@ -1,9 +1,7 @@
 import { ChatroomDTO } from "../../types/chat"
 
 const Tr = (props: ChatroomDTO) => {
-    const onClick = () => {
-        window.open(`/room/${props.id}`)
-    }
+    const onClick = () => { window.open(`/room/${props.id}`) }
 
     return <tr onClick={onClick}>
         <td>{props.id}</td>

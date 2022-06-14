@@ -6,7 +6,7 @@ type Props = {
 }
 
 const Chatrooms = (props: Props) => {
-    return <table>
+    return <table className="table">
         <thead>
             <tr>
                 <th>#</th>
