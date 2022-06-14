@@ -41,8 +41,6 @@ const Input = (props: Props) => {
     </form>
 }
 
-const mapStateToProps = (state: State) => {
-    return { client: state.client }
-}
+const mapStateToProps = (state: State) => ({ client: state.client })
 
 export default connect(mapStateToProps)(Input)

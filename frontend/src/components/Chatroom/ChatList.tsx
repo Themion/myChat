@@ -1,18 +1,13 @@
-import { Dispatch } from "@reduxjs/toolkit"
-import { Client } from "@stomp/stompjs"
 import { useReducer, useState, useEffect } from "react"
 import { connect } from "react-redux"
-import { slice } from "../../app/store"
 import { Id, ChatAction, ChatActionType } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
-import { setAccessToken } from "../../utils/session"
-import { activateClient, stompClient } from "../../utils/stomp"
+import { activateClient } from "../../utils/stomp"
 import { Sender, Chat, Info } from "./Chat"
 
 type Props = ClientProps & {
     id: Id
     getRoom: () => void
-    setClient: (client?: Client) => void
 }
 
 const reducer = (
@@ -40,36 +35,19 @@ const reducer = (
 }
 
 const ChatList = (props: Props) => {
-    const { id, client, setClient, getRoom } = props
+    const { id, client, getRoom } = props
     const [chats, dispatch] = useReducer(
         reducer(getRoom, ...useState("")), []
     )
 
-    const closeClient = () => {
-        if (client) {
-            client.publish({ destination: `/ws/${id}/disconnect` })
-            setClient()
-        }
-    }
-
     useEffect(() => {
-        client ? 
-            activateClient(id, client, dispatch) :
-            setAccessToken().finally(() => setClient(stompClient()))
-
-        return closeClient
+        if (client) activateClient(id, client, dispatch)
         // eslint-disable-next-line
     }, [client])
-
-    window.onbeforeunload = closeClient
 
     return <div id="chatlist">{chats}</div>
 }
 
 const mapStateToProps = (state: State) => ({ client: state.client })
 
-const mapDispatchToProps = (dispatch: Dispatch): {
-    setClient: Props["setClient"]
-} => ({ setClient: (client) => dispatch(slice.actions.setClient(client)) })
-
-export default connect(mapStateToProps, mapDispatchToProps)(ChatList)
+export default connect(mapStateToProps)(ChatList)
