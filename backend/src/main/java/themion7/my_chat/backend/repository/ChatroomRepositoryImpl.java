@@ -17,22 +17,26 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
 
     @Override
     public Chatroom save(Chatroom chatroom) {
+        System.out.println("ChatroomRepository.save");
         em.persist(chatroom);
         return chatroom;
     }
 
     @Override
     public Chatroom findById(Long id) {
+        System.out.println("ChatroomRepository.findById");
         return em.find(Chatroom.class, id);
     }
 
     @Override
     public List<Chatroom> findAll() {
+        System.out.println("ChatroomRepository.findAll");
         return em.createQuery("select c from Chatroom as c", Chatroom.class).getResultList();
     }
 
     @Override
     public Chatroom increaseRoomPopulationById(Long id) {
+        System.out.println("ChatroomRepository.increaseRoomPopulationById");
         Chatroom chatroom = this.findById(id);
         if (chatroom != null) chatroom.setPopulation(chatroom.getPopulation() + 1);
         return chatroom;
@@ -40,6 +44,7 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
 
     @Override
     public Chatroom decreaseRoomPopulationById(Long id) {
+        System.out.println("ChatroomRepository.decreaseRoomPopulationById");
         Chatroom chatroom = this.findById(id);
         if (chatroom != null) chatroom.setPopulation(chatroom.getPopulation() - 1);
         return chatroom;
@@ -47,6 +52,7 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
 
     @Override
     public void deleteById(Long id) {
+        System.out.println("ChatroomRepository.deleteById");
         em.remove(this.findById(id));
     }
 

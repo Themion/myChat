@@ -24,14 +24,16 @@ public class WebSocketController {
             final Principal principal,
             final ChatDTO dto
     ) {
+        System.out.println("WebSocketController.onPublish");
         webSocketService.onPublish(roomId, principal, dto);
     }
-
+    
     @MessageMapping("/{roomId}/connect")
     public void onConnect(
         @DestinationVariable final Long roomId,
         final Principal principal
-    ) {
+        ) {
+        System.out.println("WebSocketController.onConnect");
         chatroomService.join(roomId, principal);
         webSocketService.onConnect(roomId, principal);
     }
@@ -40,7 +42,8 @@ public class WebSocketController {
     public void onDisconnect(
         @DestinationVariable final Long roomId,
         final Principal principal
-    ) {
+        ) {
+        System.out.println("WebSocketController.onDisconnect");
         chatroomService.leave(roomId);
         webSocketService.onDisconnect(roomId, principal);
     }

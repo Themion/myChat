@@ -24,12 +24,13 @@ public class MemberController {
 
     @RequestMapping(method = RequestMethod.POST)
     public void save(@RequestBody final SignupDTO dto) {
+        System.out.println("\n\n\nPOST /member");
         this.memberService.save(dto);
     }
 
     @RequestMapping(method = RequestMethod.GET)
     public List<Chatroom> get(@AuthenticationPrincipal String username) {
-        System.out.println(username);
+        System.out.println("\n\n\nGET /member");
         Member member = memberService.findByUsername(username);
         List<MemberChatroom> list = member.getChatrooms();
         List<Chatroom> ret = new ArrayList<>();
@@ -41,6 +42,7 @@ public class MemberController {
 
     @RequestMapping(method = RequestMethod.DELETE)
     public void delete(@AuthenticationPrincipal String username) {
+        System.out.println("\n\n\nDELETE /member");
         this.memberService.deleteByUsername(username);
     }
 }

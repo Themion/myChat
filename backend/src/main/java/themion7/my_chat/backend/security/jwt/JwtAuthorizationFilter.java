@@ -33,6 +33,7 @@ public class JwtAuthorizationFilter extends BasicAuthenticationFilter {
 
         if (header != null && header.startsWith(JwtUtils.PREFIX)) {
             String username = JwtUtils.getUsernameFromHeader(header);
+            System.out.println("\nauthorization");
 
             // 인가 과정에서는 credentials(password)를 확인할 필요 없음
             //     -> 어차피 password를 memberService에서 가져오므로 항상 맞는 credential이 된다

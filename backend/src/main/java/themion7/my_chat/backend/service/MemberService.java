@@ -25,34 +25,37 @@ public class MemberService implements UserDetailsService {
         new themion7.my_chat.backend.security.PasswordEncoder();
 
     public Member save(SignupDTO dto) {
+        System.out.println("MemberService.save");
         Member member = Member.builder()
             .username(dto.getUsername())
             .password(encoder.encode(dto.getPassword()))
             .build();
 
-        if (!this.memberRepository.isMember(member.getUsername()))
+        try {
             this.memberRepository.save(member);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         return member;
     }
 
     private void setChatrooms(Member member) {
+        System.out.println("MemberService.setChatrooms");
         member.setChatrooms(
             this.memberChatroomRepository.findByMemberId(member.getId())
         );
     }
 
     public Member findByUsername(String username) {
+        System.out.println("MemberService.findByUsername");
         Member member = this.memberRepository.findByUsername(username);
         this.setChatrooms(member);
         return member;
     }
 
-    public boolean isMember(String username) {
-        return this.memberRepository.isMember(username);
-    }
-
     public void deleteByUsername(String username) {
+        System.out.println("MemberService.deleteByUsername");
         this.memberRepository.deleteByUsername(username);
     }
 

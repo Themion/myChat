@@ -23,12 +23,14 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
 
     @Override
     public MemberChatroom save(MemberChatroom memberChatroom) {
+        System.out.println("MemberChatroomRepository.save");
         em.persist(memberChatroom);
         return memberChatroom;
     }
 
     @Override
     public List<MemberChatroom> findByMemberId(Long memberId) {
+        System.out.println("MemberChatroomRepository.findByMemberId");
         String qlString = ql + "where" + mql;
         return em
             .createQuery(qlString, MemberChatroom.class)
@@ -39,6 +41,7 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
 
     @Override
     public List<MemberChatroom> findByChatroomId(Long chatroomId) {
+        System.out.println("MemberChatroomRepository.findByChatroomId");
         String qlString = ql + "where" + cql;
         return em
             .createQuery(qlString, MemberChatroom.class)
@@ -49,6 +52,7 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
 
     @Override
     public MemberChatroom findByMemberIdAndChatroomId(Long memberId, Long chatroomId) {
+        System.out.println("MemberChatroomRepository.findByMemberIdAndChatroomId");
         String qlString = ql + "where" + mql + "and" + cql;
         return em
             .createQuery(qlString, MemberChatroom.class)
@@ -61,6 +65,7 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
     // POJO하지 않지만 영속성 컨텍스트? 위반으로 인해 id로 검색해 삭제
     @Override
     public void delete(Long memberId, Long chatroomId) {
+        System.out.println("MemberChatroomRepository.delete");
         em.remove(this.findByMemberIdAndChatroomId(memberId, chatroomId));
     }
 

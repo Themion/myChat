@@ -1,5 +1,6 @@
 package themion7.my_chat.backend.config;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -53,12 +54,15 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
                 StompHeaderAccessor accessor = MessageHeaderAccessor.getAccessor(message, StompHeaderAccessor.class);
                 
                 if (StompCommand.CONNECT.equals(accessor.getCommand())) {
-                    List<String> result = accessor.getNativeHeader("username");
-                    accessor.setUser(
-                        (result != null && memberService.isMember(result.get(0))) ? 
-                            memberService.findByUsername(result.get(0)) : 
-                            createNewAnonymousAuthentication()
-                    );
+                    Principal principal = null;
+                    try {
+                        List<String> result = accessor.getNativeHeader("username");
+                        principal = memberService.findByUsername(result.get(0));    
+                    } catch (Exception e) {
+                        principal = createNewAnonymousAuthentication();
+                    }
+
+                    accessor.setUser(principal);
                 }
 
                 return message;

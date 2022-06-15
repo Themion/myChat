@@ -65,22 +65,4 @@ public class MemberRepositoryTest {
             .assertThat(memberRepository.findById(member.getId()))
             .isNull();
     }
-
-    @Test
-    public void isUsername() {
-        Member member = Member.builder()
-            .username("test123")
-            .password("password123")
-            .build();
-
-        Assertions
-            .assertThat(memberRepository.isMember(member.getUsername()))
-            .isFalse();
-            
-        memberRepository.save(member);
-            
-        Assertions
-            .assertThat(memberRepository.isMember(member.getUsername()))
-            .isTrue();
-    }
 }

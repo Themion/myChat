@@ -6,6 +6,7 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import lombok.AllArgsConstructor;
+import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.dto.ChatDTO;
 import themion7.my_chat.backend.repository.MemberRepository;
 
@@ -16,6 +17,7 @@ public class WebSocketService {
     private final SimpMessagingTemplate messagingTemplate;
     
     public void onPublish(final Long roomId, final Principal principal, final ChatDTO dto) {
+        System.out.println("WebSocketService.onPublish");
         dto.setSender(getSender(principal));
 
         messagingTemplate.convertAndSend(
@@ -25,6 +27,7 @@ public class WebSocketService {
     }
 
     public void onConnect(final Long roomId, final Principal principal) {
+        System.out.println("WebSocketService.onConnect");
         String sender = getSender(principal);
         
         messagingTemplate.convertAndSend(
@@ -37,6 +40,7 @@ public class WebSocketService {
     }
 
     public void onDisconnect(final Long roomId, final Principal principal) {
+        System.out.println("WebSocketService.onDisconnect");
         String sender = getSender(principal);
         
         messagingTemplate.convertAndSend(
@@ -49,8 +53,8 @@ public class WebSocketService {
     }
 
     private String getSender(final Principal principal) {
-        if (this.memberRepository.isMember(principal.getName()))
-            return principal.getName();
-        return principal.getName().split("-")[0];
+        System.out.println("WebSocketService.getSender");
+        Member member = this.memberRepository.findByUsername(principal.getName());
+        return (member != null) ? principal.getName() : principal.getName().split("-")[0];
     }
 }
