@@ -1,9 +1,10 @@
 import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { baseURL } from "../types/axios";
 import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../types/chat";
 import { getTokenPayload } from "./session";
 
-const WebSocketServer = "http://localhost:8080/websocket"
+const WebSocketServer = baseURL + '/websocket'
 
 export const stompClient = () => {
     const payload = getTokenPayload()

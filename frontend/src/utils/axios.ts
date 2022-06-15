@@ -1,8 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from "axios"
-import { AxiosCallback, AxiosDestination, AxiosFallback } from "../types/axios"
+import { AxiosCallback, AxiosDestination, AxiosFallback, baseURL } from "../types/axios"
 import { getAccessToken } from "./session"
-
-const baseURL = 'http://localhost:8080'
 
 const makeConfig = (
     to: AxiosDestination, 
