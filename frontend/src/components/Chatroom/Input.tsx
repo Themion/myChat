@@ -27,18 +27,10 @@ const Input = (props: Props) => {
         chat.value = ""
     }
 
-    return <form onSubmit={onSubmit}>
-        <div className="input-group mt-3">
-            <textarea 
-                id="chat" 
-                className={`form-control ${styles.textarea}`} />
-            <button 
-                className="btn btn-outline-secondary" 
-                type="submit">
-                보내기
-            </button>
-        </div>
-    </form>
+    return <form onSubmit={onSubmit}><>
+        <textarea id="chat" className={styles.textarea} />
+        <button type="submit">보내기</button>
+    </></form>
 }
 
 const mapStateToProps = (state: State) => ({ client: state.client })

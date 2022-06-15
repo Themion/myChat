@@ -22,12 +22,10 @@ const CreateChatroomForm = () => {
     }
 
     return (
-        <form onSubmit={onSubmit}>
-            <div className="input-group mb-3">
-                <input type="text" className="form-control" id="title" placeholder="새 채팅방 이름" />
-                <button className="btn btn-outline-secondary" type="submit">새 채팅방 만들기</button>
-            </div>
-        </form>
+        <form onSubmit={onSubmit}><>
+            <input type="text" id="title" placeholder="새 채팅방 이름" />
+            <button type="submit">새 채팅방 만들기</button>
+        </></form>
     )
 }
 
