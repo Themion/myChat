@@ -38,8 +38,7 @@ public class Member implements UserDetails, Principal {
     private String password;
 
     @OneToMany(mappedBy = "member", orphanRemoval = true)
-    @Builder.Default
-    private List<MemberChatroom> chatrooms = new ArrayList<>();
+    private List<MemberChatroom> chatrooms;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
