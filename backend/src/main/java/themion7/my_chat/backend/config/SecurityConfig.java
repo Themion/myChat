@@ -45,11 +45,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/member")
                     .permitAll()
-                .antMatchers(HttpMethod.DELETE, "/member/**")
-                    .authenticated()
+                .antMatchers(HttpMethod.DELETE, "/member")
+                    .hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/token")
                     .permitAll()
-                
+                .anyRequest()
+                    .denyAll()
         ;
 
     }
