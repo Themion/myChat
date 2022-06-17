@@ -12,7 +12,6 @@ import org.springframework.web.util.HtmlUtils;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import themion7.my_chat.backend.domain.Chatroom;
-import themion7.my_chat.backend.domain.Member;
 import themion7.my_chat.backend.domain.MemberChatroom;
 import themion7.my_chat.backend.dto.ChatroomDTO;
 import themion7.my_chat.backend.repository.ChatroomRepository;
@@ -24,7 +23,7 @@ public class ChatroomService {
 
     @NonNull
     private final MemberRepository memberRepository;
-    
+
     @NonNull
     private final ChatroomRepository chatroomRepository;
 
@@ -39,7 +38,7 @@ public class ChatroomService {
         try {
             Thread.sleep(lifespan);
             Chatroom chatroom = this.chatroomRepository.findById(id);
-            if (chatroom != null && chatroom.getPopulation() == 0L) 
+            if (chatroom != null && chatroom.getPopulation() == 0L)
                 this.chatroomRepository.deleteById(id);
         } catch (Exception e) {
             e.printStackTrace();
@@ -50,7 +49,7 @@ public class ChatroomService {
         System.out.println("ChatroomService.save");
         return this.chatroomRepository.save(
             Chatroom.builder()
-                .title(HtmlUtils.htmlEscape(chatroomDTO.getTitle()))  
+                .title(HtmlUtils.htmlEscape(chatroomDTO.getTitle()))
                 .population(0L)
                 .build()
         ).getId();
@@ -70,9 +69,7 @@ public class ChatroomService {
         System.out.println("ChatroomService.join");
         this.chatroomRepository.increaseRoomPopulationById(id);
 
-        Member member = memberRepository.findByUsername(principal.getName());
-        if (member != null) {
-
+        memberRepository.findByUsername(principal.getName()).ifPresent(member -> {
             try {
                 memberChatroomRepository.findByMemberIdAndChatroomId(member.getId(), id);
             } catch (NoResultException e) {
@@ -83,7 +80,7 @@ public class ChatroomService {
                         .build()
                 );
             }
-        }
+        });
     }
 
     public void leave(final Long id) {

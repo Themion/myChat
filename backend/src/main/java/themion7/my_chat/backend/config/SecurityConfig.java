@@ -43,6 +43,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .permitAll()
                 .antMatchers(HttpMethod.POST, "/room/**")
                     .permitAll()
+                .antMatchers(HttpMethod.GET, "/member")
+                    .hasRole("USER")
                 .antMatchers(HttpMethod.POST, "/member")
                     .permitAll()
                 .antMatchers(HttpMethod.DELETE, "/member")

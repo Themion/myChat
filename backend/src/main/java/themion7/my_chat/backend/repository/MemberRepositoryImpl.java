@@ -1,5 +1,7 @@
 package themion7.my_chat.backend.repository;
 
+import java.util.Optional;
+
 import javax.persistence.EntityManager;
 
 import org.springframework.transaction.annotation.Transactional;
@@ -21,13 +23,13 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
-    public Member findById(Long id) {
+    public Optional<Member> findById(Long id) {
         System.out.println("MemberChatroomRepository.findById");
-        return em.find(Member.class, id);
+        return Optional.ofNullable(em.find(Member.class, id));
     }
 
     @Override
-    public Member findByUsername(String username) {
+    public Optional<Member> findByUsername(String username) {
         System.out.println("MemberChatroomRepository.findByUsername");
         return em
             .createQuery(
@@ -35,13 +37,13 @@ public class MemberRepositoryImpl implements MemberRepository {
                 Member.class
             )
             .setParameter("username", username)
-            .getSingleResult();
+            .getResultList().stream().findFirst();
     }
 
-	@Override
-	public void deleteByUsername(String username) {
+    @Override
+    public void deleteByUsername(String username) {
         System.out.println("MemberChatroomRepository.deleteByUsername");
-		em.remove(this.findByUsername(username));
-	}
+        em.remove(this.findByUsername(username));
+    }
     
 }

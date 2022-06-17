@@ -49,9 +49,13 @@ public class MemberService implements UserDetailsService {
 
     public Member findByUsername(String username) {
         System.out.println("MemberService.findByUsername");
-        Member member = this.memberRepository.findByUsername(username);
-        this.setChatrooms(member);
-        return member;
+        return this.memberRepository
+            .findByUsername(username)
+            .map(member -> {
+                this.setChatrooms(member);
+                return member;
+            })
+            .orElseThrow(() -> new UsernameNotFoundException(""));
     }
 
     public void deleteByUsername(String username) {
