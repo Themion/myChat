@@ -46,7 +46,6 @@ public class ChatroomService {
     }
 
     public Long save(ChatroomDTO chatroomDTO) {
-        System.out.println("ChatroomService.save");
         return this.chatroomRepository.save(
             Chatroom.builder()
                 .title(HtmlUtils.htmlEscape(chatroomDTO.getTitle()))
@@ -56,17 +55,14 @@ public class ChatroomService {
     }
 
     public Chatroom findById(Long id) {
-        System.out.println("ChatroomService.findById");
         return this.chatroomRepository.findById(id);
     }
 
     public List<Chatroom> findAll() {
-        System.out.println("ChatroomService.findAll");
         return this.chatroomRepository.findAll();
     }
 
     public void join(final Long id, Principal principal) {
-        System.out.println("ChatroomService.join");
         this.chatroomRepository.increaseRoomPopulationById(id);
 
         memberRepository.findByUsername(principal.getName()).ifPresent(member -> {
@@ -84,7 +80,6 @@ public class ChatroomService {
     }
 
     public void leave(final Long id) {
-        System.out.println("ChatroomService.leave");
         Chatroom chatroom = this.chatroomRepository.decreaseRoomPopulationById(id);
         if (chatroom != null && chatroom.getPopulation() == 0L)
             this.chatroomRepository.deleteById(id);

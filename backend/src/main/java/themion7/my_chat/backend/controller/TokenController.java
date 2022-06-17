@@ -24,7 +24,6 @@ public class TokenController {
     
     @RequestMapping(method = RequestMethod.GET)
     public String getAccessToken(@CookieValue(value = JwtUtils.REFRESH_TOKEN_HEADER) String refreshToken) {
-        System.out.println("\n\n\nGET /token");
         Member member = memberService.findByUsername(
             JWT
                 .decode(refreshToken)

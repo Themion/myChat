@@ -17,20 +17,17 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public Member save(Member member) {
-        System.out.println("MemberChatroomRepository.save");
         em.persist(member);
         return member;
     }
 
     @Override
     public Optional<Member> findById(Long id) {
-        System.out.println("MemberChatroomRepository.findById");
         return Optional.ofNullable(em.find(Member.class, id));
     }
 
     @Override
     public Optional<Member> findByUsername(String username) {
-        System.out.println("MemberChatroomRepository.findByUsername");
         return em
             .createQuery(
                 "select m from Member m where m.username = :username",
@@ -42,7 +39,6 @@ public class MemberRepositoryImpl implements MemberRepository {
 
     @Override
     public void deleteByUsername(String username) {
-        System.out.println("MemberChatroomRepository.deleteByUsername");
         em.remove(this.findByUsername(username));
     }
     

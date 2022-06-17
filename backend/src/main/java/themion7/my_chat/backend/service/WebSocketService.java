@@ -16,7 +16,6 @@ public class WebSocketService {
     private final SimpMessagingTemplate messagingTemplate;
     
     public void onPublish(final Long roomId, final Principal principal, final ChatDTO dto) {
-        System.out.println("WebSocketService.onPublish");
         dto.setSender(getSender(principal));
 
         messagingTemplate.convertAndSend(
@@ -26,7 +25,6 @@ public class WebSocketService {
     }
 
     public void onConnect(final Long roomId, final Principal principal) {
-        System.out.println("WebSocketService.onConnect");
         String sender = getSender(principal);
         
         messagingTemplate.convertAndSend(
@@ -39,7 +37,6 @@ public class WebSocketService {
     }
 
     public void onDisconnect(final Long roomId, final Principal principal) {
-        System.out.println("WebSocketService.onDisconnect");
         String sender = getSender(principal);
         
         messagingTemplate.convertAndSend(
@@ -52,7 +49,6 @@ public class WebSocketService {
     }
 
     private String getSender(final Principal principal) {
-        System.out.println("WebSocketService.getSender");
         return this.memberRepository.findByUsername(principal.getName())
             .map(member -> member.getUsername())
             .orElse(principal.getName().split("-")[0]);

@@ -22,13 +22,11 @@ public class ChatroomController {
     
     @RequestMapping(method = RequestMethod.GET)
     public List<Chatroom> chatroomList() {
-        System.out.println("\n\n\nGET /room");
         return this.chatroomService.findAll();
     }
 
     @RequestMapping(method = RequestMethod.POST)
     public Long makeChatroom(@RequestBody ChatroomDTO dto) {
-        System.out.println("\n\n\nPOST /room");
         Long id = this.chatroomService.save(dto);
         this.chatroomService.deleteIfRoomEmpty(id);
         return id;
@@ -36,7 +34,6 @@ public class ChatroomController {
 
     @RequestMapping(method = RequestMethod.GET, value = "{id}")
     public Chatroom getChatroom(@PathVariable Long id) {
-        System.out.println("\n\n\nGET /room/{id}");
         return this.chatroomService.findById(id);
     }
 }
