@@ -18,15 +18,8 @@ const Login = () => {
         const username = document.querySelector('input#username') as HTMLInputElement
         const password = document.querySelector('input#password') as HTMLInputElement
 
-        const to: AxiosDestination = {
-            url: '/login',
-            method: 'POST'
-        }
-
-        const callback: AxiosCallback = (res) => {
-            setAccessToken()
-            navigate('/')
-        }
+        const to: AxiosDestination = { url: '/login', method: 'POST' }
+        const callback: AxiosCallback = (res) => navigate('/')
         const fallback: AxiosFallback = (res) => {
             username.value = ""
             password.value = ""
