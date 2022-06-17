@@ -40,22 +40,21 @@ public class MemberService implements UserDetailsService {
         return member;
     }
 
-    private void setChatrooms(Member member) {
-        System.out.println("MemberService.setChatrooms");
-        member.setChatrooms(
-            this.memberChatroomRepository.findByMemberId(member.getId())
-        );
-    }
-
     public Member findByUsername(String username) {
         System.out.println("MemberService.findByUsername");
         return this.memberRepository
             .findByUsername(username)
-            .map(member -> {
-                this.setChatrooms(member);
-                return member;
-            })
+            .map(member -> member)
             .orElseThrow(() -> new UsernameNotFoundException(""));
+    }
+
+    public Member findByUsernameWithChatrooms(String username) {
+        System.out.println("MemberService.findByUsernameWithChatrooms");
+        Member member = this.findByUsername(username);
+        member.setChatrooms(
+            this.memberChatroomRepository.findByMemberId(member.getId())
+        );
+        return member;
     }
 
     public void deleteByUsername(String username) {
