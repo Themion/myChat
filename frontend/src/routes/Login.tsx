@@ -2,7 +2,6 @@ import { FormEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { send } from "../utils/axios"
-import { setAccessToken } from "../utils/session"
 
 interface LoginDTO {
     username: string

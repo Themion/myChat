@@ -7,7 +7,9 @@ const makeConfig = (
     data: object
 ): AxiosRequestConfig => {
     const accessToken = getAccessToken()
-    const headers: AxiosRequestHeaders = { authorization: accessToken ? "Bearer " + accessToken : "" }
+    const headers: AxiosRequestHeaders = { 
+        authorization: accessToken ? "Bearer " + accessToken : "" 
+    }
 
     return {
         url: to.url,
@@ -28,10 +30,9 @@ export const send = (
     axios(makeConfig(to, data))
         .then((res: AxiosResponse) => callback(res))
         .catch((err: Error | AxiosError) => {
-            if (axios.isAxiosError(err)) {
-                console.log(err.response)
-                if (err.response) fallback(err.response)
-            } else console.log(err)
+            console.log(err)
+            if (axios.isAxiosError(err) && err.response) 
+                fallback(err.response)
     })
 }
 
