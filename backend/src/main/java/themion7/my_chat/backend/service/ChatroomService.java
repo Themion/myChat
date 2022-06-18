@@ -37,9 +37,9 @@ public class ChatroomService {
     public void deleteIfRoomEmpty(Long id) {
         try {
             Thread.sleep(lifespan);
-            Chatroom chatroom = this.chatroomRepository.findById(id);
-            if (chatroom != null && chatroom.getPopulation() == 0L)
-                this.chatroomRepository.deleteById(id);
+            this.chatroomRepository.findById(id).ifPresent(chatroom -> 
+                chatroomRepository.deleteIfEmpty(chatroom)
+            );
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -55,7 +55,9 @@ public class ChatroomService {
     }
 
     public Chatroom findById(Long id) {
-        return this.chatroomRepository.findById(id);
+        return this.chatroomRepository.findById(id)
+            .map(member -> member)
+            .orElseThrow(() -> new NoResultException(""));
     }
 
     public List<Chatroom> findAll() {
@@ -80,8 +82,9 @@ public class ChatroomService {
     }
 
     public void leave(final Long id) {
-        Chatroom chatroom = this.chatroomRepository.decreaseRoomPopulationById(id);
-        if (chatroom != null && chatroom.getPopulation() == 0L)
-            this.chatroomRepository.deleteById(id);
+        this.chatroomRepository.findById(id).ifPresent(chatroom -> {
+            chatroomRepository.decreaseRoomPopulationById(id);
+            chatroomRepository.deleteIfEmpty(chatroom);
+        });
     }
 }

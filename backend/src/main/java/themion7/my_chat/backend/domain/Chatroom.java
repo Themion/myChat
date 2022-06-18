@@ -1,14 +1,10 @@
 package themion7.my_chat.backend.domain;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -32,9 +28,5 @@ public class Chatroom {
     @Column
     @Builder.Default
     private Long population = 0L;
-
-    @OneToMany(mappedBy = "member", orphanRemoval = true)
-    @Builder.Default
-    private List<MemberChatroom> members = new ArrayList<>();
 
 }

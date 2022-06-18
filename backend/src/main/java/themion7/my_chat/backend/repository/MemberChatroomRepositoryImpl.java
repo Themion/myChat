@@ -1,6 +1,7 @@
 package themion7.my_chat.backend.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -48,13 +49,15 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
         }
 
     @Override
-    public MemberChatroom findByMemberIdAndChatroomId(Long memberId, Long chatroomId) {
+    public Optional<MemberChatroom> findByMemberIdAndChatroomId(Long memberId, Long chatroomId) {
         String qlString = ql + "where" + mql + "and" + cql;
         return em
             .createQuery(qlString, MemberChatroom.class)
             .setParameter("memberId", memberId)
             .setParameter("chatroomId", chatroomId)
-            .getSingleResult()
+            .getResultList()
+            .stream()
+            .findFirst()
             ;
     }
 

@@ -1,6 +1,7 @@
 package themion7.my_chat.backend.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import javax.persistence.EntityManager;
 
@@ -22,8 +23,8 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public Chatroom findById(Long id) {
-        return em.find(Chatroom.class, id);
+    public Optional<Chatroom> findById(Long id) {
+        return Optional.ofNullable(em.find(Chatroom.class, id));
     }
 
     @Override
@@ -32,22 +33,27 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
-    public Chatroom increaseRoomPopulationById(Long id) {
-        Chatroom chatroom = this.findById(id);
-        if (chatroom != null) chatroom.setPopulation(chatroom.getPopulation() + 1);
+    public Optional<Chatroom> increaseRoomPopulationById(Long id) {
+        Optional<Chatroom> chatroom = this.findById(id);
+        chatroom.ifPresent(c -> c.setPopulation(c.getPopulation() + 1));
         return chatroom;
     }
 
     @Override
-    public Chatroom decreaseRoomPopulationById(Long id) {
-        Chatroom chatroom = this.findById(id);
-        if (chatroom != null) chatroom.setPopulation(chatroom.getPopulation() - 1);
+    public Optional<Chatroom> decreaseRoomPopulationById(Long id) {
+        Optional<Chatroom> chatroom = this.findById(id);
+        chatroom.ifPresent(c -> c.setPopulation(c.getPopulation() - 1));
         return chatroom;
     }
 
     @Override
     public void deleteById(Long id) {
         em.remove(this.findById(id));
+    }
+
+    @Override
+    public void deleteIfEmpty(Chatroom chatroom) {
+        if (chatroom.getPopulation() == 0L) this.deleteById(chatroom.getId());
     }
 
 }
