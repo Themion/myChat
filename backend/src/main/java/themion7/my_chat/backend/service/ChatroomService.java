@@ -65,26 +65,27 @@ public class ChatroomService {
     }
 
     public void join(final Long id, Principal principal) {
-        this.chatroomRepository.increaseRoomPopulationById(id);
-
-        memberRepository.findByUsername(principal.getName()).ifPresent(member -> {
-            try {
-                memberChatroomRepository.findByMemberIdAndChatroomId(member.getId(), id);
-            } catch (NoResultException e) {
-                memberChatroomRepository.save(
-                    MemberChatroom.builder()
-                        .member(member)
-                        .chatroom(this.findById(id))
-                        .build()
+        this.chatroomRepository.increaseRoomPopulationById(id).ifPresent(chatroom -> {
+            memberRepository.findByUsername(principal.getName()).ifPresent(member -> {
+                memberChatroomRepository.findByMemberIdAndChatroomId(member.getId(), id).ifPresentOrElse(
+                    mc -> {},
+                    () -> {
+                        memberChatroomRepository.save(
+                            MemberChatroom.builder()
+                                .member(member)
+                                .chatroom(chatroom)
+                                .build()
+                        );
+                    }
                 );
-            }
+            });
         });
     }
 
+
     public void leave(final Long id) {
-        this.chatroomRepository.findById(id).ifPresent(chatroom -> {
-            chatroomRepository.decreaseRoomPopulationById(id);
-            chatroomRepository.deleteIfEmpty(chatroom);
-        });
+        chatroomRepository
+            .decreaseRoomPopulationById(id)
+            .ifPresent(c -> chatroomRepository.deleteIfEmpty(c));
     }
 }
