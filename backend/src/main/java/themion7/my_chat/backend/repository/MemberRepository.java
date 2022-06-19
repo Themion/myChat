@@ -8,5 +8,6 @@ public interface MemberRepository {
     public Member save(Member member);
     public Optional<Member> findById(Long id);
     public Optional<Member> findByUsername(String username);
+    public void delete(Member member);
     public void deleteByUsername(String username);
 }

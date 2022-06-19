@@ -11,6 +11,7 @@ public interface ChatroomRepository {
     public List<Chatroom> findAll();
     public Optional<Chatroom> increaseRoomPopulationById(Long id);
     public Optional<Chatroom> decreaseRoomPopulationById(Long id);
+    public void delete(Chatroom chatroom);
     public void deleteById(Long id);
     public void deleteIfEmpty(Chatroom chatroom);
 }

@@ -47,13 +47,18 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
     }
 
     @Override
+    public void delete(Chatroom chatroom) {
+        em.remove(chatroom);
+    }
+
+    @Override
     public void deleteById(Long id) {
-        em.remove(this.findById(id));
+        this.findById(id).ifPresent(c -> this.delete(c));
     }
 
     @Override
     public void deleteIfEmpty(Chatroom chatroom) {
-        if (chatroom.getPopulation() == 0L) this.deleteById(chatroom.getId());
+        if (chatroom.getPopulation() == 0L) this.delete(chatroom);
     }
 
 }

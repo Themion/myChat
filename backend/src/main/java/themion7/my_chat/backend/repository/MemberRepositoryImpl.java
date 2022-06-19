@@ -38,8 +38,13 @@ public class MemberRepositoryImpl implements MemberRepository {
     }
 
     @Override
+    public void delete(Member member) {
+        em.remove(member);
+    }
+
+    @Override
     public void deleteByUsername(String username) {
-        em.remove(this.findByUsername(username));
+        this.findByUsername(username).ifPresent(member -> this.delete(member));
     }
     
 }

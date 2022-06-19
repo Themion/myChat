@@ -61,10 +61,17 @@ public class MemberChatroomRepositoryImpl implements MemberChatroomRepository {
             ;
     }
 
-    // POJO하지 않지만 영속성 컨텍스트? 위반으로 인해 id로 검색해 삭제
     @Override
-    public void delete(Long memberId, Long chatroomId) {
-        em.remove(this.findByMemberIdAndChatroomId(memberId, chatroomId));
+    public void delete(MemberChatroom memberChatroom) {
+        em.remove(memberChatroom);
+        
+    }
+
+    @Override
+    public void deleteByMemberIdAndChatroomId(Long memberId, Long chatroomId) {
+        this.findByMemberIdAndChatroomId(memberId, chatroomId).ifPresent(
+            memberChatroom -> this.delete(memberChatroom)
+        );
     }
 
 }
