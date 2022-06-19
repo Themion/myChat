@@ -35,7 +35,7 @@ public class ChatroomRepositoryTest {
         chatroomRepository.save(chatroom);
         Assertions
             .assertThat(chatroomRepository.findById(chatroom.getId()))
-            .isNotNull();
+            .isPresent();
     }
 
     @Test
@@ -47,12 +47,14 @@ public class ChatroomRepositoryTest {
             .title("test123123")
             .build();
 
+        int size = chatroomRepository.findAll().size();
+
         chatroomRepository.save(c1);
         chatroomRepository.save(c2);
 
         Assertions
             .assertThat(chatroomRepository.findAll().size())
-            .isEqualTo(2);
+            .isEqualTo(size + 2);
     }
 
     @Test
@@ -87,6 +89,6 @@ public class ChatroomRepositoryTest {
         chatroomRepository.deleteById(chatroom.getId());
         Assertions
             .assertThat(chatroomRepository.findById(chatroom.getId()))
-            .isNull();
+            .isEmpty();
     }
 }

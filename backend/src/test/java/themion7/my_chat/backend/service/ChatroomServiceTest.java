@@ -1,5 +1,8 @@
 package themion7.my_chat.backend.service;
 
+import static org.junit.jupiter.api.Assertions.assertThrows;
+
+import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -27,15 +30,13 @@ public class ChatroomServiceTest {
             .password("password")
             .build();
 
-        service.save(chatroomDTO);
+        id = service.save(chatroomDTO);
 
-        Chatroom chatroom = service.findAll().get(0);
+        Chatroom chatroom = service.findById(id);
 
         Assertions
             .assertThat(chatroom.getPopulation())
             .isZero();
-
-        id = chatroom.getId();
 
         service.join(id, member);
         Assertions
@@ -46,10 +47,12 @@ public class ChatroomServiceTest {
         Assertions
             .assertThat(chatroom.getPopulation())
             .isZero();
-    
-        Assertions
-            .assertThat(service.findById(id))
-            .isNull();
+
+        assertThrows(
+            NoResultException.class, 
+            () -> service.findById(id)
+        );
+
     }
 
     @Test

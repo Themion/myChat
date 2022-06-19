@@ -2,7 +2,6 @@ package themion7.my_chat.backend.repository;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import javax.persistence.NoResultException;
 import javax.transaction.Transactional;
 
 import org.assertj.core.api.Assertions;
@@ -24,8 +23,8 @@ public class MemberChatroomRepositoryTest {
     @Test
     public void create() {
         Member member = Member.builder()
-            .username("username")
-            .password("password")
+            .username("usernameTest")
+            .password("passwordTest")
             .build();
         
         Chatroom chatroom = Chatroom.builder()
@@ -95,19 +94,18 @@ public class MemberChatroomRepositoryTest {
                     .findByChatroomId(chatroom.getId() + 1)
             ).isEmpty();
 
-        assertThrows(
-            NoResultException.class, 
-            () -> {
+        Assertions
+            .assertThat(
                 memberChatroomRepository
-                    .findByMemberIdAndChatroomId(30L, 30L);
-            });
+                    .findByMemberIdAndChatroomId(30L, 30L)
+            ).isEmpty();
     }
 
     @Test
     public void delete() {
         Member member = Member.builder()
-            .username("username")
-            .password("password")
+            .username("usernameTest")
+            .password("passwordTest")
             .build();
         
         Chatroom chatroom = Chatroom.builder()
@@ -123,7 +121,7 @@ public class MemberChatroomRepositoryTest {
         chatroomRepository.save(chatroom);
         memberChatroomRepository.save(memberChatroom);
 
-        memberChatroomRepository.delete(member.getId(), chatroom.getId());
+        memberChatroomRepository.deleteByMemberIdAndChatroomId(member.getId(), chatroom.getId());
 
         Assertions
             .assertThat(
@@ -135,8 +133,8 @@ public class MemberChatroomRepositoryTest {
     @Test
     public void UniqueConstraint() {
         Member member = Member.builder()
-            .username("username")
-            .password("password")
+            .username("usernameTest")
+            .password("passwordTest")
             .build();
 
         Chatroom chatroom = Chatroom.builder()
