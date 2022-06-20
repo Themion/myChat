@@ -5,6 +5,7 @@ import com.auth0.jwt.JWT;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,9 @@ public class TokenController {
     private MemberService memberService;
     
     @RequestMapping(method = RequestMethod.GET)
-    public String getAccessToken(@CookieValue(value = JwtUtils.REFRESH_TOKEN_HEADER) String refreshToken) {
+    public String getAccessToken(@Nullable @CookieValue(value = JwtUtils.REFRESH_TOKEN_HEADER) String refreshToken) {
+        if (refreshToken == null) return "";
+    
         Member member = memberService.findByUsername(
             JWT
                 .decode(refreshToken)
