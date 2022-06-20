@@ -13,24 +13,24 @@ type Props = ClientProps & {
 const reducer = (
     getRoom: Props["getRoom"], 
     lastSender: string,
-    setLastSender: (lastSender: string) => any
+    setLastSender: React.Dispatch<string>
 ) => {
     return (state: JSX.Element[], action: ChatAction) => {
         const { type, payload } = action
-        if (payload.sender !== lastSender) {
-            state.push(<Sender key={payload.sender} {...payload} />)
-            setLastSender(payload.sender)
+        const { sender, chatId } = payload
+    
+        if (sender !== lastSender) {
+            state.push(<Sender key={sender} {...payload} />)
+            setLastSender(sender)
         }
 
         switch (type) {
             case ChatActionType.CHAT:
-                return state.concat(<Chat key={payload.chatId} {...payload} />)
+                return state.concat(<Chat key={chatId} {...payload} />)
             case ChatActionType.INFO: 
                 getRoom()
-                return state.concat(<Info key={payload.chatId} {...payload} />)
+                return state.concat(<Info key={chatId} {...payload} />)
         }
-
-        return state
     }
 }
 
