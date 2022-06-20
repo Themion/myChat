@@ -3,14 +3,9 @@ import { Client } from "@stomp/stompjs"
 export type ClientState = Client | undefined
 export type TokenState = string | undefined
 
-export type ClientAction = {
+export type Action<T> = {
     type: string
-    payload: ClientState
-}
-
-export type TokenAction = {
-    type: string
-    payload: TokenState
+    payload: T
 }
 
 export type State = {

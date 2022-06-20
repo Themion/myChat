@@ -15,7 +15,7 @@ export type ChatroomDTO = {
 }
 
 export type ChatAction = {
-    type: string
+    type: ChatActionType
     payload: ChatDTO
 }
 

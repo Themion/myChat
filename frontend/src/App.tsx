@@ -14,7 +14,7 @@ import Signup from './routes/Signup';
 const App = () => {
     return (
         <Router>
-            <div className="App m-3">
+            <div className="App">
                 <Routes>
                     <Route path="/signup" element={<Signup />} />
                     <Route path="/login" element={<Login />} />

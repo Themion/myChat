@@ -13,32 +13,17 @@ export const getAccessToken = () => {
 }
 
 export const setAccessToken = async () => {
-    const to: AxiosDestination = {
-        url: '/token',
-        method: 'GET'
-    }
-
-    const callback: AxiosCallback = (res) => {
-        store.dispatch(slice.actions.setAccessToken(res.data))
-    }
-    const fallback: AxiosFallback = (res) => {
-        store.dispatch(slice.actions.setAccessToken())
-    }
+    const to: AxiosDestination = { url: '/token', method: 'GET' }
+    const callback: AxiosCallback = (res) => store.dispatch(slice.actions.setAccessToken(res.data))
+    const fallback: AxiosFallback = (res) => store.dispatch(slice.actions.setAccessToken())
 
     return await sendAsync(to, {}, callback, fallback)
 }
 
 export const removeAccessToken = () => {
-    const to: AxiosDestination = {
-        url: '/token',
-        method: 'DELETE'
-    }
-
-    const callback: AxiosCallback = (res) => {
-        store.dispatch(slice.actions.setAccessToken())
-    }
-    const fallback: AxiosFallback = (res) => {
-    }
+    const to: AxiosDestination = { url: '/token', method: 'DELETE' }
+    const callback: AxiosCallback = (res) => store.dispatch(slice.actions.setAccessToken())
+    const fallback: AxiosFallback = (res) => { }
 
     sendAsync(to, {}, callback, fallback)
 }

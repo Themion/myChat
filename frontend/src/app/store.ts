@@ -1,11 +1,11 @@
 import { createSlice, configureStore } from "@reduxjs/toolkit"
-import { ClientAction, State, TokenAction } from "../types/redux"
+import { Action, ClientState, State, TokenState } from "../types/redux"
 
 export const slice = createSlice({
     name: "clientReducer",
     initialState: {} as State, 
     reducers: {
-        setClient: (state, action: ClientAction) => {
+        setClient: (state, action: Action<ClientState>) => {
             if (action.payload) {
                 state.client = action.payload
                 state.client.activate()
@@ -15,7 +15,7 @@ export const slice = createSlice({
             }
             return state
         },
-        setAccessToken: (state, action: TokenAction) => {
+        setAccessToken: (state, action: Action<TokenState>) => {
             return { ...state, accessToken: action.payload }
         }
     }
