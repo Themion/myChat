@@ -58,6 +58,10 @@ export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) =
             })
         })
 
+        client.subscribe(`/user/queue/${id}`, (message) => {
+            console.log(message.body)
+        })
+
         client.publish({ destination: `/ws/${id}/connect` })
     }
 
@@ -66,4 +70,6 @@ export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) =
         client.unsubscribe(`/topic/${id}/connect`)
         client.unsubscribe(`/topic/${id}/disconnect`)
     }
+
+    // client.activate()
 }

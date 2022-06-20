@@ -30,9 +30,9 @@ public class WebSocketService {
         messagingTemplate.convertAndSend(
             "/topic/" + roomId.toString() + "/connect", 
             ChatDTO.builder()
-                .chat(sender + " has connected")
-                .sender("")
-                .build()
+            .chat(sender + " has connected")
+            .sender("")
+            .build()
         );
     }
 
@@ -48,7 +48,15 @@ public class WebSocketService {
         );
     }
 
-    private String getSender(final Principal principal) {
+    public void sendSender(final Long roomId, final Principal principal) {
+        messagingTemplate.convertAndSendToUser(
+            principal.getName(), 
+            "/queue/" + roomId.toString(), 
+            getSender(principal)
+        );
+    }
+
+    public String getSender(final Principal principal) {
         return this.memberRepository.findByUsername(principal.getName())
             .map(member -> member.getUsername())
             .orElse(principal.getName().split("-")[0]);
