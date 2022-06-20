@@ -3,6 +3,7 @@ package themion7.my_chat.backend.config.handler;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.messaging.Message;
@@ -11,10 +12,10 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import lombok.AllArgsConstructor;
+import themion7.my_chat.backend.security.jwt.JwtUtils;
 import themion7.my_chat.backend.service.MemberService;
 
 @AllArgsConstructor
@@ -28,15 +29,11 @@ public class WebSocketHandler implements ChannelInterceptor {
         
         switch (accessor.getCommand()) {
             case CONNECT:
-                Principal principal = null;
-                try {
-                    List<String> result = accessor.getNativeHeader("username");
-                    principal = memberService.findByUsername(result.get(0));
-                } catch (Exception e) {
-                    principal = createNewAnonymousAuthentication();
-                } finally {
-                    accessor.setUser(principal);
-                }
+                Optional<String> auth = accessor.getNativeHeader("authentication").stream().findAny();
+                accessor.setUser(auth.isPresent() ? 
+                    memberService.findByUsername(JwtUtils.getUsernameFromHeader(auth.get())) : 
+                    createNewAnonymousAuthentication()
+                );
                 break;
         
             default:
@@ -46,7 +43,7 @@ public class WebSocketHandler implements ChannelInterceptor {
         return message;
     }
 
-    private Authentication createNewAnonymousAuthentication() {
+    private Principal createNewAnonymousAuthentication() {
         final String randomId = UUID.randomUUID().toString();
         List<SimpleGrantedAuthority> authorities = new ArrayList<>();
         authorities.add(new SimpleGrantedAuthority("ROLE_USER"));

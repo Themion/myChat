@@ -2,12 +2,12 @@ import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { baseURL } from "../types/axios";
 import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../types/chat";
-import { getTokenPayload } from "./session";
+import { getAccessToken } from "./session";
 
 const WebSocketServer = baseURL + '/websocket'
 
 export const stompClient = () => {
-    const payload = getTokenPayload()
+    const token = getAccessToken()
 
     const client = new Client({
         webSocketFactory: () => new SockJS(WebSocketServer),
@@ -15,7 +15,7 @@ export const stompClient = () => {
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
-        connectHeaders: payload ? { username: payload.sub } : {}
+        connectHeaders: token ? { authentication: token } : {}
     })
     
     client.onStompError = (frame) => {
