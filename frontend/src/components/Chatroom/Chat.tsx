@@ -22,6 +22,6 @@ export const Sender = (props: ChatDTO) => {
 
     const isMine = (getUsername() === sender) ? styles.myChat : ''
     return <div className={`${styles.sender} ${isMine}`}>
-        {sender}
+        <h5 className={styles.header}>{sender}</h5>
     </div>
 }
