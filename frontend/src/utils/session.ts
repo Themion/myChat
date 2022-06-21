@@ -3,6 +3,8 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { TokenPayload } from "../types/token"
 import { sendAsync } from "./axios"
 
+const usernameStorage = 'username'
+
 export const getTokenPayload = (): TokenPayload => {
     const token = getAccessToken()
     return token ? JSON.parse(atob(token.split(".")[1])) : undefined;
@@ -26,4 +28,12 @@ export const removeAccessToken = () => {
     const fallback: AxiosFallback = (res) => { }
 
     sendAsync(to, {}, callback, fallback)
+}
+
+export const setUsername = (username: string) => {
+    sessionStorage.setItem(usernameStorage, username)
+}
+
+export const getUsername = () => {
+    return sessionStorage.getItem(usernameStorage)
 }

@@ -1,4 +1,5 @@
 import { ChatDTO } from '../../types/chat'
+import { getUsername } from '../../utils/session'
 import styles from './Chat.module.css'
 
 export const Info = (props: ChatDTO) => {
@@ -8,13 +9,19 @@ export const Info = (props: ChatDTO) => {
 }
 
 export const Chat = (props: ChatDTO) => {
-    return <div>
-        {props.chat}
+    const { chat, sender } = props
+
+    const isMine = (getUsername() === sender) ? styles.myChat : ''
+    return <div className={isMine}>
+        {chat}
     </div>
 }
 
 export const Sender = (props: ChatDTO) => {
-    return <div className={styles.sender}>
-        {props.sender}
+    const { sender } = props
+
+    const isMine = (getUsername() === sender) ? styles.myChat : ''
+    return <div className={`${styles.sender} ${isMine}`}>
+        {sender}
     </div>
 }

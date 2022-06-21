@@ -2,7 +2,7 @@ import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
 import { baseURL } from "../types/axios";
 import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../types/chat";
-import { getAccessToken } from "./session";
+import { getAccessToken, setUsername } from "./session";
 
 const WebSocketServer = baseURL + '/websocket'
 
@@ -38,7 +38,7 @@ const messageToDTO = (message: IMessage) => {
 }
 
 export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) => {
-    client.onConnect = (frame) => {        
+    client.onConnect = (frame) => {
         client.subscribe(`/topic/${id}`, (message) => {
             dispatch({
                 type: ChatActionType.CHAT, 
@@ -59,7 +59,7 @@ export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) =
         })
 
         client.subscribe(`/user/queue/${id}`, (message) => {
-            console.log(message.body)
+            setUsername(message.body)
         })
 
         client.publish({ destination: `/ws/${id}/connect` })
@@ -69,6 +69,7 @@ export const activateClient = (id: Id, client: Client, dispatch: ChatDispatch) =
         client.unsubscribe(`/topic/${id}`)
         client.unsubscribe(`/topic/${id}/connect`)
         client.unsubscribe(`/topic/${id}/disconnect`)
+        client.unsubscribe(`/user/queue/${id}`)
     }
 
     // client.activate()
