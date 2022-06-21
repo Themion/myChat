@@ -3,7 +3,6 @@ package themion7.my_chat.backend.config.handler;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.messaging.Message;
@@ -29,9 +28,9 @@ public class WebSocketHandler implements ChannelInterceptor {
         
         switch (accessor.getCommand()) {
             case CONNECT:
-                Optional<String> auth = accessor.getNativeHeader("authentication").stream().findAny();
-                accessor.setUser(auth.isPresent() ? 
-                    memberService.findByUsername(JwtUtils.getUsernameFromHeader(auth.get())) : 
+                List<String> auth = accessor.getNativeHeader("authentication");
+                accessor.setUser(auth != null ? 
+                    memberService.findByUsername(JwtUtils.getUsernameFromHeader(auth.get(0))) : 
                     createNewAnonymousAuthentication()
                 );
                 break;

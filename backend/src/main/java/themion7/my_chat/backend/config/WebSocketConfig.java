@@ -22,7 +22,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
     public void configureMessageBroker(MessageBrokerRegistry registry) {
         registry
             .setApplicationDestinationPrefixes("/ws")
-            .enableSimpleBroker("/topic");
+            .enableSimpleBroker("/topic", "/queue");
     }
 
     @Override

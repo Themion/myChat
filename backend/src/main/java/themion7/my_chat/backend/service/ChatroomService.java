@@ -86,6 +86,9 @@ public class ChatroomService {
     public void leave(final Long id) {
         chatroomRepository
             .decreaseRoomPopulationById(id)
-            .ifPresent(c -> chatroomRepository.deleteIfEmpty(c));
+            .ifPresent(chatroom -> {
+                if (memberChatroomRepository.findByChatroomId(chatroom.getId()).isEmpty())
+                    chatroomRepository.deleteIfEmpty(chatroom);
+            });
     }
 }
