@@ -1,10 +1,11 @@
 import { useState, useEffect, Dispatch } from "react"
 import { useNavigate } from "react-router-dom"
+import { getAccessToken } from "../app/store"
 import Chatrooms from "../components/Home/Chatrooms"
 import CreateChatroomForm from "../components/Home/CreateChatroomForm"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { send } from "../utils/axios"
-import { setAccessToken, getAccessToken } from "../utils/session"
+import { setAccessToken } from "../utils/session"
 
 const updateTable = (to: AxiosDestination, setTable: Dispatch<any>, text: string) => {
     const callback: AxiosCallback = (res) => setTable(<>

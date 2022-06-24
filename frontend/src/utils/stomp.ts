@@ -1,8 +1,9 @@
 import { Client, IMessage } from "@stomp/stompjs";
 import SockJS from "sockjs-client";
+import { getAccessToken } from "../app/store";
 import { baseURL } from "../types/axios";
 import { ChatActionType, ChatDispatch, ChatDTO, Id } from "../types/chat";
-import { getAccessToken, setUsername } from "./session";
+import { setUsername } from "./session";
 
 const WebSocketServer = baseURL + '/websocket'
 

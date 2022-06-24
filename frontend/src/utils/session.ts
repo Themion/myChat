@@ -1,4 +1,4 @@
-import { slice, store } from "../app/store"
+import { getAccessToken, slice, store } from "../app/store"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { TokenPayload } from "../types/token"
 import { sendAsync } from "./axios"
@@ -8,10 +8,6 @@ const usernameStorage = 'username'
 export const getTokenPayload = (): TokenPayload => {
     const token = getAccessToken()
     return token ? JSON.parse(atob(token.split(".")[1])) : undefined;
-}
-
-export const getAccessToken = () => {
-    return store.getState().accessToken
 }
 
 export const setAccessToken = async () => {

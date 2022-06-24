@@ -22,3 +22,7 @@ export const slice = createSlice({
 })
 
 export const store = configureStore({reducer: slice.reducer})
+
+export const getAccessToken = () => {
+    return store.getState().accessToken
+}

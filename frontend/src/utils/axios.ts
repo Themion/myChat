@@ -1,6 +1,6 @@
 import axios, { AxiosError, AxiosRequestConfig, AxiosRequestHeaders, AxiosResponse } from "axios"
+import { getAccessToken } from "../app/store"
 import { AxiosCallback, AxiosDestination, AxiosFallback, baseURL } from "../types/axios"
-import { getAccessToken } from "./session"
 
 const makeConfig = (
     to: AxiosDestination, 
