@@ -58,7 +58,7 @@ public class ChatroomRepositoryImpl implements ChatroomRepository {
 
     @Override
     public void deleteIfEmpty(Chatroom chatroom) {
-        if (chatroom.getPopulation() == 0L) this.delete(chatroom);
+        if (chatroom.getPopulation() == 0L) this.deleteById(chatroom.getId());
     }
 
 }
