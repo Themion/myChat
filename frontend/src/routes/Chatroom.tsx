@@ -10,7 +10,7 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { Id, ChatroomDTO } from "../types/chat"
 import { ClientProps, State } from "../types/redux"
 import { send } from "../utils/axios"
-import { setAccessToken } from "../utils/session"
+import { setTokens } from "../utils/session"
 import { stompClient } from "../utils/stomp"
 
 type Props = ClientProps & {
@@ -37,7 +37,7 @@ const Chatroom = (props: Props) => {
 
     useEffect(() => {
         getRoom()
-        setAccessToken().finally(() => setClient(stompClient()))
+        setTokens().finally(() => setClient(stompClient()))
 
         return removeClient
         // eslint-disable-next-line

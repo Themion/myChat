@@ -10,7 +10,7 @@ export const getTokenPayload = (): TokenPayload => {
     return token ? JSON.parse(atob(token.split(".")[1])) : undefined;
 }
 
-export const setAccessToken = async () => {
+export const setTokens = async () => {
     const to: AxiosDestination = { url: '/token', method: 'GET' }
     const callback: AxiosCallback = (res) => store.dispatch(slice.actions.setAccessToken(res.data))
     const fallback: AxiosFallback = (res) => store.dispatch(slice.actions.setAccessToken())
@@ -18,12 +18,12 @@ export const setAccessToken = async () => {
     return await sendAsync(to, {}, callback, fallback)
 }
 
-export const removeAccessToken = () => {
+export const removeTokens = async () => {
     const to: AxiosDestination = { url: '/token', method: 'DELETE' }
     const callback: AxiosCallback = (res) => store.dispatch(slice.actions.setAccessToken())
-    const fallback: AxiosFallback = (res) => { }
+    const fallback: AxiosFallback = (res) => console.log(res)
 
-    sendAsync(to, {}, callback, fallback)
+    return await sendAsync(to, {}, callback, fallback)
 }
 
 export const setUsername = (username: string) => {
