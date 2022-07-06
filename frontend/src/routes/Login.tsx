@@ -20,9 +20,13 @@ const Login = () => {
         const to: AxiosDestination = { url: '/login', method: 'POST' }
         const callback: AxiosCallback = (res) => navigate('/')
         const fallback: AxiosFallback = (res) => {
+            const span = document.querySelector('span') as HTMLSpanElement
+
             username.value = ""
             password.value = ""
             console.log(res)
+
+            span.innerHTML = res.status === 403 ? "아이디 혹은 비밀번호가 잘못되었습니다." : "알 수 없는 오류"
         }
 
         const data: LoginDTO = {
@@ -36,6 +40,7 @@ const Login = () => {
     return <>
         <h2>로그인</h2>
         <form onSubmit={onSubmit}>
+            <span></span>
             <div>
                 <input id="username" type="text" placeholder="username"></input>
             </div>

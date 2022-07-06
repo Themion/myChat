@@ -24,6 +24,13 @@ const Signup = () => {
             navigate('/login')
         }
         const fallback: AxiosFallback = (res) => {
+            console.log(res.data.errors)
+            res.data.errors.forEach((error: any) => {
+                const input = document.querySelector(`input#${error.field}`) as HTMLInputElement
+                const span = input.parentElement?.querySelector('span') as HTMLSpanElement
+
+                span.innerHTML = error.defaultMessage
+            })
             // window.location.href = '/signup'
         }
     
@@ -51,12 +58,15 @@ const Signup = () => {
         <form onSubmit={onSubmit}>
             <div>
                 <input id="username" type="text" placeholder="username"></input>
+                <span></span>
             </div>
             <div>
                 <input id="password" type="password" placeholder="password"></input>
+                <span></span>
             </div>
             <div>
                 <input id="password_check" type="password" placeholder="password_check"></input>
+                <span></span>
             </div>
             <button type="submit">제출</button>
         </form>
