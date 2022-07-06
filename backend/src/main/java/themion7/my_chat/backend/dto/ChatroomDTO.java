@@ -15,7 +15,7 @@ import static themion7.my_chat.backend.dto.validation.ValidationUtils.*;
 @Data
 @NoArgsConstructor
 public class ChatroomDTO {
-    @NotBlank(message = notBlankMsg)
+    @NotBlank(message = emptyMsg)
     @Size(min = 3, max = 100, message = chatroomTitleLengthMsg)
     private String title;
 }

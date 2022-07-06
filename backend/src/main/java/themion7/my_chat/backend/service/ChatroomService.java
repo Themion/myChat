@@ -56,7 +56,6 @@ public class ChatroomService {
 
     public Chatroom findById(Long id) {
         return this.chatroomRepository.findById(id)
-            .map(member -> member)
             .orElseThrow(() -> new NoResultException(""));
     }
 

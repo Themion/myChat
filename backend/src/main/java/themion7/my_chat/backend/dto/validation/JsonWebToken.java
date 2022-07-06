@@ -51,9 +51,7 @@ class TokenValidator implements ConstraintValidator<JsonWebToken, String> {
 
         if (decode.getExpiresAt().getTime() < System.currentTimeMillis())
             return setContextViolation(context, "이미 만료된 토큰입니다.");
-    
-        String username = decode.getSubject();
-        if (memberRepository.findByUsername(username).isEmpty())
+        else if (memberRepository.findByUsername(decode.getSubject()).isEmpty())
             return setContextViolation(context);
         
         return true;
