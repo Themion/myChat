@@ -87,7 +87,7 @@ public class ChatroomService {
         chatroomRepository
             .decreaseRoomPopulationById(id)
             .ifPresent(chatroom -> {
-                if (memberChatroomRepository.findByChatroomId(chatroom.getId()).isEmpty())
+                // if (memberChatroomRepository.findByChatroomId(chatroom.getId()).isEmpty())
                     chatroomRepository.deleteIfEmpty(chatroom);
             });
     }

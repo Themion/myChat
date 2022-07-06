@@ -20,7 +20,7 @@ import themion7.my_chat.backend.repository.MemberRepository;
 import static themion7.my_chat.backend.dto.validation.ValidationUtils.*;
 
 @Constraint(validatedBy = UniqueUsernameValidator.class)
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)
 public @interface UniqueUsername {
     String message() default duplicateUsernameMsg;
@@ -36,11 +36,8 @@ class UniqueUsernameValidator implements ConstraintValidator<UniqueUsername, Str
 
     @Override
     public boolean isValid(String username, ConstraintValidatorContext context) {
-
         boolean result = memberRepository.findByUsername(username).isEmpty();
-
-        if (!result) setContextValidation(context);
-
+        if (!result) return setContextViolation(context, duplicateUsernameMsg);
         return result;
     }
     
