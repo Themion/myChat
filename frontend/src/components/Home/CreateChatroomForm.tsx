@@ -1,6 +1,7 @@
 import { FormEventHandler } from "react"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../../types/axios"
 import { send } from "../../utils/axios"
+import { openChatroom } from "../../utils/utils"
 
 const CreateChatroomForm = () => {
     const onSubmit: FormEventHandler = (e) => {
@@ -13,7 +14,7 @@ const CreateChatroomForm = () => {
         const data = { title: input.value }
 
         const callback: AxiosCallback = (res) => {
-            window.open(`/room/${res.data}`)
+            openChatroom(res.data)
             window.location.reload()
         }
         const fallback: AxiosFallback = (res) => console.log(res)
