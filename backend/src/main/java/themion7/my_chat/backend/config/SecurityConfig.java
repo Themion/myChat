@@ -51,6 +51,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/token")
                     .permitAll()
+                .antMatchers(HttpMethod.DELETE, "/token")
+                    .hasRole("USER")
                 .antMatchers(HttpMethod.GET, "/websocket/**")
                     .permitAll()
                 .anyRequest()
