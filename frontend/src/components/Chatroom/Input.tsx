@@ -1,4 +1,4 @@
-import { FormEventHandler } from "react"
+import { FormEventHandler, KeyboardEventHandler } from "react"
 import { connect } from "react-redux"
 import { Id, ChatDTO } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
@@ -27,8 +27,24 @@ const Input = (props: Props) => {
         chat.value = ""
     }
 
+    const keydown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+        if (e.key === "Enter") {
+            if (!e.ctrlKey) {
+                e.preventDefault()
+                onSubmit(e)
+            }
+            else {
+                const target = e.target as HTMLTextAreaElement
+                target.value += '\n'
+            }
+        }
+    }
+
     return <form className={styles.form} onSubmit={onSubmit}>
-        <textarea id="chat" className={styles.textarea} />
+        <textarea 
+            id="chat" 
+            className={styles.textarea}
+            onKeyDown={keydown}/>
         <button type="submit">보내기</button>
     </form>
 }
