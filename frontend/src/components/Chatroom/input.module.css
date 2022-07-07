@@ -1,15 +1,35 @@
+.form {
+    display: grid;
+    width: calc(100vw - 1rem);
+}
+
 .textarea {
     resize: none;
-    padding: 0.1rem;
+    border: 1px solid lightgray;
+}
+
+.button{
+    border: 1px solid lightgray;
 }
 
 .span {
     margin: auto;
 }
 
-.form {
-    display: grid;
-    width: calc(100vw - 1rem);
+@media (min-width: 0) {
+    .textarea {
+        height: 2rem;
+        
+        border-radius: 5px 5px 0 0;
+        border-width: 1px 1px 0px 1px;
+    }
+
+    .button {
+        height: 1.5rem;
+    
+        border-radius: 0 0 5px 5px;
+        border-width: 0px 1px 1px 1px;
+    }
 }
 
 @media (min-width: 15rem) {
@@ -18,25 +38,17 @@
     }
 
     .textarea {
-        display: inline-grid;
         height: 3.5rem;
+        padding: 0.1rem;
+
+        border-radius: 5px 0 0 5px;
+        border-width: 1px 0px 1px 1px;
     }
 
     .button {
-        display: inline-grid;
         height: auto;
-    }
-}
 
-
-@media (max-width: calc(15rem - 1px)) {
-    .textarea {
-        display: inline-grid;
-        height: 2rem;
-    }
-
-    .button {
-        display: inline-grid;
-        height: 1.5rem;
+        border-radius: 0 5px 5px 0;
+        border-width: 1px 1px 1px 0px;
     }
 }
