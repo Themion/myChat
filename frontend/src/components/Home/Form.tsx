@@ -3,7 +3,7 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../../types/axio
 import { send } from "../../utils/axios"
 import { openChatroom } from "../../utils/utils"
 
-const CreateChatroomForm = () => {
+const Form = () => {
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
 
@@ -24,10 +24,14 @@ const CreateChatroomForm = () => {
 
     return (
         <form onSubmit={onSubmit}><>
-            <input type="text" id="title" placeholder="새 채팅방 이름" />
+            <input
+                type="text" 
+                id="title" 
+                placeholder="새 채팅방 이름" />
             <button type="submit">새 채팅방 만들기</button>
         </></form>
     )
 }
 
-export default CreateChatroomForm
+export default Form
+
