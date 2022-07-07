@@ -5,6 +5,8 @@ import { ClientProps, State } from "../../types/redux"
 import { activateClient } from "../../utils/stomp"
 import { Sender, Chat, Info } from "./Chat"
 
+import styles from "./ChatList.module.css"
+
 type Props = ClientProps & {
     id: Id
     getRoom: () => void
@@ -45,7 +47,7 @@ const ChatList = (props: Props) => {
         // eslint-disable-next-line
     }, [client])
 
-    return <div id="chatlist">{chats}</div>
+    return <div className={styles.chatlist}>{chats}</div>
 }
 
 const mapStateToProps = (state: State) => ({ client: state.client })

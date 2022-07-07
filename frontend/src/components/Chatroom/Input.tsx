@@ -45,7 +45,9 @@ const Input = (props: Props) => {
             id="chat" 
             className={styles.textarea}
             onKeyDown={keydown}/>
-        <button type="submit">보내기</button>
+        <button type="submit" className={styles.button}>
+            <span className={styles.span}>보내기</span>
+        </button>
     </form>
 }
 

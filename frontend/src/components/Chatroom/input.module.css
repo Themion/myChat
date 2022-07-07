@@ -1,7 +1,42 @@
 .textarea {
     resize: none;
+    padding: 0.1rem;
+}
+
+.span {
+    margin: auto;
 }
 
 .form {
-    margin-top: 1rem;
+    display: grid;
+    width: calc(100vw - 1rem);
+}
+
+@media (min-width: 15rem) {
+    .form {
+        grid-template-columns: auto 4rem;
+    }
+
+    .textarea {
+        display: inline-grid;
+        height: 3.5rem;
+    }
+
+    .button {
+        display: inline-grid;
+        height: auto;
+    }
+}
+
+
+@media (max-width: calc(15rem - 1px)) {
+    .textarea {
+        display: inline-grid;
+        height: 2rem;
+    }
+
+    .button {
+        display: inline-grid;
+        height: 1.5rem;
+    }
 }

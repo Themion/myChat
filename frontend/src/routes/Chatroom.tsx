@@ -13,6 +13,8 @@ import { send } from "../utils/axios"
 import { setTokens } from "../utils/session"
 import { stompClient } from "../utils/stomp"
 
+import styles from "./Chatroom.module.css"
+
 type Props = ClientProps & {
     setClient: (client?: Client) => void
 }
@@ -47,11 +49,13 @@ const Chatroom = (props: Props) => {
 
     if (!id) { return <Navigate to='/' /> }
 
-    return <>
-        <h2 id='chatroom_title'>{room.title} ({room.population})</h2>
+    return <div className={styles.chatroom}>
+        <h2 className={styles.title} id='chatroom_title'>
+            {room.title} ({room.population})
+        </h2>
         <ChatList id={id} getRoom={getRoom} />
         <Input id={id} />
-    </>
+    </div>
 }
 
 const mapStateToProps = (state: State) => ({ client: state.client })
