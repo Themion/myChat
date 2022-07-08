@@ -1,0 +1,18 @@
+.chatlist {
+    /* title 2rem, title margin 1rem input 3.5rem, extra 1rem */
+    height: calc(100vh - 7.5rem);
+    overflow-y: auto;
+}
+
+.chatlist::-webkit-scrollbar {
+    width: 0.4rem;
+}
+
+.chatlist::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+.chatlist::-webkit-scrollbar-thumb {
+    background: lightgray;
+    border-radius: 0.2rem;
+}

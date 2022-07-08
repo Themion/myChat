@@ -3,7 +3,7 @@ import { connect } from "react-redux"
 import { Id, ChatDTO } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
 
-import styles from './input.module.css'
+import styles from './css/input.module.css'
 
 type Props = ClientProps & {
     id: Id

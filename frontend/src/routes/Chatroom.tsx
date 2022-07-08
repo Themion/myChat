@@ -13,7 +13,7 @@ import { send } from "../utils/axios"
 import { setTokens } from "../utils/session"
 import { stompClient } from "../utils/stomp"
 
-import styles from "./Chatroom.module.css"
+import styles from "./css/Chatroom.module.css"
 
 type Props = ClientProps & {
     setClient: (client?: Client) => void

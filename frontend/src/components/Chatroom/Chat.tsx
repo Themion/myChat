@@ -1,6 +1,6 @@
 import { ChatDTO } from '../../types/chat'
 import { getUsername } from '../../utils/session'
-import styles from './Chat.module.css'
+import styles from './css/Chat.module.css'
 
 export const Info = (props: ChatDTO) => {
     return <div className={styles.info}>
