@@ -1,10 +1,16 @@
-export interface SignupDTO {
+export type SignupDTO = {
     username: string
     password: string
     passwordCheck: string
 }
 
-export interface LoginDTO {
+export type LoginDTO = {
     username: string
     password: string
+}
+
+export type InputType = {
+    name: string
+    type: "text" | "password"
+    placeholder: string
 }

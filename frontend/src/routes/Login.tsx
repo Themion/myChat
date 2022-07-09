@@ -1,54 +1,37 @@
-import { FormEventHandler } from "react"
 import { useNavigate } from "react-router-dom"
+import Form from "../components/Member/Form"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
-import { send } from "../utils/axios"
-
-interface LoginDTO {
-    username: string
-    password: string
-}
+import { InputType } from "../types/dto"
 
 const Login = () => {
     const navigate = useNavigate()
 
-    const onSubmit: FormEventHandler = (e) => {
-        e.preventDefault()
+    const to: AxiosDestination = { url: '/login', method: 'POST' }
+    const callback: AxiosCallback = (res) => navigate('/')
+    const fallback: AxiosFallback = (res) => {
+        const span = document.querySelector('span#loginError') as HTMLSpanElement
 
-        const username = document.querySelector('input#username') as HTMLInputElement
-        const password = document.querySelector('input#password') as HTMLInputElement
-
-        const to: AxiosDestination = { url: '/login', method: 'POST' }
-        const callback: AxiosCallback = (res) => navigate('/')
-        const fallback: AxiosFallback = (res) => {
-            const span = document.querySelector('span') as HTMLSpanElement
-
-            username.value = ""
-            password.value = ""
-            console.log(res)
-
-            span.innerHTML = res.status === 403 ? "아이디 혹은 비밀번호가 잘못되었습니다." : "알 수 없는 오류"
-        }
-
-        const data: LoginDTO = {
-            username: username.value,
-            password: password.value
-        }
-
-        send(to, data, callback, fallback)
+        console.log(res)
+        
+        span.innerHTML = res.status === 403 ? "아이디 혹은 비밀번호가 잘못되었습니다." : "알 수 없는 오류"
     }
+
+    const inputs: InputType[] = [
+        {
+            name: "username",
+            placeholder: "username",
+            type: "text"
+        }, {
+            name: "password",
+            placeholder: "password",
+            type: "password"
+        }
+    ]
 
     return <>
         <h2>로그인</h2>
-        <form onSubmit={onSubmit}>
-            <span></span>
-            <div>
-                <input id="username" type="text" placeholder="username"></input>
-            </div>
-            <div>
-                <input id="password" type="password" placeholder="password"></input>
-            </div>
-            <button type="submit">제출</button>
-        </form>
+        <span id='loginError'></span>
+        <Form inputs={inputs} to={to} callback={callback} fallback={fallback} />
         <button onClick={() => { navigate('/signup') }}>회원가입</button>
     </>
 }
