@@ -3,6 +3,8 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../../types/axio
 import { send } from "../../utils/axios"
 import { openChatroom } from "../../utils/utils"
 
+import styles from "./css/Form.module.css"
+
 const Form = () => {
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
@@ -23,13 +25,16 @@ const Form = () => {
     }
 
     return (
-        <form onSubmit={onSubmit}><>
-            <input
+        <form className={styles.form} onSubmit={onSubmit}>
+            <input 
+                className={styles.input}
                 type="text" 
                 id="title" 
                 placeholder="새 채팅방 이름" />
-            <button type="submit">새 채팅방 만들기</button>
-        </></form>
+            <button 
+                className={styles.button}
+                type="submit"><span className={styles.span}>새 채팅방 만들기</span></button>
+        </form>
     )
 }
 
