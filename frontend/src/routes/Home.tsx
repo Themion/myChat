@@ -2,7 +2,7 @@ import { useState, useEffect, Dispatch } from "react"
 import { useNavigate } from "react-router-dom"
 import { getAccessToken } from "../app/store"
 import Chatrooms from "../components/Home/Chatrooms"
-import Form from "../components/Home/Form"
+import Input from "../components/Home/Input"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { send } from "../utils/axios"
 import { removeTokens, setTokens } from "../utils/session"
@@ -41,7 +41,7 @@ const Home = () => {
     return <>
         {getAccessToken() && visited}
         {table}
-        <Form />
+        <Input />
         {button}
     </>
 }

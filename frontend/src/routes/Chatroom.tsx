@@ -5,7 +5,7 @@ import { connect } from "react-redux"
 import { useParams, Navigate } from "react-router-dom"
 import { slice } from "../app/store"
 import ChatList from "../components/Chatroom/ChatList"
-import Input from "../components/Chatroom/Input"
+import Textarea from "../components/Chatroom/Textarea"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../types/axios"
 import { Id, ChatroomDTO } from "../types/chat"
 import { ClientProps, State } from "../types/redux"
@@ -54,7 +54,7 @@ const Chatroom = (props: Props) => {
             {room.title} ({room.population})
         </h2>
         <ChatList id={id} getRoom={getRoom} />
-        <Input id={id} />
+        <Textarea id={id} />
     </div>
 }
 

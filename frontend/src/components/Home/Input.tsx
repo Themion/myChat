@@ -3,7 +3,7 @@ import { AxiosDestination, AxiosCallback, AxiosFallback } from "../../types/axio
 import { send } from "../../utils/axios"
 import { openChatroom } from "../../utils/utils"
 
-import styles from "./css/Form.module.css"
+import styles from "./css/Input.module.css"
 
 const Form = () => {
     const onSubmit: FormEventHandler = (e) => {
