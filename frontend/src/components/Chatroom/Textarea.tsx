@@ -1,4 +1,4 @@
-import { FormEventHandler, KeyboardEventHandler, useState } from "react"
+import { FormEvent, FormEventHandler, KeyboardEventHandler, useState } from "react"
 import { connect } from "react-redux"
 import { Id, ChatDTO } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
@@ -37,11 +37,15 @@ const Input = (props: Props) => {
         }
     }
 
+    const onChange = (e: FormEvent<HTMLTextAreaElement>) => 
+        setChat(e.currentTarget.value)
+
     return <form className={styles.form} onSubmit={onSubmit}>
         <textarea 
             id="chat" 
             className={styles.textarea}
             value={chat}
+            onChange={onChange}
             onKeyDown={onKeyDown}/>
         <button type="submit" className={styles.button}>
             <span className={styles.span}>보내기</span>
