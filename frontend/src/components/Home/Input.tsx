@@ -1,4 +1,4 @@
-import { FormEventHandler } from "react"
+import { FormEvent, FormEventHandler, useState } from "react"
 import { AxiosDestination, AxiosCallback, AxiosFallback } from "../../types/axios"
 import { send } from "../../utils/axios"
 import { openChatroom } from "../../utils/utils"
@@ -6,22 +6,20 @@ import { openChatroom } from "../../utils/utils"
 import styles from "./css/Input.module.css"
 
 const Form = () => {
+    const [title, setTitle] = useState('')
+
+    const onChange = (e: FormEvent<HTMLInputElement>) =>
+        setTitle(e.currentTarget.value)
+    
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
-
-        const input = document.getElementById("title") as HTMLInputElement
-        if (input.value === "") return
+        if (title === "") return
         
         const to: AxiosDestination = { url: "/room", method: "POST" }
-        const data = { title: input.value }
-
-        const callback: AxiosCallback = (res) => {
-            openChatroom(res.data)
-            window.location.reload()
-        }
+        const callback: AxiosCallback = (res) => openChatroom(res.data)
         const fallback: AxiosFallback = (res) => console.log(res)
 
-        send(to, data, callback, fallback)
+        send(to, { title }, callback, fallback)
     }
 
     return (
@@ -30,7 +28,9 @@ const Form = () => {
                 className={styles.input}
                 type="text" 
                 id="title" 
-                placeholder="새 채팅방 이름" />
+                placeholder="새 채팅방 이름"
+                value={title}
+                onChange={onChange} />
             <button 
                 className={styles.button}
                 type="submit"><span className={styles.span}>새 채팅방 만들기</span></button>

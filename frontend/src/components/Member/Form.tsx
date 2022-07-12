@@ -36,12 +36,8 @@ const Form = (props: Props) => {
     const onSubmit = (e: FormEvent) => {
         e.preventDefault()
 
-        console.log(data)
-
         const fallback: AxiosFallback = (res) => {
             const {data: {errors}} = res
-
-            console.log(errors)
             errors.forEach((error: any) => 
                 errorDispatch({
                     type: error.field, 
@@ -49,6 +45,7 @@ const Form = (props: Props) => {
                 }))
             if (customFallback) customFallback(res)
         }
+        
         send(to, data, callback, fallback)
     }
 

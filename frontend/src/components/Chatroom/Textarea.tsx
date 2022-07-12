@@ -1,4 +1,4 @@
-import { FormEventHandler, KeyboardEventHandler } from "react"
+import { FormEventHandler, KeyboardEventHandler, useState } from "react"
 import { connect } from "react-redux"
 import { Id, ChatDTO } from "../../types/chat"
 import { ClientProps, State } from "../../types/redux"
@@ -11,32 +11,29 @@ type Props = ClientProps & {
 
 const Input = (props: Props) => {
     const {id, client} = props
+    const [chat, setChat] = useState('')
 
     const onSubmit: FormEventHandler = (e) => {
         e.preventDefault()
-        
-        const chat = document.getElementById("chat") as HTMLTextAreaElement
-        if (chat.value === "") return
 
-        const data: Partial<ChatDTO> = { chat: chat.value }
+        if (chat === "") return
+
+        const data: Partial<ChatDTO> = { chat }
         if (client) client.publish({
             destination: `/ws/${id}`,
             body: JSON.stringify(data)
         })
 
-        chat.value = ""
+        setChat('')
     }
 
-    const keydown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
+    const onKeyDown: KeyboardEventHandler<HTMLTextAreaElement> = (e) => {
         if (e.key === "Enter") {
             if (!e.ctrlKey) {
                 e.preventDefault()
                 onSubmit(e)
             }
-            else {
-                const target = e.target as HTMLTextAreaElement
-                target.value += '\n'
-            }
+            else setChat(chat + '\n')
         }
     }
 
@@ -44,7 +41,8 @@ const Input = (props: Props) => {
         <textarea 
             id="chat" 
             className={styles.textarea}
-            onKeyDown={keydown}/>
+            value={chat}
+            onKeyDown={onKeyDown}/>
         <button type="submit" className={styles.button}>
             <span className={styles.span}>보내기</span>
         </button>
