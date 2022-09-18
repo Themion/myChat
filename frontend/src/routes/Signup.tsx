@@ -20,7 +20,7 @@ const Signup = () => {
             placeholder: "password",
             type: "password"
         }, {
-            name: "passwordCheck",
+            name: "password_check",
             placeholder: "password check",
             type: "password"
         }
@@ -31,7 +31,7 @@ const Signup = () => {
     return <>
         <h2>회원가입</h2>
         <Form inputs={inputs} to={to} callback={callback} />
-        <button onClick={() => {navigate('/login')}}>로그인</button>
+        <button onClick={() => { navigate('/login') }}>로그인</button>
     </>
 }
 
